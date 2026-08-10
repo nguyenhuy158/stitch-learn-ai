@@ -15,8 +15,9 @@ export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, sso
       });
       token = await sessionPort.sign({ id: ssoPayload.sub, email: ssoPayload.email });
       mintedToken = token;
-    } catch {
-      console.error("SSO session verification failed");
+    } catch (error) {
+      console.error("SSO session verification failed:", error?.message, error?.code);
+      return { user: null, mintedToken: null, debugError: `${error?.name}: ${error?.message} (${error?.code})` };
     }
   }
 
