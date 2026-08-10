@@ -10,6 +10,9 @@
  * @property {(claims: {email: string, name: string, picture: string}) => Promise<string>} resolveIdFromSso
  * @property {(id: string, fields: {streak: number, last_active_date: string}) => Promise<void>} updateStreak
  * @property {(id: string, fields: object) => Promise<void>} updateProfile
+ * @property {(id: string, amount: number) => Promise<void>} incrementXp
+ * @property {(limit: number) => Promise<Array<{id: string, name: string, xp: number, streak: number}>>} listRankings
+ * @property {(id: string) => Promise<number|null>} getRank
  *
  * @typedef {Object} ChatRepository
  * @property {(userId: string, limit: number) => Promise<Array<{role: string, parts: Array<{text: string}>}>>} listRecent
@@ -21,6 +24,7 @@
  * @property {(id: number) => Promise<object|null>} findById
  * @property {(lessonId: number) => Promise<Array<{term: string, meaning: string, example: string|null}>>} listVocab
  * @property {(lessonId: number, items: Array<{term: string, meaning: string, example?: string}>) => Promise<void>} saveVocab
+ * @property {() => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listAllVocab
  *
  * @typedef {Object} VocabGeneratorPort
  * @property {(input: {title: string, subTitle: string, count?: number}) => Promise<Array<{term: string, meaning: string, example: string}>>} generate
@@ -46,5 +50,10 @@
  *
  * @typedef {Object} FeedbackRepository
  * @property {(userId: string, message: string) => Promise<void>} create
+ *
+ * @typedef {Object} SavedVocabRepository
+ * @property {(userId: string, vocabId: number) => Promise<void>} save
+ * @property {(userId: string, vocabId: number) => Promise<void>} unsave
+ * @property {(userId: string) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listForUser
  */
 export {};

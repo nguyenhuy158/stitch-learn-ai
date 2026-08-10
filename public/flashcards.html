@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --teal-dark: #0f3d38; --teal: #0f766e; --orange: #f2792e;
+      --bg: #f7f8fa; --card: #ffffff; --text: #14201e; --muted: #6b7a78;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Be Vietnam Pro", "Noto Sans", sans-serif; background: var(--bg); color: var(--text); }
+    .page { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 40px; }
+    header { background: var(--teal-dark); color: #fff; padding: 20px 20px 24px; border-radius: 0 0 24px 24px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+    header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+    main { padding: 20px; }
+    .progress { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .card-wrap { perspective: 1000px; height: 260px; margin-bottom: 16px; }
+    .card {
+      position: relative; width: 100%; height: 100%; cursor: pointer;
+      transform-style: preserve-3d; transition: transform 0.5s; border-radius: 20px;
+    }
+    .card.flipped { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; inset: 0; border-radius: 20px; backface-visibility: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px; text-align: center; box-shadow: 0 4px 16px rgba(15,61,56,0.12);
+    }
+    .card-front { background: var(--card); }
+    .card-back { background: var(--teal-dark); color: #fff; transform: rotateY(180deg); }
+    .card-lesson { font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+    .card-term { font-size: 26px; font-weight: 800; color: var(--teal-dark); }
+    .card-back .card-meaning { font-size: 22px; font-weight: 700; color: var(--orange); margin-bottom: 10px; }
+    .card-back .card-example { font-size: 14px; font-style: italic; color: rgba(255,255,255,0.8); }
+    .hint { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+    .controls { display: flex; gap: 10px; align-items: center; }
+    .controls button {
+      flex: 1; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer;
+      background: var(--card); color: var(--teal-dark); box-shadow: 0 1px 3px rgba(15,61,56,0.08);
+    }
+    .controls button:disabled { opacity: 0.4; cursor: default; }
+    .save-btn { flex: 0 0 auto; width: 48px; background: var(--card); }
+    .save-btn.saved { background: var(--orange); color: #fff; }
+    .state { text-align: center; color: var(--muted); padding: 60px 20px; }
+
+    @media (min-width: 768px) {
+      .page { max-width: 560px; padding-bottom: 60px; }
+      header { padding: 28px 36px; border-radius: 0 0 32px 32px; }
+      main { padding: 28px 36px; }
+      .card-wrap { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="back-link" href="/">&larr; Về Home</a>
+      <h1>Flashcards</h1>
+    </header>
+    <main>
+      <div id="content" class="state">Đang tải...</div>
+    </main>
+  </div>
+
+  <script>
+    let cards = [];
+    let savedIds = new Set();
+    let index = 0;
+    let flipped = false;
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str ?? "";
+      return div.innerHTML;
+    }
+
+    function render() {
+      const content = document.getElementById("content");
+      if (!cards.length) {
+        content.className = "state";
+        content.textContent = "Chưa có flashcard nào. Vào một bài học để tạo từ vựng trước.";
+        return;
+      }
+      const c = cards[index];
+      const isSaved = savedIds.has(c.id);
+      content.className = "";
+      content.innerHTML = `
+        <div class="progress">${index + 1} / ${cards.length} &mdash; ${escapeHtml(c.lesson_title)}</div>
+        <div class="card-wrap">
+          <div class="card ${flipped ? "flipped" : ""}" id="flipCard">
+            <div class="card-face card-front">
+              <div class="card-lesson">${escapeHtml(c.lesson_title)}</div>
+              <div class="card-term">${escapeHtml(c.term)}</div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-meaning">${escapeHtml(c.meaning)}</div>
+              ${c.example ? `<div class="card-example">"${escapeHtml(c.example)}"</div>` : ""}
+            </div>
+          </div>
+        </div>
+        <div class="hint">Chạm vào thẻ để lật</div>
+        <div class="controls">
+          <button id="prevBtn" ${index === 0 ? "disabled" : ""}>&larr; Trước</button>
+          <button class="save-btn ${isSaved ? "saved" : ""}" id="saveBtn" title="Lưu từ này">${isSaved ? "★" : "☆"}</button>
+          <button id="nextBtn" ${index === cards.length - 1 ? "disabled" : ""}>Tiếp &rarr;</button>
+        </div>
+      `;
+
+      document.getElementById("flipCard").addEventListener("click", () => {
+        flipped = !flipped;
+        render();
+      });
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        if (index > 0) { index--; flipped = false; render(); }
+      });
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        if (index < cards.length - 1) { index++; flipped = false; render(); }
+      });
+      document.getElementById("saveBtn").addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const nowSaved = !isSaved;
+        try {
+          await fetch(`/api/vocab/${c.id}/save`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ save: nowSaved })
+          });
+          if (nowSaved) savedIds.add(c.id);
+          else savedIds.delete(c.id);
+          render();
+        } catch {}
+      });
+    }
+
+    async function load() {
+      const content = document.getElementById("content");
+      try {
+        const [vocabRes, savedRes] = await Promise.all([fetch("/api/vocab"), fetch("/api/vocab/saved")]);
+        if (vocabRes.status === 401) {
+          location.href = "/login";
+          return;
+        }
+        cards = await vocabRes.json();
+        const saved = await savedRes.json();
+        savedIds = new Set((Array.isArray(saved) ? saved : []).map((s) => s.id));
+        render();
+      } catch (err) {
+        content.className = "state";
+        content.textContent = "Không tải được flashcards: " + err.message;
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

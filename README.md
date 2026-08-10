@@ -30,6 +30,7 @@ src/
 - `/api/chat/history`
 - `/api/user/update`
 - `/api/writing/review` — sửa lỗi văn viết tiếng Anh qua Gemini (câu đã sửa + chi tiết từng lỗi + nhận xét chung), không lưu D1
+- `/api/vocab`, `/api/vocab/saved`, `/api/vocab/:id/save`, `/api/rankings` — flashcards/saved/rankings (xem `## Home cards`)
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
 
 `/api/user/password` bị retire (410 Gone) — xem `## Đổi mật khẩu (đã bỏ)`.
@@ -55,6 +56,15 @@ Trang mock cũ trong bundle vẫn còn tồn tại về mặt code (không xoá 
 2 nút chết trên `/profile` đã sửa:
 - Gear icon góc header: trước không mở gì cả (verify qua devtools) — giờ scroll xuống section "Cài đặt & Tùy chọn" thay vì để chết, vì nó vốn trùng chức năng với section đó.
 - Modal "Trợ giúp & Phản hồi": bundle render ra sheet **hoàn toàn rỗng** (không có nội dung nào cả). Chặn click trước khi React mở modal đó, chuyển sang `public/help.html` (FAQ tĩnh + form gửi phản hồi thật qua `POST /api/feedback`, lưu bảng `feedback` mới trên D1).
+
+## Home cards (2026-08-10)
+Home page có 1 khối UI hoàn toàn chưa test/gắn trước đó (nằm dưới màn hình, phải scroll mới thấy) — "Gemini Suggests" (Pronunciation Fix, Mistake Review, Coffee Chat) và "Learning Tools" (AI Tutor, Flashcards, Saved, Rankings). Không nút nào có handler trong bundle. Đã gắn hết:
+
+- **AI Tutor**, **Pronunciation Fix → Start**, **Coffee Chat → Start**: đều dẫn về `/chat` (AI Chat có sẵn) — không có backend riêng cho luyện phát âm hay roleplay tình huống, AI Chat là tính năng hội thoại thật gần nhất.
+- **Mistake Review → Start**: `public/mistakes.html` — tổng hợp lỗi ngữ pháp thật từ `metadata.corrections` trong lịch sử chat (`/api/chat/history`), không cần route backend mới.
+- **Flashcards**: `public/flashcards.html` + `GET /api/vocab` — lật thẻ từ vựng, gộp từ tất cả bài học đã tạo nội dung (không tính bài `is_locked`), **chỉ đọc data đã cache sẵn, không gọi Gemini mới**. Có nút ★ lưu từ.
+- **Saved**: `public/saved.html` + `GET /api/vocab/saved` + `POST /api/vocab/:id/save` (bảng `saved_vocab` mới) — danh sách từ đã lưu từ Flashcards, bỏ lưu được.
+- **Rankings**: `public/rankings.html` + `GET /api/rankings` — xếp hạng theo `xp` thật. Trước đó **`xp` không có chỗ nào cộng cả** (luôn = 0 với mọi user) — đã thêm `+5 xp` mỗi lần chat AI Tutor và mỗi lần dùng Sửa lỗi viết (`userRepository.incrementXp`).
 
 ## Avatar mặc định (2026-08-10)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.

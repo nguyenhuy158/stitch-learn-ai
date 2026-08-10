@@ -211,6 +211,49 @@
               location.href = "/lessons";
               return;
             }
+
+            // "Gemini Suggests" (Pronunciation Fix / Mistake Review / Coffee
+            // Chat) and "Learning Tools" (AI Tutor / Flashcards / Saved /
+            // Rankings) — none of these had any handler in the compiled
+            // bundle (verified via devtools). Mistake Review has real data
+            // behind it (chat corrections) so it gets its own page; the
+            // other two "Gemini Suggests" cards map to the existing AI Chat
+            // feature since that's genuinely what practicing pronunciation
+            // or a casual conversation means here — there's no separate
+            // pronunciation-scoring or scenario-roleplay backend.
+            const toolBtn = e.target.closest("button");
+            if (toolBtn) {
+              const toolText = toolBtn.textContent.trim();
+              if (toolText.endsWith("AI Tutor")) {
+                location.href = "/chat";
+                return;
+              }
+              if (toolText.endsWith("Flashcards")) {
+                location.href = "/flashcards.html";
+                return;
+              }
+              if (toolText.endsWith("Saved")) {
+                location.href = "/saved.html";
+                return;
+              }
+              if (toolText.endsWith("Rankings")) {
+                location.href = "/rankings.html";
+                return;
+              }
+              if (toolText.startsWith("Start")) {
+                let ancestor = toolBtn.parentElement;
+                let isMistakeReview = false;
+                for (let depth = 0; depth < 6 && ancestor; depth++) {
+                  if (ancestor.textContent.includes("Mistake Review")) {
+                    isMistakeReview = true;
+                    break;
+                  }
+                  ancestor = ancestor.parentElement;
+                }
+                location.href = isMistakeReview ? "/mistakes.html" : "/chat";
+                return;
+              }
+            }
           }
 
           if (location.pathname === "/profile") {

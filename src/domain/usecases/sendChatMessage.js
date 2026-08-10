@@ -7,5 +7,6 @@ export async function sendChatMessage({ userId, message }, { userRepository, cha
     feedback: reply.feedback,
     corrections: reply.corrections
   });
+  await userRepository.incrementXp(userId, 5);
   return reply;
 }

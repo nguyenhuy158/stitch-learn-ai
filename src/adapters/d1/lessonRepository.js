@@ -24,6 +24,21 @@ export function createD1LessonRepository(db) {
         ).bind(lessonId, item.term, item.meaning, item.example ?? null, index)
       );
       await db.batch(statements);
+    },
+    // Flashcards only ever show vocab that's already been generated (visiting
+    // a lesson at least once) — this never triggers a new Gemini call, and
+    // never includes locked lessons.
+    async listAllVocab() {
+      const { results } = await db
+        .prepare(
+          `SELECT v.id, v.term, v.meaning, v.example, l.id AS lesson_id, l.title AS lesson_title
+           FROM lesson_vocab v
+           JOIN lessons l ON l.id = v.lesson_id
+           WHERE l.is_locked = 0
+           ORDER BY l.sort_order ASC, v.sort_order ASC`
+        )
+        .all();
+      return results;
     }
   };
 }

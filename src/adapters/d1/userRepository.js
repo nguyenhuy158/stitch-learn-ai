@@ -41,6 +41,24 @@ export function createD1UserRepository(db) {
       const columns = Object.keys(fields);
       const query = `UPDATE users SET ${columns.map((c) => `${c} = ?`).join(", ")} WHERE id = ?`;
       await db.prepare(query).bind(...columns.map((c) => fields[c]), id).run();
+    },
+    async incrementXp(id, amount) {
+      await db.prepare("UPDATE users SET xp = COALESCE(xp, 0) + ? WHERE id = ?").bind(amount, id).run();
+    },
+    async listRankings(limit) {
+      const { results } = await db.prepare(
+        "SELECT id, name, xp, streak FROM users ORDER BY xp DESC, streak DESC LIMIT ?"
+      ).bind(limit).all();
+      return results;
+    },
+    async getRank(id) {
+      const user = await db.prepare("SELECT xp FROM users WHERE id = ?").bind(id).first();
+      if (!user) return null;
+      const row = await db
+        .prepare("SELECT COUNT(*) + 1 AS rank FROM users WHERE xp > ?")
+        .bind(user.xp || 0)
+        .first();
+      return row.rank;
     }
   };
 }

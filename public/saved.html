@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đã lưu</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root { --teal-dark: #0f3d38; --teal: #0f766e; --orange: #f2792e; --bg: #f7f8fa; --card: #ffffff; --text: #14201e; --muted: #6b7a78; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Be Vietnam Pro", "Noto Sans", sans-serif; background: var(--bg); color: var(--text); }
+    .page { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 40px; }
+    header { background: var(--teal-dark); color: #fff; padding: 20px 20px 24px; border-radius: 0 0 24px 24px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+    header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+    main { padding: 20px; }
+    .entry { background: var(--card); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(15,61,56,0.06); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .entry-term { font-weight: 700; font-size: 16px; color: var(--teal-dark); }
+    .entry-meaning { color: var(--orange); font-weight: 600; font-size: 13px; margin-top: 2px; }
+    .entry-example { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 6px; }
+    .entry-lesson { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
+    .unsave-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; flex-shrink: 0; }
+    .state { text-align: center; color: var(--muted); padding: 60px 20px; }
+
+    @media (min-width: 768px) {
+      .page { max-width: 720px; padding-bottom: 60px; }
+      header { padding: 28px 36px; border-radius: 0 0 32px 32px; }
+      main { padding: 28px 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="back-link" href="/">&larr; Về Home</a>
+      <h1>Từ vựng đã lưu</h1>
+    </header>
+    <main>
+      <div id="content" class="state">Đang tải...</div>
+    </main>
+  </div>
+
+  <script>
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str ?? "";
+      return div.innerHTML;
+    }
+
+    async function unsave(id) {
+      await fetch(`/api/vocab/${id}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ save: false })
+      });
+      load();
+    }
+
+    async function load() {
+      const content = document.getElementById("content");
+      try {
+        const res = await fetch("/api/vocab/saved");
+        if (res.status === 401) {
+          location.href = "/login";
+          return;
+        }
+        const items = await res.json();
+        if (!Array.isArray(items) || !items.length) {
+          content.className = "state";
+          content.textContent = "Chưa lưu từ vựng nào. Vào Flashcards và bấm ★ để lưu.";
+          return;
+        }
+        content.className = "";
+        content.innerHTML = items
+          .map(
+            (item) => `
+          <div class="entry">
+            <div>
+              <div class="entry-term">${escapeHtml(item.term)}</div>
+              <div class="entry-meaning">${escapeHtml(item.meaning)}</div>
+              ${item.example ? `<div class="entry-example">"${escapeHtml(item.example)}"</div>` : ""}
+              <div class="entry-lesson">${escapeHtml(item.lesson_title)}</div>
+            </div>
+            <button class="unsave-btn" data-id="${item.id}" title="Bỏ lưu">★</button>
+          </div>`
+          )
+          .join("");
+        content.querySelectorAll(".unsave-btn").forEach((btn) => {
+          btn.addEventListener("click", () => unsave(Number(btn.dataset.id)));
+        });
+      } catch (err) {
+        content.className = "state";
+        content.textContent = "Không tải được: " + err.message;
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

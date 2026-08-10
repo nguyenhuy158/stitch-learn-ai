@@ -9,6 +9,10 @@ import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
+import { getFlashcards } from "../../domain/usecases/getFlashcards.js";
+import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
+import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
+import { getRankings } from "../../domain/usecases/getRankings.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -54,15 +58,66 @@ export async function handleRequest(request, url, deps) {
     }
   }
 
+  if (url.pathname === "/api/vocab" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      await deps.sessionPort.verify(authToken);
+      return json(await getFlashcards({}, deps));
+    } catch (error) {
+      console.error("Flashcards error:", error);
+      return json({ error: "Failed to load flashcards" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/vocab/saved" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      return json(await getSavedVocab({ userId: id }, deps));
+    } catch (error) {
+      console.error("Saved vocab error:", error);
+      return json({ error: "Failed to load saved vocab" }, { status: 500 });
+    }
+  }
+
+  const saveVocabMatch = url.pathname.match(/^\/api\/vocab\/(\d+)\/save$/);
+  if (saveVocabMatch && request.method === "POST") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const body = await request.json().catch(() => ({}));
+      await toggleSavedVocab({ userId: id, vocabId: Number(saveVocabMatch[1]), save: body.save !== false }, deps);
+      return json({ success: true });
+    } catch (error) {
+      console.error("Toggle saved vocab error:", error);
+      return json({ error: "Failed to update saved vocab" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/rankings" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      return json(await getRankings({ userId: id }, deps));
+    } catch (error) {
+      console.error("Rankings error:", error);
+      return json({ error: "Failed to load rankings" }, { status: 500 });
+    }
+  }
+
   if (url.pathname === "/api/writing/review" && request.method === "POST") {
     // Same reasoning as lesson detail: a real Gemini call, so require a
     // session instead of letting it be hit anonymously in a loop.
     const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
     if (!authToken) return new Response("Unauthorized", { status: 401 });
     try {
-      await deps.sessionPort.verify(authToken);
+      const { id } = await deps.sessionPort.verify(authToken);
       const { text } = await request.json();
-      const result = await reviewWriting({ text }, deps);
+      const result = await reviewWriting({ userId: id, text }, deps);
       return json(result);
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
