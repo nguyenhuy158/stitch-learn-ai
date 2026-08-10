@@ -131,7 +131,9 @@
         "click",
         async function (e) {
           const continueBtn = e.target.closest("button");
-          if (continueBtn && continueBtn.textContent.trim() === "Tiếp tục") {
+          // Text is actually "Tiếp tục" + an icon glyph name glued on with no
+          // separator (e.g. "Tiếp tụcarrow_forward") — startsWith, not ===.
+          if (continueBtn && continueBtn.textContent.trim().startsWith("Tiếp tục")) {
             const lessons = await lessonsPromise;
             const target = lessons.find((l) => l.is_active) || lessons[0];
             if (target) location.href = `/lesson.html?id=${target.id}`;
