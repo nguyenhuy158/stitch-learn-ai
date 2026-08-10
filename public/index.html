@@ -153,23 +153,22 @@
     })();
 
     /*
-      Search box and category tabs on /lessons are decorative too: the
-      search input has `readonly` hardcoded (so typing does nothing at all)
-      and the tab buttons never toggle active state or filter anything.
-      Patched from outside like the click handler above.
+      Category tabs on /lessons are decorative too: they never toggle active
+      state or filter anything in the compiled bundle. Patched from outside
+      like the click handler above.
 
-      Category tabs have no real data to filter by — the `lessons` table
-      has no category column, only title/subtitle/progress/lock flags — so
-      "Ngữ pháp" and "AI Practice" show an honest empty state rather than a
-      fake filter, since none of the 4 seed lessons are actually grammar
-      drills or AI-practice content (those are separate cards/routes).
-      "Từ vựng" shows everything, since every current lesson genuinely is a
-      vocab topic.
+      No real data to filter by — the `lessons` table has no category
+      column, only title/subtitle/progress/lock flags — so "Ngữ pháp" and
+      "AI Practice" show an honest empty state rather than a fake filter,
+      since none of the 4 seed lessons are actually grammar drills or
+      AI-practice content (those are separate cards/routes). "Từ vựng" shows
+      everything, since every current lesson genuinely is a vocab topic.
 
-      Risk: the search input's value is likely React-controlled with no
-      onChange handler. Removing `readonly` lets keystrokes land in the DOM,
-      but if the bundle ever re-renders that input for an unrelated reason,
-      React may reset it back to empty. No source to fix that properly.
+      The search input next to these tabs was tried too (removing its
+      hardcoded `readonly` + filtering on `input`), but React reverts both
+      the attribute and the value on the native `input` event since it's a
+      controlled input with no onChange handler — that's React's own
+      behavior, not fixable by patching from outside. Left as decorative.
     */
     (function () {
       const lessonsPromise = fetch("/api/lessons").then((r) => r.json()).catch(() => []);
@@ -210,7 +209,7 @@
         });
       }
 
-      function renderEmptyState(rows, message) {
+      function renderEmptyState(rows) {
         const wrapper = rows[0] && rows[0].parentElement;
         if (!wrapper) return;
         let el = document.getElementById("patched-empty-state");
@@ -229,30 +228,17 @@
           el.style.fontSize = "14px";
           wrapper.appendChild(el);
         }
-        el.textContent = message;
+        el.textContent = "Chưa có bài học nào trong mục này.";
         el.style.display = "";
       }
 
       function applyFilter() {
         const rows = roadmapRows();
         if (!rows.length) return;
-        const input = document.querySelector('input[placeholder*="Tìm kiếm"]');
-        const query = (input && input.value.trim().toLowerCase()) || "";
         rows.forEach((row) => {
-          const matchesTab = currentMode === "all";
-          const matchesQuery = !query || row.textContent.toLowerCase().includes(query);
-          row.style.display = matchesTab && matchesQuery ? "" : "none";
+          row.style.display = currentMode === "all" ? "" : "none";
         });
-        renderEmptyState(
-          rows,
-          query ? `Không tìm thấy bài học khớp với "${query}".` : "Chưa có bài học nào trong mục này."
-        );
-      }
-
-      const searchInput = document.querySelector('input[placeholder*="Tìm kiếm"]');
-      if (searchInput) {
-        searchInput.removeAttribute("readonly");
-        searchInput.addEventListener("input", applyFilter);
+        renderEmptyState(rows);
       }
 
       document.addEventListener("click", function (e) {
