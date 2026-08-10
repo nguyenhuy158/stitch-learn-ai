@@ -9,11 +9,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Học Tiếng Anh cùng Gemini</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <script type="module" crossorigin src="/assets/index-Dh9l9Bsl.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-TOnAb83y.css">
   <style>
+    /*
+      Swaps the compiled bundle's hardcoded Manrope for Be Vietnam Pro
+      everywhere. The bundle's CSS bakes `font-family:Manrope,sans-serif`
+      into a utility class (verified in index-TOnAb83y.css) — no source to
+      change that at the root, so this overrides it globally instead.
+    */
+    *, body {
+      font-family: "Be Vietnam Pro", "Noto Sans", sans-serif !important;
+    }
+    .material-symbols-outlined {
+      font-family: "Material Symbols Outlined" !important;
+    }
     /*
       The compiled bundle hard-codes a phone-frame mockup: a single
       `.max-w-md` wrapper (448px, plus a decorative border+shadow) that the
@@ -73,7 +85,7 @@
         border-radius: 10px;
         color: rgba(255, 255, 255, 0.75);
         text-decoration: none;
-        font-family: "Manrope", sans-serif;
+        font-family: "Be Vietnam Pro", sans-serif;
         font-weight: 600;
         font-size: 14px;
       }
@@ -82,7 +94,7 @@
       #app-sidebar a .material-symbols-outlined { font-size: 20px; }
       #app-sidebar .sidebar-title {
         color: #fff;
-        font-family: "Manrope", sans-serif;
+        font-family: "Be Vietnam Pro", sans-serif;
         font-weight: 800;
         font-size: 16px;
         padding: 8px 14px 20px;
@@ -295,7 +307,7 @@
           el.style.padding = "24px 4px";
           el.style.textAlign = "center";
           el.style.color = "#6b7a78";
-          el.style.fontFamily = "Manrope, sans-serif";
+          el.style.fontFamily = "Be Vietnam Pro, sans-serif";
           el.style.fontSize = "14px";
           wrapper.appendChild(el);
         }
