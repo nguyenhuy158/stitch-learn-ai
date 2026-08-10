@@ -105,6 +105,50 @@
     document.querySelectorAll("#app-sidebar a[data-path]").forEach((link) => {
       if (link.dataset.path === location.pathname) link.classList.add("active");
     });
+
+    /*
+      The lesson list/cards render from real data but have no click handler
+      at all in the compiled bundle (verified via devtools — clicking does
+      nothing, not even a failed navigation). No source to add one, so this
+      patches it in from outside: fetch the real lesson list once, then map
+      clicks to lesson.html by matching text ("Tiếp tục" button -> whichever
+      lesson is_active) or DOM position (each row under the "Lộ trình cơ bản"
+      heading, in the same order /api/lessons returns them in).
+    */
+    (function () {
+      const lessonsPromise = fetch("/api/lessons").then((r) => r.json()).catch(() => []);
+
+      function roadmapRows() {
+        const heading = [...document.querySelectorAll("*")].find(
+          (el) => el.children.length === 0 && el.textContent.trim() === "Lộ trình cơ bản"
+        );
+        if (!heading) return [];
+        const wrapper = [...heading.parentElement.children].find((c) => c !== heading);
+        return wrapper ? [...wrapper.children] : [];
+      }
+
+      document.addEventListener(
+        "click",
+        async function (e) {
+          const continueBtn = e.target.closest("button");
+          if (continueBtn && continueBtn.textContent.trim() === "Tiếp tục") {
+            const lessons = await lessonsPromise;
+            const target = lessons.find((l) => l.is_active) || lessons[0];
+            if (target) location.href = `/lesson.html?id=${target.id}`;
+            return;
+          }
+
+          const rows = roadmapRows();
+          const idx = rows.findIndex((r) => r === e.target || r.contains(e.target));
+          if (idx !== -1) {
+            const lessons = await lessonsPromise;
+            const lesson = lessons[idx];
+            if (lesson && !lesson.is_locked) location.href = `/lesson.html?id=${lesson.id}`;
+          }
+        },
+        true
+      );
+    })();
   </script>
 </body>
 

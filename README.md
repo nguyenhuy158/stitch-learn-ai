@@ -28,13 +28,15 @@ src/
 - `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Gemini lần đầu rồi cache vào D1 (`lesson_vocab`)
 - `/api/chat` — chat luyện ngôn ngữ, gọi Gemini API (model mặc định `gemini-2.5-flash`), lưu lịch sử D1
 - `/api/chat/history`
-- `/api/user/update`, `/api/user/password`
+- `/api/user/update`
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
+
+`/api/user/password` bị retire (410 Gone) — xem `## Đổi mật khẩu (đã bỏ)`.
 
 ## Trang chi tiết bài học (2026-08-10)
 `public/lesson.html?id=<lessonId>` — trang tĩnh riêng (không phải part của SPA React chính, vì repo chỉ có bundle build sẵn đã minify, không sửa được để thêm route/onClick). Responsive mobile + desktop (breakpoint 768px/1100px), tự fetch `/api/lessons/:id`.
 
-**Chưa gắn vào list bài học cũ** (nút "Tiếp tục"/click item trong `/lessons` hiện không có handler nào — bug có từ code gốc, không phải do route thiếu). Muốn dùng thì mở trực tiếp `/lesson.html?id=1` (id lấy từ `/api/lessons`).
+**Nút "Tiếp tục"/click item trong `/lessons` giờ đã có tác dụng** — không sửa được bundle React nên vá bằng cách chèn 1 script trong `index.html` (global click listener + `/api/lessons` để map click theo text/vị trí DOM sang `/lesson.html?id=X`). Xem comment trong `public/index.html`. Rủi ro: nếu bundle sau này đổi cấu trúc DOM, script này có thể không match đúng nữa.
 
 Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi) — đã dedupe về đúng 4 dòng (`id` 1-4) trên D1 prod ngày 2026-08-10.
 
@@ -42,6 +44,9 @@ Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.
 
 Chỉ áp dụng khi Google không trả `picture` (hoặc user tương lai không qua Google). Đã backfill cho user hiện có (`picture` từng `null`) trên D1 prod.
+
+## Đổi mật khẩu (đã bỏ, 2026-08-10)
+`changePassword` usecase + `updatePassword` repo method đã xoá. `/api/user/password` trả `410` cho mọi request — SSO là cách đăng nhập duy nhất được hỗ trợ giờ. Đăng nhập bằng password cũ (`/api/auth/login`) vẫn giữ (user hiện có vẫn login được), chỉ bỏ khả năng đổi/đặt mật khẩu mới. Menu "Thiết lập mật khẩu" trong bundle cũ vẫn hiện (không xoá được UI), nhưng bấm vào sẽ nhận lỗi rõ ràng thay vì lỗi ngầm.
 
 ## Auth qua SSO (2026-08-10)
 Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:

@@ -4,7 +4,6 @@ import { startSsoLogin } from "../../domain/usecases/startSsoLogin.js";
 import { getCurrentUser } from "../../domain/usecases/getCurrentUser.js";
 import { updateProfile } from "../../domain/usecases/updateProfile.js";
 import { loginWithPassword } from "../../domain/usecases/loginWithPassword.js";
-import { changePassword } from "../../domain/usecases/changePassword.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
@@ -111,17 +110,11 @@ export async function handleRequest(request, url, deps) {
   }
 
   if (url.pathname === "/api/user/password" && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      const { password } = await request.json();
-      await changePassword({ userId: id, password }, deps);
-      return json({ success: true });
-    } catch (error) {
-      if (error instanceof ValidationError) return new Response(error.message, { status: 400 });
-      return new Response(error.message, { status: 500 });
-    }
+    // Feature retired: SSO is the only supported way in now. Kept as an
+    // explicit response (rather than deleting the route outright) so the
+    // still-visible "Thiết lập mật khẩu" menu item in the compiled bundle
+    // fails cleanly instead of falling through to the SPA asset fallback.
+    return json({ error: "Đổi mật khẩu không còn được hỗ trợ. Đăng nhập bằng Google." }, { status: 410 });
   }
 
   if (url.pathname === "/api/chat" && request.method === "POST") {

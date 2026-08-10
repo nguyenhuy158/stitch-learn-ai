@@ -10,7 +10,6 @@
  * @property {(claims: {email: string, name: string, picture: string}) => Promise<string>} resolveIdFromSso
  * @property {(id: string, fields: {streak: number, last_active_date: string}) => Promise<void>} updateStreak
  * @property {(id: string, fields: object) => Promise<void>} updateProfile
- * @property {(id: string, creds: {hash: string, salt: string}) => Promise<void>} updatePassword
  *
  * @typedef {Object} ChatRepository
  * @property {(userId: string, limit: number) => Promise<Array<{role: string, parts: Array<{text: string}>}>>} listRecent

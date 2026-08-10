@@ -41,9 +41,6 @@ export function createD1UserRepository(db) {
       const columns = Object.keys(fields);
       const query = `UPDATE users SET ${columns.map((c) => `${c} = ?`).join(", ")} WHERE id = ?`;
       await db.prepare(query).bind(...columns.map((c) => fields[c]), id).run();
-    },
-    async updatePassword(id, { hash, salt }) {
-      await db.prepare("UPDATE users SET password_hash = ?, salt = ? WHERE id = ?").bind(hash, salt, id).run();
     }
   };
 }
