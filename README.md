@@ -19,13 +19,13 @@ Code trong `worker.js` được lấy lại từ bản đã deploy trên Cloudfl
 - Bỏ các `console.log` lộ email/user id/cookie state; giữ `console.error` không chứa PII.
 
 ## Cần bù lại để deploy được từ repo này
-- `wrangler.jsonc`: điền đúng `database_id` D1 thật (đang để `REPLACE_ME`)
+- `wrangler.jsonc`: `database_id` đã điền đúng D1 thật (`stitch-db`)
 - Secrets (không lấy được từ Cloudflare API, cần set lại bằng `wrangler secret put`):
   - `JWT_SECRET`
   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
   - `GEMINI_API_KEY`
 - D1 schema (`users`, `chat_messages`, bảng lessons...) chưa có migration file — cần dump từ D1 thật hoặc viết lại
-- Thư mục `assets` (frontend build output) chưa có trong repo này
+- `public/` hiện chỉ có file placeholder — frontend build output gốc không lấy lại được, cần build lại và bỏ vào đây
 
 ## Deploy
 ```
