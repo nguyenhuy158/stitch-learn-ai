@@ -68,9 +68,15 @@ export async function handleRequest(request, url, deps) {
   }
 
   if (url.pathname === "/api/auth/logout") {
+    // Clearing only the local auth_token isn't enough for SSO sessions: the
+    // domain-wide huyab_sso cookie would just re-authenticate the visitor on
+    // the very next /api/auth/me call. Only the issuer can clear that cookie.
+    const location = deps.env.SSO_ISSUER
+      ? `${deps.env.SSO_ISSUER}/logout?redirect_uri=${encodeURIComponent(`${url.origin}/login`)}`
+      : "/login";
     return new Response(null, {
       status: 302,
-      headers: { Location: "/login", "Set-Cookie": buildLogoutCookie(isSecure) }
+      headers: { Location: location, "Set-Cookie": buildLogoutCookie(isSecure) }
     });
   }
 

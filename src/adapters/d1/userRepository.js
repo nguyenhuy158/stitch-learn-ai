@@ -13,13 +13,15 @@ export function createD1UserRepository(db) {
      * whatever id a user already has here (e.g. from the old direct-Google
      * flow, or from password signup). Inserting a new row keyed on `sub`
      * would violate the UNIQUE constraint on `email` for any returning user.
+     *
+     * Existing users are NOT overwritten with the SSO's name/picture on every
+     * re-login — this app is the source of truth for those once a user has
+     * an account here, so a stale/different name at the SSO issuer doesn't
+     * clobber a profile edit made via /api/user/update.
      */
     async resolveIdFromSso({ email, name, picture }) {
       const existing = await db.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
-      if (existing) {
-        await db.prepare("UPDATE users SET name = ?, picture = ? WHERE id = ?").bind(name, picture, existing.id).run();
-        return existing.id;
-      }
+      if (existing) return existing.id;
 
       const id = crypto.randomUUID();
       await db.prepare(
