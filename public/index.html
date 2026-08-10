@@ -37,11 +37,75 @@
         max-width: 880px !important;
       }
     }
+
+    /*
+      Desktop sidebar. The bottom tab bar is a compiled component we can't
+      edit — its outer wrapper happens to have this exact combination of
+      utility classes (verified via devtools), which is unique to it, so
+      it's used as the hide target instead of a class we'd have to add
+      ourselves. #app-sidebar below is a plain injected element (see script
+      at the bottom of <body>), not part of the React tree; it does full
+      page navigations (<a href>), not client-side routing, since there's no
+      access to the bundle's router internals to hook into.
+    */
+    #app-sidebar { display: none; }
+    @media (min-width: 1024px) {
+      .fixed.bottom-0.left-0.right-0.z-50 { display: none !important; }
+      body { padding-left: 240px; }
+      #app-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 240px;
+        padding: 24px 12px;
+        background: #0f3d38;
+        box-sizing: border-box;
+      }
+      #app-sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        font-family: "Manrope", sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      #app-sidebar a:hover { background: rgba(255, 255, 255, 0.08); }
+      #app-sidebar a.active { background: rgba(255, 255, 255, 0.14); color: #fff; }
+      #app-sidebar a .material-symbols-outlined { font-size: 20px; }
+      #app-sidebar .sidebar-title {
+        color: #fff;
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 16px;
+        padding: 8px 14px 20px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <nav id="app-sidebar">
+    <div class="sidebar-title">Học Tiếng Anh cùng Gemini</div>
+    <a href="/" data-path="/"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="/lessons" data-path="/lessons"><span class="material-symbols-outlined">book_2</span>Học</a>
+    <a href="/chat" data-path="/chat"><span class="material-symbols-outlined">smart_toy</span>AI Chat</a>
+    <a href="/history" data-path="/history"><span class="material-symbols-outlined">history</span>Lịch sử</a>
+    <a href="/profile" data-path="/profile"><span class="material-symbols-outlined">person</span>Hồ sơ</a>
+  </nav>
   <div id="root"></div>
+  <script>
+    document.querySelectorAll("#app-sidebar a[data-path]").forEach((link) => {
+      if (link.dataset.path === location.pathname) link.classList.add("active");
+    });
+  </script>
 </body>
 
 </html>
