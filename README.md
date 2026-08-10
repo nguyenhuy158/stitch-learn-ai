@@ -29,6 +29,7 @@ src/
 - `/api/chat` — chat luyện ngôn ngữ, gọi Gemini API (model mặc định `gemini-2.5-flash`), lưu lịch sử D1
 - `/api/chat/history`
 - `/api/user/update`
+- `/api/writing/review` — sửa lỗi văn viết tiếng Anh qua Gemini (câu đã sửa + chi tiết từng lỗi + nhận xét chung), không lưu D1
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
 
 `/api/user/password` bị retire (410 Gone) — xem `## Đổi mật khẩu (đã bỏ)`.
@@ -39,6 +40,9 @@ src/
 **Nút "Tiếp tục"/click item trong `/lessons` giờ đã có tác dụng** — không sửa được bundle React nên vá bằng cách chèn 1 script trong `index.html` (global click listener + `/api/lessons` để map click theo text/vị trí DOM sang `/lesson.html?id=X`). Xem comment trong `public/index.html`. Rủi ro: nếu bundle sau này đổi cấu trúc DOM, script này có thể không match đúng nữa.
 
 Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi) — đã dedupe về đúng 4 dòng (`id` 1-4) trên D1 prod ngày 2026-08-10.
+
+## Trang sửa lỗi viết (2026-08-10)
+`public/writing.html` — card "Sửa lỗi viết" (trong "Gợi ý cho bạn" ở `/lessons`) không có route/handler nào từ trước cả (khác lesson detail — cái này thực sự chưa tồn tại, không phải thiếu route cho data có sẵn), nên build mới hoàn toàn: textarea nhập đoạn văn, gọi `/api/writing/review`, hiển thị bản đã sửa + từng lỗi cụ thể + nhận xét chung. Không lưu lịch sử (stateless, mỗi lần gọi Gemini mới). Responsive mobile/desktop giống `lesson.html`. Gắn click vào card qua cùng script vá trong `index.html`.
 
 ## Avatar mặc định (2026-08-10)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.

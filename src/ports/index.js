@@ -40,5 +40,8 @@
  *
  * @typedef {Object} AvatarGeneratorPort
  * @property {(seed: string) => string} generate - deterministic SVG data URI from a seed (e.g. email)
+ *
+ * @typedef {Object} WritingReviewerPort
+ * @property {(input: {text: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
  */
 export {};

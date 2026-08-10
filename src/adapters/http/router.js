@@ -7,6 +7,7 @@ import { loginWithPassword } from "../../domain/usecases/loginWithPassword.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
+import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -49,6 +50,23 @@ export async function handleRequest(request, url, deps) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 404 });
       console.error("Lesson detail error:", error);
       return json({ error: "Failed to load lesson" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/writing/review" && request.method === "POST") {
+    // Same reasoning as lesson detail: a real Gemini call, so require a
+    // session instead of letting it be hit anonymously in a loop.
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      await deps.sessionPort.verify(authToken);
+      const { text } = await request.json();
+      const result = await reviewWriting({ text }, deps);
+      return json(result);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Writing review error:", error);
+      return json({ error: "Failed to review writing" }, { status: 500 });
     }
   }
 

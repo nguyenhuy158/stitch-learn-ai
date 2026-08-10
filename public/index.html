@@ -146,6 +146,18 @@
             const lessons = await lessonsPromise;
             const lesson = lessons[idx];
             if (lesson && !lesson.is_locked) location.href = `/lesson.html?id=${lesson.id}`;
+            return;
+          }
+
+          // "Sửa lỗi viết" suggestion card: same situation, no handler at
+          // all. Genuinely no route existed for it anywhere (checked the
+          // bundle), so writing.html + /api/writing/review were built fresh
+          // rather than patched from existing data like the lesson pages.
+          const writingCard = [...document.querySelectorAll("*")].find(
+            (el) => el.children.length === 0 && el.textContent.trim() === "Sửa lỗi viết"
+          );
+          if (writingCard && (e.target === writingCard || writingCard.contains(e.target) || e.target.contains(writingCard))) {
+            location.href = "/writing.html";
           }
         },
         true
