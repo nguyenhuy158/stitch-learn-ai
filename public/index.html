@@ -27,6 +27,18 @@
       font-family: "Material Symbols Outlined" !important;
     }
     /*
+      The floating "AI Chat" button centered above the bottom nav is a
+      purple/indigo rounded-square in the compiled bundle — clashes with the
+      rest of the app's teal/orange palette. Scoped to its exact (unique)
+      combination of utility classes, verified via devtools. Circle shape +
+      teal gradient matching the header/streak color instead.
+    */
+    button.bg-gradient-to-br.from-indigo-500.via-indigo-600.to-purple-600 {
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #14b8a6, #0f3d38) !important;
+      box-shadow: 0 8px 20px rgba(15, 61, 56, 0.35) !important;
+    }
+    /*
       The compiled bundle hard-codes a phone-frame mockup: a single
       `.max-w-md` wrapper (448px, plus a decorative border+shadow) that the
       whole app and its bottom nav are centered inside, regardless of
