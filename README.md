@@ -66,6 +66,9 @@ Home page có 1 khối UI hoàn toàn chưa test/gắn trước đó (nằm dư�
 - **Saved**: `public/saved.html` + `GET /api/vocab/saved` + `POST /api/vocab/:id/save` (bảng `saved_vocab` mới) — danh sách từ đã lưu từ Flashcards, bỏ lưu được.
 - **Rankings**: `public/rankings.html` + `GET /api/rankings` — xếp hạng theo `xp` thật. Trước đó **`xp` không có chỗ nào cộng cả** (luôn = 0 với mọi user) — đã thêm `+5 xp` mỗi lần chat AI Tutor và mỗi lần dùng Sửa lỗi viết (`userRepository.incrementXp`).
 
+## Fix bug Start button (2026-08-10)
+Test thật phát hiện bấm "Start" ở Pronunciation Fix lại nhảy sang `/mistakes.html` (đáng lẽ `/chat`). Nguyên nhân: script vá đi ngược DOM tìm ancestor chứa "Mistake Review" tới 6 cấp — 3 card share 1 container chung, nên đi quá xa lên tới container đó lúc nào cũng match "Mistake Review" dù đang bấm Pronunciation Fix hay Coffee Chat. Sửa: dừng ở ancestor đầu tiên có nhắc tên bất kỳ 1 trong 3 card (không riêng Mistake Review), rồi mới xét đúng card nào.
+
 ## Avatar mặc định (2026-08-10)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.
 

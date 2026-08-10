@@ -241,16 +241,20 @@
                 return;
               }
               if (toolText.startsWith("Start")) {
+                // Walk up and stop at the FIRST ancestor whose text mentions
+                // any of the 3 cards, not just "Mistake Review" — the cards
+                // share a container a few levels up, so scanning past that
+                // point falsely matched Mistake Review for every card.
                 let ancestor = toolBtn.parentElement;
-                let isMistakeReview = false;
+                let cardName = null;
                 for (let depth = 0; depth < 6 && ancestor; depth++) {
-                  if (ancestor.textContent.includes("Mistake Review")) {
-                    isMistakeReview = true;
-                    break;
-                  }
+                  const t = ancestor.textContent;
+                  if (t.includes("Mistake Review")) { cardName = "mistake"; break; }
+                  if (t.includes("Pronunciation Fix")) { cardName = "other"; break; }
+                  if (t.includes("Coffee Chat")) { cardName = "other"; break; }
                   ancestor = ancestor.parentElement;
                 }
-                location.href = isMistakeReview ? "/mistakes.html" : "/chat";
+                location.href = cardName === "mistake" ? "/mistakes.html" : "/chat";
                 return;
               }
             }
