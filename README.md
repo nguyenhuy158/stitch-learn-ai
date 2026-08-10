@@ -13,6 +13,11 @@ Code trong `worker.js` được lấy lại từ bản đã deploy trên Cloudfl
 - `/api/user/update`, `/api/user/password`
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
 
+## Security fixes áp dụng (2026-08-10)
+- OAuth `state` giờ ký JWT (10 phút hạn) chứa `origin`, verify ở callback thay vì tin trực tiếp `Referer`/query string → chống CSRF + open-redirect.
+- Redirect sau login chỉ cho phép origin nằm trong `ALLOWED_ORIGINS` (env, phân tách bằng dấu phẩy; mặc định origin của request).
+- Bỏ các `console.log` lộ email/user id/cookie state; giữ `console.error` không chứa PII.
+
 ## Cần bù lại để deploy được từ repo này
 - `wrangler.jsonc`: điền đúng `database_id` D1 thật (đang để `REPLACE_ME`)
 - Secrets (không lấy được từ Cloudflare API, cần set lại bằng `wrangler secret put`):

@@ -1461,16 +1461,16 @@ var worker_default = {
       googleAuthUrl.searchParams.set("access_type", "offline");
       googleAuthUrl.searchParams.set("prompt", "consent");
       const referer = request.headers.get("Referer");
-      if (referer) {
-        const refererUrl = new URL(referer);
-        googleAuthUrl.searchParams.set("state", refererUrl.origin);
-      }
+      const allowedOrigins = (env.ALLOWED_ORIGINS || url.origin).split(",").map((o) => o.trim());
+      const refererOrigin = referer ? new URL(referer).origin : url.origin;
+      const originToUse = allowedOrigins.includes(refererOrigin) ? refererOrigin : url.origin;
+      const state = await new SignJWT({ origin: originToUse }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("10m").sign(new TextEncoder().encode(env.JWT_SECRET));
+      googleAuthUrl.searchParams.set("state", state);
       return Response.redirect(googleAuthUrl.toString());
     }
     if (url.pathname === "/api/auth/google/callback") {
       const code = url.searchParams.get("code");
       if (!code) return new Response("No code", { status: 400 });
-      console.log("Exchanging code for tokens...");
       const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -1484,26 +1484,33 @@ var worker_default = {
       });
       const tokens = await tokenRes.json();
       if (tokens.error) {
-        console.error("Token exchange error:", tokens);
+        console.error("Token exchange error");
         return new Response(JSON.stringify(tokens), { status: 400 });
       }
       const userRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: { Authorization: `Bearer ${tokens.access_token}` }
       });
       const profile = await userRes.json();
-      console.log("User profile received:", profile.email);
       try {
         await env.DB.prepare(
           "INSERT INTO users (id, email, name, picture) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, picture = excluded.picture"
         ).bind(profile.sub, profile.email, profile.name, profile.picture).run();
-        console.log("User upserted in D1");
       } catch (dbError) {
-        console.error("D1 Database error:", dbError.message);
-        return new Response("Database Error: " + dbError.message, { status: 500 });
+        console.error("D1 Database error");
+        return new Response("Database Error", { status: 500 });
       }
       const jwt = await new SignJWT({ id: profile.sub, email: profile.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("30d").sign(new TextEncoder().encode(env.JWT_SECRET));
-      const state = url.searchParams.get("state");
-      const targetOrigin = state || url.origin;
+      const stateParam = url.searchParams.get("state");
+      const allowedOrigins = (env.ALLOWED_ORIGINS || url.origin).split(",").map((o) => o.trim());
+      let targetOrigin = url.origin;
+      if (stateParam) {
+        try {
+          const { payload: statePayload } = await jwtVerify(stateParam, new TextEncoder().encode(env.JWT_SECRET));
+          if (allowedOrigins.includes(statePayload.origin)) targetOrigin = statePayload.origin;
+        } catch {
+          return new Response("Invalid state", { status: 400 });
+        }
+      }
       const isSecure = url.protocol === "https:";
       const cookieOptions = `Path=/; HttpOnly; ${isSecure ? "Secure;" : ""} SameSite=Lax; Max-Age=2592000`;
       return new Response(null, {
@@ -1516,18 +1523,13 @@ var worker_default = {
     }
     if (url.pathname === "/api/auth/me") {
       const cookie = request.headers.get("Cookie");
-      console.log("Cookie header received:", cookie ? "Exists" : "Missing");
       const token = cookie?.split(";").find((c) => c.trim().startsWith("auth_token="))?.split("=")[1];
       if (!token) {
-        console.log("No auth_token found in cookies");
         return new Response(JSON.stringify({ user: null }), { headers: { "Content-Type": "application/json" } });
       }
       try {
         const { payload } = await jwtVerify(token, new TextEncoder().encode(env.JWT_SECRET));
-        console.log("JWT verified for user:", payload.id);
         const user = await env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(payload.id).first();
-        if (!user) console.log("User not found in DB for ID:", payload.id);
-        else console.log("Successfully fetched user from DB:", user.email);
         if (user) {
           const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
           const lastActive = user.last_active_date;
