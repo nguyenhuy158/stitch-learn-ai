@@ -1433,10 +1433,62 @@ async function hashPassword(password, salt) {
   return { hash: hashHex, salt: saltStr };
 }
 __name(hashPassword, "hashPassword");
+var ssoJwksCache = { issuer: null, keys: null, fetchedAt: 0 };
+async function getSsoJwks(issuer) {
+  const now = Date.now();
+  if (ssoJwksCache.issuer === issuer && now - ssoJwksCache.fetchedAt < 3600000) {
+    return ssoJwksCache.keys;
+  }
+  const res = await fetch(`${issuer}/.well-known/jwks.json`);
+  if (!res.ok) throw new Error("Failed to fetch SSO JWKS");
+  const body = await res.json();
+  ssoJwksCache = { issuer, keys: body.keys, fetchedAt: now };
+  return body.keys;
+}
+__name(getSsoJwks, "getSsoJwks");
+function base64UrlToBytes(b64url) {
+  const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = b64.length % 4 === 0 ? "" : "=".repeat(4 - b64.length % 4);
+  const bin = atob(b64 + pad);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+__name(base64UrlToBytes, "base64UrlToBytes");
+async function verifySsoSession(token, issuer, audience) {
+  const parts = token.split(".");
+  if (parts.length !== 3) throw new Error("Malformed token");
+  const [headerB64, payloadB64, sigB64] = parts;
+  const header = JSON.parse(new TextDecoder().decode(base64UrlToBytes(headerB64)));
+  if (header.alg !== "RS256") throw new Error("Unsupported alg");
+  const keys = await getSsoJwks(issuer);
+  const jwk = keys.find((k) => k.kid === header.kid);
+  if (!jwk) throw new Error("Unknown key id");
+  const key = await crypto.subtle.importKey(
+    "jwk",
+    { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: jwk.alg, ext: true },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["verify"]
+  );
+  const valid = await crypto.subtle.verify(
+    "RSASSA-PKCS1-v1_5",
+    key,
+    base64UrlToBytes(sigB64),
+    new TextEncoder().encode(`${headerB64}.${payloadB64}`)
+  );
+  if (!valid) throw new Error("Invalid signature");
+  const payload = JSON.parse(new TextDecoder().decode(base64UrlToBytes(payloadB64)));
+  const now = Math.floor(Date.now() / 1e3);
+  if (payload.exp && payload.exp < now) throw new Error("Token expired");
+  if (payload.iss !== issuer) throw new Error("Issuer mismatch");
+  if (audience && payload.aud !== audience) throw new Error("Audience mismatch");
+  return payload;
+}
+__name(verifySsoSession, "verifySsoSession");
 var worker_default = {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const redirectUri = `${url.origin}/api/auth/google/callback`;
     if (url.pathname === "/api/lessons") {
       try {
         const { results } = await env.DB.prepare(
@@ -1453,77 +1505,31 @@ var worker_default = {
       }
     }
     if (url.pathname === "/api/auth/google") {
-      const googleAuthUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
-      googleAuthUrl.searchParams.set("client_id", env.GOOGLE_CLIENT_ID);
-      googleAuthUrl.searchParams.set("redirect_uri", redirectUri);
-      googleAuthUrl.searchParams.set("response_type", "code");
-      googleAuthUrl.searchParams.set("scope", "openid email profile");
-      googleAuthUrl.searchParams.set("access_type", "offline");
-      googleAuthUrl.searchParams.set("prompt", "consent");
-      const referer = request.headers.get("Referer");
-      const allowedOrigins = (env.ALLOWED_ORIGINS || url.origin).split(",").map((o) => o.trim());
-      const refererOrigin = referer ? new URL(referer).origin : url.origin;
-      const originToUse = allowedOrigins.includes(refererOrigin) ? refererOrigin : url.origin;
-      const state = await new SignJWT({ origin: originToUse }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("10m").sign(new TextEncoder().encode(env.JWT_SECRET));
-      googleAuthUrl.searchParams.set("state", state);
-      return Response.redirect(googleAuthUrl.toString());
-    }
-    if (url.pathname === "/api/auth/google/callback") {
-      const code = url.searchParams.get("code");
-      if (!code) return new Response("No code", { status: 400 });
-      const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          code,
-          client_id: env.GOOGLE_CLIENT_ID,
-          client_secret: env.GOOGLE_CLIENT_SECRET,
-          redirect_uri: redirectUri,
-          grant_type: "authorization_code"
-        })
-      });
-      const tokens = await tokenRes.json();
-      if (tokens.error) {
-        console.error("Token exchange error");
-        return new Response(JSON.stringify(tokens), { status: 400 });
-      }
-      const userRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-        headers: { Authorization: `Bearer ${tokens.access_token}` }
-      });
-      const profile = await userRes.json();
-      try {
-        await env.DB.prepare(
-          "INSERT INTO users (id, email, name, picture) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, picture = excluded.picture"
-        ).bind(profile.sub, profile.email, profile.name, profile.picture).run();
-      } catch (dbError) {
-        console.error("D1 Database error");
-        return new Response("Database Error", { status: 500 });
-      }
-      const jwt = await new SignJWT({ id: profile.sub, email: profile.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("30d").sign(new TextEncoder().encode(env.JWT_SECRET));
-      const stateParam = url.searchParams.get("state");
-      const allowedOrigins = (env.ALLOWED_ORIGINS || url.origin).split(",").map((o) => o.trim());
-      let targetOrigin = url.origin;
-      if (stateParam) {
-        try {
-          const { payload: statePayload } = await jwtVerify(stateParam, new TextEncoder().encode(env.JWT_SECRET));
-          if (allowedOrigins.includes(statePayload.origin)) targetOrigin = statePayload.origin;
-        } catch {
-          return new Response("Invalid state", { status: 400 });
-        }
-      }
-      const isSecure = url.protocol === "https:";
-      const cookieOptions = `Path=/; HttpOnly; ${isSecure ? "Secure;" : ""} SameSite=Lax; Max-Age=2592000`;
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: `${targetOrigin}/`,
-          "Set-Cookie": `auth_token=${jwt}; ${cookieOptions}`
-        }
-      });
+      if (!env.SSO_ISSUER) return new Response("SSO is not configured", { status: 503 });
+      const loginUrl = new URL(`${env.SSO_ISSUER}/login`);
+      loginUrl.searchParams.set("redirect_uri", `${url.origin}/`);
+      return Response.redirect(loginUrl.toString(), 302);
     }
     if (url.pathname === "/api/auth/me") {
       const cookie = request.headers.get("Cookie");
-      const token = cookie?.split(";").find((c) => c.trim().startsWith("auth_token="))?.split("=")[1];
+      let token = cookie?.split(";").find((c) => c.trim().startsWith("auth_token="))?.split("=")[1];
+      let newAuthCookie = null;
+      if (!token && env.SSO_ISSUER) {
+        const ssoToken = cookie?.split(";").find((c) => c.trim().startsWith("huyab_sso="))?.split("=")[1];
+        if (ssoToken) {
+          try {
+            const ssoPayload = await verifySsoSession(ssoToken, env.SSO_ISSUER, env.SSO_AUDIENCE);
+            await env.DB.prepare(
+              "INSERT INTO users (id, email, name, picture) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, picture = excluded.picture"
+            ).bind(ssoPayload.sub, ssoPayload.email, ssoPayload.name, ssoPayload.picture).run();
+            token = await new SignJWT({ id: ssoPayload.sub, email: ssoPayload.email }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("30d").sign(new TextEncoder().encode(env.JWT_SECRET));
+            const isSecure = url.protocol === "https:";
+            newAuthCookie = `auth_token=${token}; Path=/; HttpOnly; ${isSecure ? "Secure;" : ""} SameSite=Lax; Max-Age=2592000`;
+          } catch (error) {
+            console.error("SSO session verification failed");
+          }
+        }
+      }
       if (!token) {
         return new Response(JSON.stringify({ user: null }), { headers: { "Content-Type": "application/json" } });
       }
@@ -1552,7 +1558,9 @@ var worker_default = {
             user.gemini_config = { voice: "neutral", speed: 1, personality: "friendly" };
           }
         }
-        return new Response(JSON.stringify({ user }), { headers: { "Content-Type": "application/json" } });
+        const meHeaders = { "Content-Type": "application/json" };
+        if (newAuthCookie) meHeaders["Set-Cookie"] = newAuthCookie;
+        return new Response(JSON.stringify({ user }), { headers: meHeaders });
       } catch {
         return new Response(JSON.stringify({ user: null }), { headers: { "Content-Type": "application/json" } });
       }
