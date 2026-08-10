@@ -7,6 +7,7 @@ import { loginWithPassword } from "../../domain/usecases/loginWithPassword.js";
 import { changePassword } from "../../domain/usecases/changePassword.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
+import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -31,6 +32,17 @@ export async function handleRequest(request, url, deps) {
     try {
       return json(await listLessons(deps));
     } catch (error) {
+      return json({ error: error.message }, { status: 500 });
+    }
+  }
+
+  const lessonMatch = url.pathname.match(/^\/api\/lessons\/(\d+)$/);
+  if (lessonMatch) {
+    try {
+      const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]) }, deps);
+      return json(detail);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 404 });
       return json({ error: error.message }, { status: 500 });
     }
   }

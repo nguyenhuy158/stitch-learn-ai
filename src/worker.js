@@ -4,6 +4,7 @@ import { createD1LessonRepository } from "./adapters/d1/lessonRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createGeminiTutor } from "./adapters/gemini/tutor.js";
+import { createGeminiVocabGenerator } from "./adapters/gemini/vocabGenerator.js";
 import { passwordHasher } from "./domain/services/passwordHasher.js";
 import { handleRequest } from "./adapters/http/router.js";
 
@@ -21,6 +22,7 @@ export default {
         ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
         : null,
       aiTutorPort: createGeminiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+      vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
       passwordHasher
     };
 

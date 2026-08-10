@@ -25,10 +25,18 @@ src/
 - Auth: SSO (huyab.click, worker `sso` tại `auth.huyab.click`) + email/password, JWT (jose), lưu D1
 - Streak học tập
 - `/api/lessons` — danh sách bài học (D1)
+- `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Gemini lần đầu rồi cache vào D1 (`lesson_vocab`)
 - `/api/chat` — chat luyện ngôn ngữ, gọi Gemini API (model mặc định `gemini-2.5-flash`), lưu lịch sử D1
 - `/api/chat/history`
 - `/api/user/update`, `/api/user/password`
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
+
+## Trang chi tiết bài học (2026-08-10)
+`public/lesson.html?id=<lessonId>` — trang tĩnh riêng (không phải part của SPA React chính, vì repo chỉ có bundle build sẵn đã minify, không sửa được để thêm route/onClick). Responsive mobile + desktop (breakpoint 768px/1100px), tự fetch `/api/lessons/:id`.
+
+**Chưa gắn vào list bài học cũ** (nút "Tiếp tục"/click item trong `/lessons` hiện không có handler nào — bug có từ code gốc, không phải do route thiếu). Muốn dùng thì mở trực tiếp `/lesson.html?id=1` (id lấy từ `/api/lessons`).
+
+Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi) — đã dedupe về đúng 4 dòng (`id` 1-4) trên D1 prod ngày 2026-08-10.
 
 ## Auth qua SSO (2026-08-10)
 Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:

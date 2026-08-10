@@ -19,6 +19,12 @@
  *
  * @typedef {Object} LessonRepository
  * @property {() => Promise<object[]>} listAll
+ * @property {(id: number) => Promise<object|null>} findById
+ * @property {(lessonId: number) => Promise<Array<{term: string, meaning: string, example: string|null}>>} listVocab
+ * @property {(lessonId: number, items: Array<{term: string, meaning: string, example?: string}>) => Promise<void>} saveVocab
+ *
+ * @typedef {Object} VocabGeneratorPort
+ * @property {(input: {title: string, subTitle: string, count?: number}) => Promise<Array<{term: string, meaning: string, example: string}>>} generate
  *
  * @typedef {Object} SessionPort
  * @property {(claims: object) => Promise<string>} sign
