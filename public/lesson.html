@@ -173,6 +173,10 @@
       }
       try {
         const res = await fetch(`/api/lessons/${id}`);
+        if (res.status === 401) {
+          location.href = "/login";
+          return;
+        }
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Không tải được bài học");
         titleEl.textContent = data.lesson.title;

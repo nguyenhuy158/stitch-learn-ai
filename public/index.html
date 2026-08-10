@@ -13,6 +13,31 @@
     rel="stylesheet" />
   <script type="module" crossorigin src="/assets/index-Dh9l9Bsl.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-TOnAb83y.css">
+  <style>
+    /*
+      The compiled bundle hard-codes a phone-frame mockup: a single
+      `.max-w-md` wrapper (448px, plus a decorative border+shadow) that the
+      whole app and its bottom nav are centered inside, regardless of
+      viewport. There's no source to edit that constraint properly, so this
+      widens it responsively on larger screens instead. Scoped to `.max-w-md`
+      specifically because it's used for exactly these two layout anchors in
+      this app (verified via devtools), not for cards/buttons elsewhere.
+    */
+    @media (min-width: 768px) {
+      .max-w-md {
+        max-width: 720px !important;
+      }
+      div.max-w-md.border-x {
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+    @media (min-width: 1200px) {
+      .max-w-md {
+        max-width: 880px !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
