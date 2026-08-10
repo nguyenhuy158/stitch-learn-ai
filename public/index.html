@@ -173,13 +173,17 @@
             return;
           }
 
-          // "Xem tất cả" next to "Continue Learning" on Home has no handler
-          // either. Only wired on "/" — the same-labelled button next to
-          // "Gợi ý cho bạn" on /lessons already shows everything it has (just
-          // 2 cards), so there's nothing meaningful to navigate to there.
+          // "See all" next to "Continue Learning" on Home has no handler
+          // either. That heading + this button are hardcoded English in the
+          // bundle regardless of the language setting (unlike the rest of
+          // the app, which is Vietnamese) — verified via devtools, not a
+          // translation quirk. Only wired on "/" — the same-labelled button
+          // next to "Gợi ý cho bạn" on /lessons already shows everything it
+          // has (just 2 cards), so there's nothing meaningful to navigate to
+          // there.
           if (location.pathname === "/") {
             const seeAllBtn = e.target.closest("button");
-            if (seeAllBtn && seeAllBtn.textContent.trim() === "Xem tất cả") {
+            if (seeAllBtn && seeAllBtn.textContent.trim() === "See all") {
               location.href = "/lessons";
             }
           }
