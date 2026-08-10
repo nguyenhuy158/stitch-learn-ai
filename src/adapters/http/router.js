@@ -38,12 +38,18 @@ export async function handleRequest(request, url, deps) {
 
   const lessonMatch = url.pathname.match(/^\/api\/lessons\/(\d+)$/);
   if (lessonMatch) {
+    // Generating vocab costs a real Gemini call — require a session so this
+    // can't be hit anonymously in a loop to run up the API bill.
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
     try {
+      await deps.sessionPort.verify(authToken);
       const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]) }, deps);
       return json(detail);
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 404 });
-      return json({ error: error.message }, { status: 500 });
+      console.error("Lesson detail error:", error);
+      return json({ error: "Failed to load lesson" }, { status: 500 });
     }
   }
 

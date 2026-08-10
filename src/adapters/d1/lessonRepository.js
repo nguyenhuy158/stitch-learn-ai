@@ -14,10 +14,13 @@ export function createD1LessonRepository(db) {
       ).bind(lessonId).all();
       return results;
     },
+    // ON CONFLICT DO NOTHING + a UNIQUE(lesson_id, term) index: two concurrent
+    // first-requests for the same lesson can both decide to generate, but
+    // only one's rows survive instead of duplicating every term.
     async saveVocab(lessonId, items) {
       const statements = items.map((item, index) =>
         db.prepare(
-          "INSERT INTO lesson_vocab (lesson_id, term, meaning, example, sort_order) VALUES (?, ?, ?, ?, ?)"
+          "INSERT INTO lesson_vocab (lesson_id, term, meaning, example, sort_order) VALUES (?, ?, ?, ?, ?) ON CONFLICT(lesson_id, term) DO NOTHING"
         ).bind(lessonId, item.term, item.meaning, item.example ?? null, index)
       );
       await db.batch(statements);
