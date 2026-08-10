@@ -44,6 +44,13 @@ Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi)
 ## Trang sửa lỗi viết (2026-08-10)
 `public/writing.html` — card "Sửa lỗi viết" (trong "Gợi ý cho bạn" ở `/lessons`) không có route/handler nào từ trước cả (khác lesson detail — cái này thực sự chưa tồn tại, không phải thiếu route cho data có sẵn), nên build mới hoàn toàn: textarea nhập đoạn văn, gọi `/api/writing/review`, hiển thị bản đã sửa + từng lỗi cụ thể + nhận xét chung. Không lưu lịch sử (stateless, mỗi lần gọi Gemini mới). Responsive mobile/desktop giống `lesson.html`. Gắn click vào card qua cùng script vá trong `index.html`.
 
+## Trang lịch sử thật (2026-08-10)
+`public/history.html` thay hoàn toàn trang "Lịch sử" mock cứng của bundle React (số liệu 12h30m/45 bài/8.5 điểm... toàn bộ là fake, không gọi API nào). Trang mới dùng data thật: `/api/auth/me` (streak, xp, level, level_progress) + `/api/chat/history` (ghép cặp user/model message thành từng lượt hội thoại, group theo ngày, đếm số lỗi từ `metadata.corrections` của mỗi reply).
+
+Cách gắn vào: file tĩnh này tự nằm ở clean URL `/history` (Cloudflare tự strip `.html`) — **trùng đúng path route SPA cũ dùng**. Full-page navigation (sidebar `<a href="/history">`, "Xem tất cả" ở Home) tự nhiên load file thật này, không cần đổi gì. Riêng nút "Lịch sử" ở bottom nav mobile dùng client-side routing nội bộ của React (không có network request) nên vẫn sẽ hiện trang mock cũ nếu không chặn — script vá trong `index.html` bắt click đó và ép `location.href = "/history"` (full reload) để luôn ra trang thật.
+
+Trang mock cũ trong bundle vẫn còn tồn tại về mặt code (không xoá được), chỉ là không còn đường nào trong UI dẫn tới nó nữa.
+
 ## Avatar mặc định (2026-08-10)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.
 

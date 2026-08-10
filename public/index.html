@@ -158,6 +158,30 @@
           );
           if (writingCard && (e.target === writingCard || writingCard.contains(e.target) || e.target.contains(writingCard))) {
             location.href = "/writing.html";
+            return;
+          }
+
+          // Bottom nav "Lịch sử" (mobile) does client-side SPA routing to its
+          // own compiled mock history page — no network request, so the new
+          // real history.html (served at the clean URL /history) never gets
+          // a chance to load unless we force a full navigation here instead.
+          const historyNavBtn = e.target.closest("button");
+          if (historyNavBtn && historyNavBtn.textContent.trim().endsWith("Lịch sử")) {
+            e.preventDefault();
+            e.stopPropagation();
+            location.href = "/history";
+            return;
+          }
+
+          // "Xem tất cả" next to "Continue Learning" on Home has no handler
+          // either. Only wired on "/" — the same-labelled button next to
+          // "Gợi ý cho bạn" on /lessons already shows everything it has (just
+          // 2 cards), so there's nothing meaningful to navigate to there.
+          if (location.pathname === "/") {
+            const seeAllBtn = e.target.closest("button");
+            if (seeAllBtn && seeAllBtn.textContent.trim() === "Xem tất cả") {
+              location.href = "/lessons";
+            }
           }
         },
         true
