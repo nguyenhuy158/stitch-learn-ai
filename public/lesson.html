@@ -183,6 +183,7 @@
         subtitleEl.textContent = data.lesson.sub_title || "";
         renderVocab(data.vocab);
       } catch (err) {
+        titleEl.textContent = "Không tải được bài học";
         contentEl.className = "state error";
         contentEl.textContent = err.message;
       }
