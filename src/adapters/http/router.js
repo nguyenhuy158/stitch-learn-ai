@@ -8,6 +8,7 @@ import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
+import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -67,6 +68,21 @@ export async function handleRequest(request, url, deps) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
       console.error("Writing review error:", error);
       return json({ error: "Failed to review writing" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/feedback" && request.method === "POST") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const { message } = await request.json();
+      await submitFeedback({ userId: id, message }, deps);
+      return json({ success: true });
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Feedback submit error:", error);
+      return json({ error: "Failed to submit feedback" }, { status: 500 });
     }
   }
 

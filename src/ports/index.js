@@ -43,5 +43,8 @@
  *
  * @typedef {Object} WritingReviewerPort
  * @property {(input: {text: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
+ *
+ * @typedef {Object} FeedbackRepository
+ * @property {(userId: string, message: string) => Promise<void>} create
  */
 export {};

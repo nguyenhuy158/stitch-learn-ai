@@ -185,6 +185,37 @@
             const seeAllBtn = e.target.closest("button");
             if (seeAllBtn && seeAllBtn.textContent.trim() === "See all") {
               location.href = "/lessons";
+              return;
+            }
+          }
+
+          if (location.pathname === "/profile") {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+            const text = btn.textContent.trim();
+
+            // Gear icon in the header opens nothing at all (verified via
+            // devtools — no modal, no navigation, completely inert). It
+            // duplicates "Cài đặt & Tùy chọn" below anyway, so instead of
+            // leaving it dead, scroll down to that section.
+            if (text === "settings") {
+              const settingsHeading = [...document.querySelectorAll("*")].find(
+                (el) => el.children.length === 0 && el.textContent.trim() === "Cài đặt & Tùy chọn"
+              );
+              if (settingsHeading) settingsHeading.scrollIntoView({ behavior: "smooth", block: "start" });
+              return;
+            }
+
+            // "Trợ giúp & Phản hồi" opens a modal that the bundle renders
+            // completely empty (verified via devtools — the sheet slides up
+            // with zero content inside). No source to fix that, so this
+            // intercepts the click before React's own handler and goes to a
+            // real page instead (FAQ + a feedback form wired to a new
+            // /api/feedback endpoint).
+            if (text.includes("Trợ giúp & Phản hồi")) {
+              e.preventDefault();
+              e.stopPropagation();
+              location.href = "/help.html";
             }
           }
         },

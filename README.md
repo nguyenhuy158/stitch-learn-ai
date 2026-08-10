@@ -51,6 +51,11 @@ Cách gắn vào: file tĩnh này tự nằm ở clean URL `/history` (Cloudflar
 
 Trang mock cũ trong bundle vẫn còn tồn tại về mặt code (không xoá được), chỉ là không còn đường nào trong UI dẫn tới nó nữa.
 
+## Trợ giúp & Phản hồi (2026-08-10)
+2 nút chết trên `/profile` đã sửa:
+- Gear icon góc header: trước không mở gì cả (verify qua devtools) — giờ scroll xuống section "Cài đặt & Tùy chọn" thay vì để chết, vì nó vốn trùng chức năng với section đó.
+- Modal "Trợ giúp & Phản hồi": bundle render ra sheet **hoàn toàn rỗng** (không có nội dung nào cả). Chặn click trước khi React mở modal đó, chuyển sang `public/help.html` (FAQ tĩnh + form gửi phản hồi thật qua `POST /api/feedback`, lưu bảng `feedback` mới trên D1).
+
 ## Avatar mặc định (2026-08-10)
 Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.
 
