@@ -16,6 +16,13 @@ function json(data, init) {
   });
 }
 
+/** Never let password_hash/salt leave this Worker, even indirectly via SELECT *. */
+function sanitizeUser(user) {
+  if (!user) return user;
+  const { password_hash, salt, ...safe } = user;
+  return safe;
+}
+
 /** Returns a Response for known API routes, or null if the request should fall through to static assets. */
 export async function handleRequest(request, url, deps) {
   const isSecure = url.protocol === "https:";
@@ -43,7 +50,7 @@ export async function handleRequest(request, url, deps) {
     const ssoToken = parseCookie(cookieHeader, "huyab_sso");
     const { user, mintedToken } = await getCurrentUser({ authToken, ssoToken }, deps);
     const headers = mintedToken ? { "Set-Cookie": buildAuthCookie(mintedToken, { secure: isSecure }) } : {};
-    return json({ user }, { headers });
+    return json({ user: sanitizeUser(user) }, { headers });
   }
 
   if (url.pathname === "/api/user/update" && request.method === "POST") {
@@ -71,7 +78,7 @@ export async function handleRequest(request, url, deps) {
     try {
       const { email, password } = await request.json();
       const { token, user } = await loginWithPassword({ email, password }, deps);
-      return json({ success: true, user }, { headers: { "Set-Cookie": buildAuthCookie(token, { secure: isSecure }) } });
+      return json({ success: true, user: sanitizeUser(user) }, { headers: { "Set-Cookie": buildAuthCookie(token, { secure: isSecure }) } });
     } catch (error) {
       if (error instanceof ValidationError) return new Response(error.message, { status: 400 });
       if (error instanceof AuthError) return new Response(error.message, { status: 401 });
