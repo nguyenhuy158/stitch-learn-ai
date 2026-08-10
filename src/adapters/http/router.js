@@ -41,11 +41,8 @@ export async function handleRequest(request, url, deps) {
     const cookieHeader = request.headers.get("Cookie");
     const authToken = parseCookie(cookieHeader, "auth_token");
     const ssoToken = parseCookie(cookieHeader, "huyab_sso");
-    const { user, mintedToken, debugError } = await getCurrentUser({ authToken, ssoToken }, deps);
+    const { user, mintedToken } = await getCurrentUser({ authToken, ssoToken }, deps);
     const headers = mintedToken ? { "Set-Cookie": buildAuthCookie(mintedToken, { secure: isSecure }) } : {};
-    if (url.searchParams.get("debug") === "1") {
-      return json({ user, hasSsoToken: Boolean(ssoToken), hasAuthToken: Boolean(authToken), debugError }, { headers });
-    }
     return json({ user }, { headers });
   }
 

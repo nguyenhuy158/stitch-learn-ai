@@ -7,7 +7,7 @@
  * @typedef {Object} UserRepository
  * @property {(id: string) => Promise<object|null>} findById
  * @property {(email: string) => Promise<object|null>} findByEmail
- * @property {(user: {id: string, email: string, name: string, picture: string}) => Promise<void>} upsertFromSso
+ * @property {(claims: {email: string, name: string, picture: string}) => Promise<string>} resolveIdFromSso
  * @property {(id: string, fields: {streak: number, last_active_date: string}) => Promise<void>} updateStreak
  * @property {(id: string, fields: object) => Promise<void>} updateProfile
  * @property {(id: string, creds: {hash: string, salt: string}) => Promise<void>} updatePassword
