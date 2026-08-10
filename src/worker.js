@@ -5,6 +5,7 @@ import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createGeminiTutor } from "./adapters/gemini/tutor.js";
 import { createGeminiVocabGenerator } from "./adapters/gemini/vocabGenerator.js";
+import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { passwordHasher } from "./domain/services/passwordHasher.js";
 import { handleRequest } from "./adapters/http/router.js";
 
@@ -23,6 +24,7 @@ export default {
         : null,
       aiTutorPort: createGeminiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
       vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+      avatarGeneratorPort: createDicebearAvatarGenerator(),
       passwordHasher
     };
 

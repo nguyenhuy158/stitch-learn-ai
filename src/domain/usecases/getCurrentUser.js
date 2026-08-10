@@ -1,16 +1,17 @@
 const DEFAULT_GEMINI_CONFIG = { voice: "neutral", speed: 1, personality: "friendly" };
 
-export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, ssoPort, userRepository }) {
+export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, ssoPort, userRepository, avatarGeneratorPort }) {
   let token = authToken;
   let mintedToken = null;
 
   if (!token && ssoToken && ssoPort) {
     try {
       const ssoPayload = await ssoPort.verify(ssoToken);
+      const picture = ssoPayload.picture || avatarGeneratorPort?.generate(ssoPayload.email);
       const userId = await userRepository.resolveIdFromSso({
         email: ssoPayload.email,
         name: ssoPayload.name,
-        picture: ssoPayload.picture
+        picture
       });
       token = await sessionPort.sign({ id: userId, email: ssoPayload.email });
       mintedToken = token;

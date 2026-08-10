@@ -38,6 +38,11 @@ src/
 
 Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi) — đã dedupe về đúng 4 dòng (`id` 1-4) trên D1 prod ngày 2026-08-10.
 
+## Avatar mặc định (2026-08-10)
+Dùng `@dicebear/core` + `@dicebear/collection` (style `funEmoji`) — cùng lib/kiểu với repo `chia-keo` (`src/components/Avatar.tsx`, xem `docs/avatar-libs.md` ở đó để biết lý do chọn DiceBear thay vì boring-avatars/multiavatar). Sinh SVG data URI thuần server-side, deterministic theo email — không cần lưu thêm cột "kiểu avatar" nào.
+
+Chỉ áp dụng khi Google không trả `picture` (hoặc user tương lai không qua Google). Đã backfill cho user hiện có (`picture` từng `null`) trên D1 prod.
+
 ## Auth qua SSO (2026-08-10)
 Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:
 - `/api/auth/google` chỉ redirect sang `${SSO_ISSUER}/login?redirect_uri=<origin>/`

@@ -38,5 +38,8 @@
  *
  * @typedef {Object} PasswordHasher
  * @property {(password: string, salt?: string) => Promise<{hash: string, salt: string}>} hash
+ *
+ * @typedef {Object} AvatarGeneratorPort
+ * @property {(seed: string) => string} generate - deterministic SVG data URI from a seed (e.g. email)
  */
 export {};
