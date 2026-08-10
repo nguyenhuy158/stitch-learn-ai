@@ -2,7 +2,24 @@
 
 Cloudflare Worker (full-stack): serves static frontend assets + backend API.
 
-Code trong `worker.js` được lấy lại từ bản đã deploy trên Cloudflare (bundled bằng esbuild) qua Cloudflare API — **không phải source gốc** (không tách file, không có React/Vite source cho frontend, không có D1 migration SQL).
+Backend được lấy lại từ bản đã deploy trên Cloudflare (bundled bằng esbuild) qua Cloudflare API, sau đó dịch ngược + tách lại thành hexagonal architecture (xem `## Cấu trúc` dưới) — **không phải source gốc 1:1** (source gốc là 1 file `src/worker.ts` duy nhất). Không có React/Vite source cho frontend, không có D1 migration SQL.
+
+## Cấu trúc (hexagonal)
+```
+src/
+  domain/            business logic thuần, không đụng D1/HTTP/Gemini/jose trực tiếp
+    usecases/        1 file / 1 hành động (login, getCurrentUser, sendChatMessage, ...)
+    services/        passwordHasher (PBKDF2, thuần crypto, không I/O ngoài)
+    errors.js        ValidationError, AuthError — router map ra HTTP status
+  ports/index.js     JSDoc typedef mô tả interface (UserRepository, SessionPort, AiTutorPort...)
+  adapters/          implement ports, chứa mọi I/O thật
+    d1/              D1 queries (user/chat/lesson repository)
+    jose/            ký/verify JWT nội bộ + verify JWKS remote của SSO
+    gemini/          gọi Gemini API, build prompt
+    http/            router.js (map route -> usecase) + cookies.js
+  worker.js          composition root: wire adapters vào usecases, export fetch handler
+```
+Đổi adapter (D1 -> KV, Gemini -> OpenAI, jose -> lib khác) không cần sửa `domain/`.
 
 ## Chức năng
 - Auth: SSO (huyab.click, worker `sso` tại `auth.huyab.click`) + email/password, JWT (jose), lưu D1
