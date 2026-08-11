@@ -1,19 +1,24 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type AppTheme = "teal" | "ocean" | "sunset" | "dark";
+/** Mau nhan dien (accent). Moi accent co ca ban sang va ban toi, xem ThemeMode. */
+export type AppTheme = "teal" | "ocean" | "sunset";
+/** Sang/toi, doc lap voi accent — chon "ocean" van co the xem ban dark. */
+export type ThemeMode = "light" | "dark";
 
 const THEMES: { id: AppTheme; label: string; swatch: string }[] = [
   { id: "teal", label: "Teal (mặc định)", swatch: "#0f766e" },
   { id: "ocean", label: "Ocean", swatch: "#216d94" },
   { id: "sunset", label: "Sunset", swatch: "#a64f36" },
-  { id: "dark", label: "Dark", swatch: "#14b8a6" },
 ];
 
-const STORAGE_KEY = "app_theme";
+const THEME_KEY = "app_theme";
+const MODE_KEY = "app_mode";
 
 type ThemeCtx = {
   theme: AppTheme;
   setTheme: (t: AppTheme) => void;
+  mode: ThemeMode;
+  setMode: (m: ThemeMode) => void;
   themes: typeof THEMES;
 };
 
@@ -21,30 +26,45 @@ const Ctx = createContext<ThemeCtx | null>(null);
 
 function readInitialTheme(): AppTheme {
   if (typeof window === "undefined") return "teal";
-  const stored = window.localStorage.getItem(STORAGE_KEY) as AppTheme | null;
-  if (stored && THEMES.some((t) => t.id === stored)) return stored;
+  const stored = window.localStorage.getItem(THEME_KEY);
+  if (stored && THEMES.some((t) => t.id === stored)) return stored as AppTheme;
   return "teal";
 }
 
-function applyTheme(theme: AppTheme) {
+function readInitialMode(): ThemeMode {
+  if (typeof window === "undefined") return "light";
+  const stored = window.localStorage.getItem(MODE_KEY);
+  if (stored === "light" || stored === "dark") return stored;
+  // Bundle cu luu theme="dark" nhu 1 accent rieng — coi day la tin hieu muon dark mode.
+  if (window.localStorage.getItem(THEME_KEY) === "dark") return "dark";
+  if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) return "dark";
+  return "light";
+}
+
+function applyTheme(theme: AppTheme, mode: ThemeMode) {
   const root = document.documentElement;
   root.setAttribute("data-theme", theme);
-  const isDark = theme === "dark";
-  root.classList.toggle("dark", isDark);
-  root.classList.toggle("light", !isDark);
+  root.classList.toggle("dark", mode === "dark");
+  root.classList.toggle("light", mode === "light");
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<AppTheme>(readInitialTheme);
+  const [mode, setModeState] = useState<ThemeMode>(readInitialMode);
 
   useEffect(() => {
-    applyTheme(theme);
-    window.localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
+    applyTheme(theme, mode);
+    window.localStorage.setItem(THEME_KEY, theme);
+    window.localStorage.setItem(MODE_KEY, mode);
+  }, [theme, mode]);
 
   const setTheme = (t: AppTheme) => setThemeState(t);
+  const setMode = (m: ThemeMode) => setModeState(m);
 
-  const value = useMemo(() => ({ theme, setTheme, themes: THEMES }), [theme]);
+  const value = useMemo(
+    () => ({ theme, setTheme, mode, setMode, themes: THEMES }),
+    [theme, mode]
+  );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

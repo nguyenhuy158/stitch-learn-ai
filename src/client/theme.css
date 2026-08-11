@@ -1,16 +1,16 @@
 /*
- * Theme presets migrated from public/assets/theme.css (4 themes: teal/ocean/sunset/dark).
- * Each preset maps the old app-specific vars (--teal-dark/--teal/--orange/--bg/--card/--text/--muted)
- * onto ui-kit's semantic tokens (--ui-*) so every copied ui-kit component (Button, Card, HeaderBar...)
- * automatically follows the active theme. The old var names are kept only as intermediate palette
- * values feeding --ui-*; no page CSS reads --teal/--card/etc. directly anymore (except --orange,
- * which ui-kit has no token for and which .text-accent/.bg-accent/.border-accent expose below).
+ * Theme = accent (teal/ocean/sunset) x mode (light/dark), 6 palettes total, doc lap voi nhau
+ * (VD chon Ocean van xem duoc ban dark cua Ocean, khong phai doi sang accent "dark" rieng).
+ * Moi preset map cac bien app-specific cu (--teal-dark/--teal/--orange/--bg/--card/--text/--muted)
+ * sang ui-kit semantic tokens (--ui-*) de moi component copy tu ui-kit tu dong theo theme.
  *
- * Selection is driven by `data-theme="teal|ocean|sunset|dark"` on <html>, persisted to the same
- * localStorage key "app_theme" the old bundle used. `.dark`/`.light` is also toggled on <html> for
- * compatibility with ui-kit's `.dark` variant selector and any future plain-CSS dark-mode rules.
+ * Accent chon qua `data-theme="teal|ocean|sunset"`, mode chon qua class `.dark`/`.light` — ca hai
+ * deu dat tren <html> boi ThemeProvider, persist vao localStorage "app_theme" + "app_mode".
+ * Day la nguon duy nhat cho --ui-bg/surface/fg/border/primary/ring — tokens.css chi con giu
+ * --ui-success/warning/danger (khong phu thuoc accent) va cac gia tri cau truc (radius...).
  */
 
+/* ---------- Teal ---------- */
 :root[data-theme="teal"],
 :root:not([data-theme]) {
   --teal-dark: #0f3d38;
@@ -36,6 +36,34 @@
   --ui-ring: oklch(from var(--teal) l c h / 35%);
 }
 
+:root[data-theme="teal"].dark,
+:root:not([data-theme]).dark {
+  color-scheme: dark;
+
+  --teal-dark: #0b1f1c;
+  --teal: #14b8a6;
+  --orange: #fb923c;
+  --bg: #101513;
+  --card: #1b2320;
+  --text: #e8f0ee;
+  --muted: #8aa39c;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(25% 0.01 165);
+  --ui-border: oklch(32% 0.012 165);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(72% 0.14 165);
+  --ui-primary-fg: oklch(18% 0.02 165);
+  --ui-primary-soft: oklch(30% 0.06 165);
+
+  --ui-ring: oklch(from var(--teal) l c h / 45%);
+}
+
+/* ---------- Ocean ---------- */
 :root[data-theme="ocean"] {
   --teal-dark: #163949;
   --teal: #216d94;
@@ -60,6 +88,33 @@
   --ui-ring: oklch(from var(--teal) l c h / 35%);
 }
 
+:root[data-theme="ocean"].dark {
+  color-scheme: dark;
+
+  --teal-dark: #0f2733;
+  --teal: #2f93bf;
+  --orange: #d9a72c;
+  --bg: #0d1720;
+  --card: #16232c;
+  --text: #e7f1f6;
+  --muted: #82a0ac;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(25% 0.012 230);
+  --ui-border: oklch(32% 0.014 230);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(72% 0.12 230);
+  --ui-primary-fg: oklch(16% 0.02 230);
+  --ui-primary-soft: oklch(30% 0.06 230);
+
+  --ui-ring: oklch(from var(--teal) l c h / 45%);
+}
+
+/* ---------- Sunset ---------- */
 :root[data-theme="sunset"] {
   --teal-dark: #532b22;
   --teal: #a64f36;
@@ -84,28 +139,28 @@
   --ui-ring: oklch(from var(--teal) l c h / 35%);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme="sunset"].dark {
   color-scheme: dark;
 
-  --teal-dark: #0b1f1c;
-  --teal: #14b8a6;
-  --orange: #fb923c;
-  --bg: #101513;
-  --card: #1b2320;
-  --text: #e8f0ee;
-  --muted: #8aa39c;
+  --teal-dark: #3a2016;
+  --teal: #c96a4a;
+  --orange: #5fa8ff;
+  --bg: #181210;
+  --card: #241a16;
+  --text: #f3e6e0;
+  --muted: #a9887b;
 
   --ui-bg: oklch(from var(--bg) l c h);
   --ui-surface: oklch(from var(--card) l c h);
-  --ui-surface-muted: oklch(25% 0.01 165);
-  --ui-border: oklch(32% 0.012 165);
+  --ui-surface-muted: oklch(26% 0.014 40);
+  --ui-border: oklch(33% 0.016 40);
   --ui-fg: oklch(from var(--text) l c h);
   --ui-fg-muted: oklch(from var(--muted) l c h);
 
   --ui-primary: oklch(from var(--teal) l c h);
-  --ui-primary-hover: oklch(72% 0.14 165);
-  --ui-primary-fg: oklch(18% 0.02 165);
-  --ui-primary-soft: oklch(30% 0.06 165);
+  --ui-primary-hover: oklch(72% 0.13 40);
+  --ui-primary-fg: oklch(18% 0.02 40);
+  --ui-primary-soft: oklch(31% 0.06 40);
 
   --ui-ring: oklch(from var(--teal) l c h / 45%);
 }

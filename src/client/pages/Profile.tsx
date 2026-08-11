@@ -4,11 +4,13 @@ import { api } from "../lib/api";
 import { Avatar } from "../ui/Avatar";
 import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
-import { ThemePicker } from "../theme/ThemePicker";
 import { Switch } from "../ui/Switch";
+import { useTheme } from "../theme/ThemeProvider";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { theme, mode, themes } = useTheme();
+  const currentThemeLabel = themes.find((t) => t.id === theme)?.label ?? theme;
   const [user, setUser] = useState<any>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -66,10 +68,16 @@ export default function Profile() {
           <span className="text-sm">Giọng đọc & Phát âm</span>
           <span className="text-sm text-fg-muted">Mặc định</span>
         </div>
-        <div className="flex items-center justify-between p-4">
-          <span className="text-sm">Giao diện</span>
-          <ThemePicker />
-        </div>
+        <Link
+          to="/theme"
+          className="flex items-center justify-between p-4 text-sm no-underline"
+        >
+          <span>Giao diện</span>
+          <span className="flex items-center gap-1.5 text-fg-muted">
+            {currentThemeLabel} · {mode === "dark" ? "Tối" : "Sáng"}
+            <span aria-hidden>›</span>
+          </span>
+        </Link>
         <div className="p-4">
           <Switch
             checked={user.flashcard_audio !== 0}

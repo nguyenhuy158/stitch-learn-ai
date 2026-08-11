@@ -19,6 +19,7 @@ import Rankings from "./pages/Rankings";
 import Mistakes from "./pages/Mistakes";
 import Writing from "./pages/Writing";
 import Help from "./pages/Help";
+import Appearance from "./pages/Appearance";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -50,6 +51,7 @@ export default function App() {
       <Route path="/mistakes" element={<Mistakes />} />
       <Route path="/writing" element={<Writing />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/theme" element={<Appearance />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
