@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
-import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
 import { BookIcon, ChatIcon } from "../components/icons";
 
@@ -43,7 +42,9 @@ export default function Home() {
         <p className="mt-1 text-sm text-fg-muted">Tiếp tục hành trình học tiếng Anh của bạn nào.</p>
       </header>
 
-      <Card className="mb-5 bg-primary-hover p-4 text-white">
+      {/* Khong dung <Card>: class bg-surface cua no thang bg-primary-hover theo thu tu CSS
+          (cn() khong merge nhu tailwind-merge), lam the streak trang tren trang, chu trang mat hut. */}
+      <div className="mb-5 rounded-ui border border-border bg-primary-hover p-4 text-white shadow-sm">
         <div className="flex items-center justify-between text-sm text-white/80">
           <span>🔥 Chuỗi {user?.streak ?? 0} ngày</span>
           <span>⭐ {user?.xp ?? 0} XP</span>
@@ -66,7 +67,7 @@ export default function Home() {
             </div>
           )
         )}
-      </Card>
+      </div>
 
       <div className="mb-3 flex items-center justify-between">
         <h2 className="m-0 text-base font-bold">Bài học</h2>
