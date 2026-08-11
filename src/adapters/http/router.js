@@ -15,7 +15,7 @@ import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
-import { getRankings } from "../../domain/usecases/getRankings.js";
+import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -152,6 +152,18 @@ export async function handleRequest(request, url, deps) {
     } catch (error) {
       console.error("Rankings error:", error);
       return json({ error: "Failed to load rankings" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/rankings/weekly" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      return json(await getWeeklyRankings({ userId: id }, deps));
+    } catch (error) {
+      console.error("Weekly rankings error:", error);
+      return json({ error: "Failed to load weekly rankings" }, { status: 500 });
     }
   }
 

@@ -14,7 +14,7 @@ export async function completeDailyChallenge({ userId, score }, deps, now = new 
   if (existing) return { completed: true, xpAwarded: existing.xp_awarded };
 
   await dailyChallengeRepository.markCompleted(userId, day, CHALLENGE_XP, day);
-  await userRepository.incrementXp(userId, CHALLENGE_XP);
+  await userRepository.incrementXp(userId, CHALLENGE_XP, day);
   await recordLearningActivity({ userId }, deps, now);
 
   return { completed: true, xpAwarded: CHALLENGE_XP, score };

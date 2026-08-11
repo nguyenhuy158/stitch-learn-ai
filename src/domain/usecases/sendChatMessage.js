@@ -1,6 +1,7 @@
 import { recordLearningActivity } from "./recordLearningActivity.js";
+import { localDate } from "../streak.js";
 
-export async function sendChatMessage({ userId, message }, { userRepository, chatRepository, aiTutorPort }) {
+export async function sendChatMessage({ userId, message }, { userRepository, chatRepository, aiTutorPort }, now = new Date()) {
   const user = await userRepository.findById(userId);
   const level = user?.level || "B1";
   const history = await chatRepository.listRecent(userId, 10);
@@ -9,7 +10,7 @@ export async function sendChatMessage({ userId, message }, { userRepository, cha
     feedback: reply.feedback,
     corrections: reply.corrections
   });
-  await userRepository.incrementXp(userId, 5);
-  await recordLearningActivity({ userId }, { userRepository });
+  await userRepository.incrementXp(userId, 5, localDate(now));
+  await recordLearningActivity({ userId }, { userRepository }, now);
   return reply;
 }

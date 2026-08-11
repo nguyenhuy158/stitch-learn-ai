@@ -12,8 +12,9 @@
  * @property {(id: string, day: string) => Promise<void>} recordActivityDay
  * @property {(id: string, limit: number) => Promise<string[]>} listActivityDays
  * @property {(id: string, fields: object) => Promise<void>} updateProfile
- * @property {(id: string, amount: number) => Promise<void>} incrementXp
+ * @property {(id: string, amount: number, day: string) => Promise<void>} incrementXp
  * @property {(limit: number) => Promise<Array<{id: string, name: string, xp: number, streak: number}>>} listRankings
+ * @property {(sinceDay: string, limit: number) => Promise<Array<{id: string, name: string, streak: number, weekly_xp: number}>>} listWeeklyRankings
  * @property {(id: string) => Promise<number|null>} getRank
  * @property {(day: string) => Promise<Array<{id: string, email: string, name: string|null, streak: number}>>} listInactiveToday
  *

@@ -53,8 +53,25 @@ export function createD1UserRepository(db) {
       const query = `UPDATE users SET ${columns.map((c) => `${c} = ?`).join(", ")} WHERE id = ?`;
       await db.prepare(query).bind(...columns.map((c) => fields[c]), id).run();
     },
-    async incrementXp(id, amount) {
-      await db.prepare("UPDATE users SET xp = COALESCE(xp, 0) + ? WHERE id = ?").bind(amount, id).run();
+    async incrementXp(id, amount, day) {
+      await db.batch([
+        db.prepare("UPDATE users SET xp = COALESCE(xp, 0) + ? WHERE id = ?").bind(amount, id),
+        db.prepare("INSERT INTO xp_events (user_id, amount, day, created_at) VALUES (?, ?, ?, ?)").bind(id, amount, day, new Date().toISOString())
+      ]);
+    },
+    async listWeeklyRankings(sinceDay, limit) {
+      const { results } = await db
+        .prepare(
+          `SELECT u.id, u.name, u.streak, COALESCE(SUM(x.amount), 0) AS weekly_xp
+           FROM users u
+           JOIN xp_events x ON x.user_id = u.id AND x.day >= ?
+           GROUP BY u.id
+           ORDER BY weekly_xp DESC, u.streak DESC
+           LIMIT ?`
+        )
+        .bind(sinceDay, limit)
+        .all();
+      return results;
     },
     /** Users who haven't logged any activity_days row for `day` yet — the streak-reminder cron's target list. */
     async listInactiveToday(day) {

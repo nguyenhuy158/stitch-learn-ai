@@ -47,6 +47,7 @@ export const api = {
   reviewVocab: (id, quality) => request(`/api/vocab/${id}/review`, { method: "POST", body: JSON.stringify({ quality }) }),
 
   rankings: () => request("/api/rankings"),
+  weeklyRankings: () => request("/api/rankings/weekly"),
 
   dailyChallenge: () => request("/api/challenge/today"),
   completeDailyChallenge: (score) => request("/api/challenge/complete", { method: "POST", body: JSON.stringify({ score }) }),
