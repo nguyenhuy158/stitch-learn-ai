@@ -53,7 +53,8 @@ export const api = {
   completeDailyChallenge: (score) => request("/api/challenge/complete", { method: "POST", body: JSON.stringify({ score }) }),
 
   wordGameRound: (difficulty) => request(`/api/game/round?difficulty=${difficulty}`),
-  wordPool: (count) => request(`/api/game/words?count=${count}`),
+  wordPool: (count, difficulty) =>
+    request(`/api/game/words?count=${count}${difficulty ? `&difficulty=${difficulty}` : ""}`),
   submitGameScore: (game, score, correct = 0) =>
     request(`/api/games/${game}/score`, { method: "POST", body: JSON.stringify({ score, correct }) }),
   gameLeaderboard: (game) => request(`/api/games/${game}/leaderboard`),

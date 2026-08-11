@@ -17,7 +17,7 @@ import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
-import { getWordPool } from "../../domain/usecases/getWordPool.js";
+import { getWordPool, DIFFICULTY_LEVELS } from "../../domain/usecases/getWordPool.js";
 import { submitGameScore } from "../../domain/usecases/submitGameScore.js";
 import { getGameLeaderboard } from "../../domain/usecases/getGameLeaderboard.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
@@ -191,7 +191,14 @@ export async function handleRequest(request, url, deps) {
     try {
       await deps.sessionPort.verify(authToken);
       const count = url.searchParams.get("count");
-      return json(await getWordPool({ count }, deps));
+      const levelsParam = url.searchParams.get("levels");
+      const difficultyParam = url.searchParams.get("difficulty");
+      const levels = levelsParam
+        ? levelsParam.split(",").map((l) => l.trim()).filter(Boolean)
+        : difficultyParam
+          ? DIFFICULTY_LEVELS[difficultyParam]
+          : undefined;
+      return json(await getWordPool({ count, levels }, deps));
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
       console.error("Word pool error:", error);

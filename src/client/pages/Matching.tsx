@@ -10,6 +10,7 @@ import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 
 type Word = { id: number; term: string; meaning: string };
 type Tile = { key: string; wordId: number; text: string; kind: "term" | "meaning" };
+type Difficulty = { key: string; label: string; desc: string; pairs: number; totalSeconds: number };
 
 function shuffle<T>(arr: T[]): T[] {
   const copy = [...arr];
@@ -20,23 +21,28 @@ function shuffle<T>(arr: T[]): T[] {
   return copy;
 }
 
-const PAIRS = 8;
-const GAME_KEY = "matching-game";
-const TOTAL_SECONDS = 45;
+const DIFFICULTIES: Difficulty[] = [
+  { key: "easy", label: "Dễ", desc: "A1-A2 · 6 cặp · 60s", pairs: 6, totalSeconds: 60 },
+  { key: "hard", label: "Khó", desc: "B1-B2 · 8 cặp · 45s", pairs: 8, totalSeconds: 45 },
+  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 10 cặp · 35s", pairs: 10, totalSeconds: 35 }
+];
 
-/** Fewer moves = more points; a perfect run (moves === PAIRS) scores max. */
-function scoreFor(moves: number) {
-  return Math.max(50, 500 - Math.max(0, moves - PAIRS) * 30);
+const GAME_KEY = "matching-game";
+
+/** Fewer moves = more points; a perfect run (moves === pairs) scores max. */
+function scoreFor(moves: number, pairs: number) {
+  return Math.max(50, 500 - Math.max(0, moves - pairs) * 30);
 }
 
 export default function Matching() {
   const navigate = useNavigate();
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
   const [tiles, setTiles] = useState<Tile[] | null>(null);
   const [matched, setMatched] = useState<Set<number>>(new Set());
   const [selected, setSelected] = useState<Tile[]>([]);
   const [wrongPair, setWrongPair] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(TOTAL_SECONDS);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [failed, setFailed] = useState(false);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
@@ -53,13 +59,16 @@ export default function Matching() {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
   }, []);
 
-  function load() {
+  function load(d: Difficulty) {
+    setError("");
+    setDifficulty(d);
+    setTiles(null);
     submittedRef.current = false;
     setSubmitResult(null);
     setFailed(false);
-    setTimeLeft(TOTAL_SECONDS);
+    setTimeLeft(d.totalSeconds);
     api
-      .wordPool(PAIRS)
+      .wordPool(d.pairs, d.key)
       .then((data: { words: Word[] }) => {
         const cards: Tile[] = [];
         data.words.forEach((w) => {
@@ -74,16 +83,15 @@ export default function Matching() {
       .catch((err) => {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
+        setDifficulty(null);
       });
   }
 
-  useEffect(load, [navigate]);
-
-  const won = tiles && matched.size === PAIRS;
+  const won = tiles && difficulty && matched.size === difficulty.pairs;
   const over = won || failed;
 
   useEffect(() => {
-    if (!tiles || over) return;
+    if (!tiles || over || !difficulty) return;
     stopTimer();
     timerRef.current = setInterval(() => {
       setTimeLeft((t) => {
@@ -96,7 +104,7 @@ export default function Matching() {
       });
     }, 1000);
     return stopTimer;
-  }, [tiles, over]);
+  }, [tiles, over, difficulty]);
 
   function pick(tile: Tile) {
     if (over || matched.has(tile.wordId) || selected.some((s) => s.key === tile.key) || selected.length === 2) return;
@@ -121,13 +129,13 @@ export default function Matching() {
   }
 
   useEffect(() => {
-    if (!over || submittedRef.current) return;
+    if (!over || submittedRef.current || !difficulty) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, won ? scoreFor(moves) : 0)
+      .submitGameScore(GAME_KEY, won ? scoreFor(moves, difficulty.pairs) : 0)
       .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
-  }, [over, won, moves]);
+  }, [over, won, moves, difficulty]);
 
   return (
     <div className="mx-auto max-w-xl">
@@ -138,13 +146,26 @@ export default function Matching() {
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && tiles === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
+
+        {!tiles && !error && (
+          <div className="flex flex-col gap-3">
+            {DIFFICULTIES.map((d) => (
+              <button key={d.key} type="button" onClick={() => load(d)} disabled={difficulty?.key === d.key}>
+                <Card className="p-4 text-left">
+                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
+                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
+                </Card>
+              </button>
+            ))}
+            {difficulty && !tiles && !error && (
+              <div className="flex justify-center py-6">
+                <Spinner />
+              </div>
+            )}
           </div>
         )}
 
-        {tiles && !over && (
+        {tiles && difficulty && !over && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>Lượt: {moves}</span>
@@ -153,7 +174,7 @@ export default function Matching() {
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
                 className={cn("h-full rounded-full transition-all", timeLeft <= 8 ? "bg-red-500" : "bg-primary")}
-                style={{ width: `${(timeLeft / TOTAL_SECONDS) * 100}%` }}
+                style={{ width: `${(timeLeft / difficulty.totalSeconds) * 100}%` }}
               />
             </div>
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -183,10 +204,10 @@ export default function Matching() {
           </>
         )}
 
-        {over && (
+        {over && difficulty && (
           <Card className="mt-5 p-5 text-center">
             <div className="text-lg font-bold text-primary-hover">
-              {won ? `Xong! ${moves} lượt — ${scoreFor(moves)} điểm` : "Thua rồi!"}
+              {won ? `Xong! ${moves} lượt — ${scoreFor(moves, difficulty.pairs)} điểm` : "Thua rồi!"}
             </div>
             {!won && <div className="mt-1 text-sm text-fg-muted">{failed && timeLeft === 0 ? "Hết giờ" : "Ghép sai"}</div>}
             {submitResult && (
@@ -195,9 +216,21 @@ export default function Matching() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <Button block className="mt-4" onClick={load}>
-              Chơi lại
-            </Button>
+            <div className="mt-4 flex gap-2.5">
+              <Button
+                block
+                variant="outline"
+                onClick={() => {
+                  setTiles(null);
+                  setDifficulty(null);
+                }}
+              >
+                Đổi độ khó
+              </Button>
+              <Button block onClick={() => load(difficulty)}>
+                Chơi lại
+              </Button>
+            </div>
           </Card>
         )}
       </main>

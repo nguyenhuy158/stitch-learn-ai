@@ -11,17 +11,24 @@ import { speak } from "../lib/speak";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { questions: Question[] };
+type Difficulty = { key: string; label: string; desc: string; questions: number; secondsPerQuestion: number };
+
+const DIFFICULTIES: Difficulty[] = [
+  { key: "easy", label: "Dễ", desc: "A1-A2 · 10 câu · 12s/câu", questions: 10, secondsPerQuestion: 12 },
+  { key: "hard", label: "Khó", desc: "B1-B2 · 12 câu · 9s/câu", questions: 12, secondsPerQuestion: 9 },
+  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 15 câu · 6s/câu", questions: 15, secondsPerQuestion: 6 }
+];
 
 const GAME_KEY = "listening-game";
-const SECONDS_PER_QUESTION = 10;
 
 export default function Listening() {
   const navigate = useNavigate();
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
   const [round, setRound] = useState<Round | null>(null);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState(SECONDS_PER_QUESTION);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [stopped, setStopped] = useState(false);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
@@ -38,15 +45,22 @@ export default function Listening() {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
   }, []);
 
-  useEffect(() => {
+  function load(d: Difficulty) {
+    setError("");
+    setDifficulty(d);
+    setRound(null);
+    submittedRef.current = false;
+    setSubmitResult(null);
+    setStopped(false);
     api
-      .wordGameRound("legend")
-      .then((data) => setRound({ questions: data.questions.slice(0, 12) }))
-      .catch((err) => {
+      .wordGameRound(d.key)
+      .then((data) => setRound({ questions: data.questions.slice(0, d.questions) }))
+      .catch((err: any) => {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
+        setDifficulty(null);
       });
-  }, [navigate]);
+  }
 
   const finished = round && index >= round.questions.length;
   const over = finished || stopped;
@@ -67,8 +81,8 @@ export default function Listening() {
   }, [q?.id]);
 
   useEffect(() => {
-    if (!q || picked) return;
-    setTimeLeft(SECONDS_PER_QUESTION);
+    if (!q || picked || !difficulty) return;
+    setTimeLeft(difficulty.secondsPerQuestion);
     stopTimer();
     timerRef.current = setInterval(() => {
       setTimeLeft((t) => {
@@ -82,7 +96,7 @@ export default function Listening() {
     }, 1000);
     return stopTimer;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, picked]);
+  }, [q, picked, difficulty]);
 
   function answer(choice: string | null) {
     if (!round || picked || stopped) return;
@@ -102,16 +116,10 @@ export default function Listening() {
   }
 
   function restart() {
-    setRound(null);
+    if (!difficulty) return;
     setIndex(0);
     setScore(0);
-    setStopped(false);
-    setSubmitResult(null);
-    submittedRef.current = false;
-    api
-      .wordGameRound("legend")
-      .then((data) => setRound({ questions: data.questions.slice(0, 12) }))
-      .catch((err) => setError(err.message));
+    load(difficulty);
   }
 
   return (
@@ -123,13 +131,35 @@ export default function Listening() {
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && round === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
+
+        {!round && (
+          <div className="flex flex-col gap-3">
+            {DIFFICULTIES.map((d) => (
+              <button
+                key={d.key}
+                type="button"
+                onClick={() => {
+                  setIndex(0);
+                  setScore(0);
+                  load(d);
+                }}
+                disabled={difficulty?.key === d.key}
+              >
+                <Card className="p-4 text-left">
+                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
+                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
+                </Card>
+              </button>
+            ))}
+            {difficulty && !round && !error && (
+              <div className="flex justify-center py-6">
+                <Spinner />
+              </div>
+            )}
           </div>
         )}
 
-        {q && (
+        {q && difficulty && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>
@@ -140,7 +170,7 @@ export default function Listening() {
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
                 className={cn("h-full rounded-full transition-all", timeLeft <= 2 ? "bg-red-500" : "bg-primary")}
-                style={{ width: `${(timeLeft / SECONDS_PER_QUESTION) * 100}%` }}
+                style={{ width: `${(timeLeft / difficulty.secondsPerQuestion) * 100}%` }}
               />
             </div>
             <Card className="mb-4 flex flex-col items-center gap-3 p-6 text-center">
@@ -191,9 +221,21 @@ export default function Listening() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <Button block className="mt-4" onClick={restart}>
-              Chơi lại
-            </Button>
+            <div className="mt-4 flex gap-2.5">
+              <Button
+                block
+                variant="outline"
+                onClick={() => {
+                  setRound(null);
+                  setDifficulty(null);
+                }}
+              >
+                Đổi độ khó
+              </Button>
+              <Button block onClick={restart}>
+                Chơi lại
+              </Button>
+            </div>
           </Card>
         )}
       </main>

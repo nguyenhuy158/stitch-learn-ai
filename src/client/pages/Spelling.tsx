@@ -9,10 +9,15 @@ import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 
 type Word = { id: number; term: string; meaning: string };
+type Difficulty = { key: string; label: string; desc: string; roundSize: number; secondsPerWord: number };
 
-const ROUND_SIZE = 10;
+const DIFFICULTIES: Difficulty[] = [
+  { key: "easy", label: "Dễ", desc: "A1-A2 · 8 từ · 15s/từ", roundSize: 8, secondsPerWord: 15 },
+  { key: "hard", label: "Khó", desc: "B1-B2 · 10 từ · 10s/từ", roundSize: 10, secondsPerWord: 10 },
+  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 12 từ · 7s/từ", roundSize: 12, secondsPerWord: 7 }
+];
+
 const GAME_KEY = "spelling-game";
-const SECONDS_PER_WORD = 12;
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -20,12 +25,13 @@ function normalize(s: string) {
 
 export default function Spelling() {
   const navigate = useNavigate();
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
   const [words, setWords] = useState<Word[] | null>(null);
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(SECONDS_PER_WORD);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [stopped, setStopped] = useState(false);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
@@ -43,12 +49,15 @@ export default function Spelling() {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
   }, []);
 
-  function load() {
+  function load(d: Difficulty) {
+    setError("");
+    setDifficulty(d);
+    setWords(null);
     submittedRef.current = false;
     setSubmitResult(null);
     setStopped(false);
     api
-      .wordPool(ROUND_SIZE)
+      .wordPool(d.roundSize, d.key)
       .then((data: { words: Word[] }) => {
         setWords(data.words);
         setIndex(0);
@@ -59,10 +68,10 @@ export default function Spelling() {
       .catch((err) => {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
+        setDifficulty(null);
       });
   }
 
-  useEffect(load, [navigate]);
   useEffect(() => inputRef.current?.focus(), [index]);
 
   const current = words && index < words.length ? words[index] : null;
@@ -79,8 +88,8 @@ export default function Spelling() {
   }, [over, score]);
 
   useEffect(() => {
-    if (!current || status !== "idle" || stopped) return;
-    setTimeLeft(SECONDS_PER_WORD);
+    if (!current || status !== "idle" || stopped || !difficulty) return;
+    setTimeLeft(difficulty.secondsPerWord);
     stopTimer();
     timerRef.current = setInterval(() => {
       setTimeLeft((t) => {
@@ -94,7 +103,7 @@ export default function Spelling() {
     }, 1000);
     return stopTimer;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current, status, stopped]);
+  }, [current, status, stopped, difficulty]);
 
   function fail() {
     if (status !== "idle" || stopped) return;
@@ -131,13 +140,26 @@ export default function Spelling() {
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && words === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
+
+        {!words && !error && (
+          <div className="flex flex-col gap-3">
+            {DIFFICULTIES.map((d) => (
+              <button key={d.key} type="button" onClick={() => load(d)} disabled={difficulty?.key === d.key}>
+                <Card className="p-4 text-left">
+                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
+                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
+                </Card>
+              </button>
+            ))}
+            {difficulty && !words && !error && (
+              <div className="flex justify-center py-6">
+                <Spinner />
+              </div>
+            )}
           </div>
         )}
 
-        {current && !over && (
+        {current && !over && difficulty && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>
@@ -148,7 +170,7 @@ export default function Spelling() {
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
                 className={cn("h-full rounded-full transition-all", timeLeft <= 3 ? "bg-red-500" : "bg-primary")}
-                style={{ width: `${(timeLeft / SECONDS_PER_WORD) * 100}%` }}
+                style={{ width: `${(timeLeft / difficulty.secondsPerWord) * 100}%` }}
               />
             </div>
             <Card className="mb-4 p-6 text-center">
@@ -177,7 +199,7 @@ export default function Spelling() {
           </>
         )}
 
-        {over && (
+        {over && difficulty && (
           <Card className="p-5 text-center">
             <div className="text-2xl font-extrabold text-primary-hover">
               {score} / {words!.length}
@@ -189,9 +211,21 @@ export default function Spelling() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <Button block className="mt-4" onClick={load}>
-              Chơi lại
-            </Button>
+            <div className="mt-4 flex gap-2.5">
+              <Button
+                block
+                variant="outline"
+                onClick={() => {
+                  setWords(null);
+                  setDifficulty(null);
+                }}
+              >
+                Đổi độ khó
+              </Button>
+              <Button block onClick={() => load(difficulty)}>
+                Chơi lại
+              </Button>
+            </div>
           </Card>
         )}
       </main>

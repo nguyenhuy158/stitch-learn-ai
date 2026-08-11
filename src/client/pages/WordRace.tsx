@@ -9,12 +9,17 @@ import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 
 type Word = { id: number; term: string; meaning: string };
+type Difficulty = { key: string; label: string; desc: string; startMs: number; minMs: number; poolSize: number };
 
-const START_MS = 6000;
-const MIN_MS = 2200;
 const STEP_MS = 250;
 const START_LIVES = 1;
 const GAME_KEY = "word-race";
+
+const DIFFICULTIES: Difficulty[] = [
+  { key: "easy", label: "Dễ", desc: "A1-A2 · 20 từ · rơi chậm dần", startMs: 7000, minMs: 3000, poolSize: 20 },
+  { key: "hard", label: "Khó", desc: "B1-B2 · 20 từ · rơi nhanh", startMs: 6000, minMs: 2200, poolSize: 20 },
+  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 20 từ · rơi rất nhanh", startMs: 4500, minMs: 1600, poolSize: 20 }
+];
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -22,6 +27,7 @@ function normalize(s: string) {
 
 export default function WordRace() {
   const navigate = useNavigate();
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
   const [words, setWords] = useState<Word[] | null>(null);
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
@@ -32,7 +38,7 @@ export default function WordRace() {
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
-  const durationRef = useRef(START_MS);
+  const durationRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,25 +48,27 @@ export default function WordRace() {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
   }, []);
 
-  function load() {
+  function load(d: Difficulty) {
+    setError("");
+    setDifficulty(d);
+    setWords(null);
     submittedRef.current = false;
     setSubmitResult(null);
     api
-      .wordPool(20)
+      .wordPool(d.poolSize, d.key)
       .then((data: { words: Word[] }) => {
         setWords(data.words);
         setIndex(0);
         setLives(START_LIVES);
         setScore(0);
-        durationRef.current = START_MS;
+        durationRef.current = d.startMs;
       })
       .catch((err) => {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
+        setDifficulty(null);
       });
   }
-
-  useEffect(load, [navigate]);
 
   const current = words && index < words.length && lives > 0 ? words[index] : null;
   const gameOver = words && (lives <= 0 || index >= words.length);
@@ -80,6 +88,7 @@ export default function WordRace() {
   }
 
   function next(miss: boolean) {
+    if (!difficulty) return;
     stopLoop();
     if (miss) {
       setLives((l) => l - 1);
@@ -91,7 +100,7 @@ export default function WordRace() {
       setInput("");
       setProgress(0);
       setIndex((i) => i + 1);
-      durationRef.current = Math.max(MIN_MS, durationRef.current - STEP_MS);
+      durationRef.current = Math.max(difficulty.minMs, durationRef.current - STEP_MS);
     }, miss ? 500 : 200);
   }
 
@@ -138,9 +147,22 @@ export default function WordRace() {
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && words === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
+
+        {!words && !error && (
+          <div className="flex flex-col gap-3">
+            {DIFFICULTIES.map((d) => (
+              <button key={d.key} type="button" onClick={() => load(d)} disabled={difficulty?.key === d.key}>
+                <Card className="p-4 text-left">
+                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
+                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
+                </Card>
+              </button>
+            ))}
+            {difficulty && !words && !error && (
+              <div className="flex justify-center py-6">
+                <Spinner />
+              </div>
+            )}
           </div>
         )}
 
@@ -181,7 +203,7 @@ export default function WordRace() {
           </>
         )}
 
-        {gameOver && (
+        {gameOver && difficulty && (
           <Card className="p-5 text-center">
             <div className="text-2xl font-extrabold text-primary-hover">{score} điểm</div>
             <div className="mt-1 text-sm text-fg-muted">{lives <= 0 ? "Hết mạng!" : "Hoàn thành!"}</div>
@@ -191,9 +213,21 @@ export default function WordRace() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <Button block className="mt-4" onClick={load}>
-              Chơi lại
-            </Button>
+            <div className="mt-4 flex gap-2.5">
+              <Button
+                block
+                variant="outline"
+                onClick={() => {
+                  setWords(null);
+                  setDifficulty(null);
+                }}
+              >
+                Đổi độ khó
+              </Button>
+              <Button block onClick={() => load(difficulty)}>
+                Chơi lại
+              </Button>
+            </div>
           </Card>
         )}
       </main>
