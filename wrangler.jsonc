@@ -3,6 +3,7 @@
   "name": "ai-english",
   "main": "src/worker.js",
   "compatibility_date": "2026-01-07",
+  "workers_dev": false,
   "assets": {
     "binding": "ASSETS",
     "directory": "./public"
