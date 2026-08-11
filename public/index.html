@@ -567,11 +567,12 @@
         "Day Streak": "ngày liên tiếp",
         "Practice every day to build your habit!": "Luyện tập mỗi ngày để xây dựng thói quen!",
         "Daily Goal": "Mục tiêu hàng ngày",
-        "MINUTES": "PHÚT",
-        "WORDS": "TỪ",
+        "Minutes": "Phút",
+        "Words": "Từ",
         "Continue Learning": "Tiếp tục học",
         "See all": "Xem tất cả",
         "Resume Lesson": "Tiếp tục",
+        "Progress": "Tiến độ",
         "Gemini Suggests": "Gemini Gợi ý",
         "Pronunciation Fix": "Sửa lỗi phát âm",
         "You struggled with \"th\" sounds yesterday.": "Bạn đã gặp khó khi phát âm \"th\" hôm qua.",
@@ -604,7 +605,8 @@
         [/^(\d+)m ago$/, (m) => `${m[1]} phút trước`],
         [/^(\d+)h ago$/, (m) => `${m[1]} giờ trước`],
         [/^(\d+)d ago$/, (m) => `${m[1]} ngày trước`],
-        [/^Just now$/, () => "Vừa xong"]
+        [/^Just now$/, () => "Vừa xong"],
+        [/^(\d+)\s*\/\s*(\d+)\s*mins$/, (m) => `${m[1]} / ${m[2]} phút`]
       ];
 
       function translateNode(node) {
