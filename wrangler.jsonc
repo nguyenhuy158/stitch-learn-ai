@@ -16,6 +16,7 @@
     }
   ],
   "services": [{ "binding": "MAILER", "service": "mailer" }],
+  "ai": { "binding": "AI" },
   // 13:30 UTC = 20:30 gio Viet Nam, cuoi ngay hoc nhung chua qua muon de con kip.
   "triggers": {
     "crons": ["30 13 * * *"]

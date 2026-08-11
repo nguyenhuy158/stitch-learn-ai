@@ -16,6 +16,7 @@ import { completeDailyChallenge } from "../../domain/usecases/completeDailyChall
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
+import { classifyVocabLevels } from "../../domain/usecases/classifyVocabLevels.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -285,6 +286,19 @@ export async function handleRequest(request, url, deps) {
       const { id } = await deps.sessionPort.verify(authToken);
       return json(await getChatHistory({ userId: id }, deps));
     } catch (error) {
+      return json({ error: error.message }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/admin/classify-vocab-levels" && request.method === "POST") {
+    if (request.headers.get("x-admin-key") !== deps.env.ADMIN_TOKEN) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    try {
+      const result = await classifyVocabLevels(deps);
+      return json(result);
+    } catch (error) {
+      console.error("Classify vocab levels error:", error);
       return json({ error: error.message }, { status: 500 });
     }
   }
