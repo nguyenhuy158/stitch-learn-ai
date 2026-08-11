@@ -33,11 +33,26 @@
       rest of the app's teal/orange palette. Scoped to its exact (unique)
       combination of utility classes, verified via devtools. Circle shape +
       teal gradient matching the header/streak color instead.
+
+      It's also only lifted `-top-8` (half in, half out of the 72px nav
+      row — verified via devtools), so on any page whose content ends in a
+      photo (e.g. the lesson banner on Home) the button's top half floats
+      over that image instead of the nav's own background — looks like
+      it's snagged on whatever happens to scroll underneath, not an
+      intentional floating action button (reference: chia-keo's
+      MobileGameNav ExpenseFab, which sits fully clear above its bar with
+      a real gap, never overlapping page content). Lifted further so the
+      whole circle clears the bar with a small gap instead, and dropped
+      the 4px white ring — it existed to separate the button from whatever
+      was directly behind it when overlapping; with no overlap there's
+      nothing to separate it from.
     */
     button.bg-gradient-to-br.from-indigo-500.via-indigo-600.to-purple-600 {
       border-radius: 50% !important;
       background: linear-gradient(135deg, #14b8a6, #0f3d38) !important;
       box-shadow: 0 8px 20px rgba(15, 61, 56, 0.35) !important;
+      top: -4.5rem !important;
+      border: none !important;
     }
     /*
       The compiled bundle hard-codes a phone-frame mockup: a single
