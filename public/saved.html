@@ -71,7 +71,7 @@
         const items = await res.json();
         if (!Array.isArray(items) || !items.length) {
           content.className = "state";
-          content.textContent = "Chưa lưu từ vựng nào. Vào Flashcards và bấm ★ để lưu.";
+          content.textContent = "Chưa lưu từ vựng nào. Vào Thẻ ghi nhớ và bấm ★ để lưu.";
           return;
         }
         content.className = "";

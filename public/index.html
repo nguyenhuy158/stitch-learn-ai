@@ -154,7 +154,7 @@
 <body>
   <nav id="app-sidebar">
     <div class="sidebar-title">Học Tiếng Anh cùng Gemini</div>
-    <a href="/" data-path="/"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="/" data-path="/"><span class="material-symbols-outlined">home</span>Trang chủ</a>
     <a href="/lessons" data-path="/lessons"><span class="material-symbols-outlined">book_2</span>Học</a>
     <a href="/chat" data-path="/chat"><span class="material-symbols-outlined">smart_toy</span>AI Chat</a>
     <a href="/history" data-path="/history"><span class="material-symbols-outlined">history</span>Lịch sử</a>
@@ -243,7 +243,7 @@
           // there.
           if (location.pathname === "/") {
             const seeAllBtn = e.target.closest("button");
-            if (seeAllBtn && seeAllBtn.textContent.trim() === "See all") {
+            if (seeAllBtn && seeAllBtn.textContent.trim() === "Xem tất cả") {
               location.href = "/lessons";
               return;
             }
@@ -260,34 +260,34 @@
             const toolBtn = e.target.closest("button");
             if (toolBtn) {
               const toolText = toolBtn.textContent.trim();
-              if (toolText.endsWith("AI Tutor")) {
+              if (toolText.endsWith("Gia sư AI")) {
                 location.href = "/chat";
                 return;
               }
-              if (toolText.endsWith("Flashcards")) {
+              if (toolText.endsWith("Thẻ ghi nhớ")) {
                 location.href = "/flashcards.html";
                 return;
               }
-              if (toolText.endsWith("Saved")) {
+              if (toolText.endsWith("Đã lưu")) {
                 location.href = "/saved.html";
                 return;
               }
-              if (toolText.endsWith("Rankings")) {
+              if (toolText.endsWith("Xếp hạng")) {
                 location.href = "/rankings.html";
                 return;
               }
-              if (toolText.startsWith("Start")) {
+              if (toolText.startsWith("Bắt đầu")) {
                 // Walk up and stop at the FIRST ancestor whose text mentions
-                // any of the 3 cards, not just "Mistake Review" — the cards
+                // any of the 3 cards, not just "Ôn lỗi sai" — the cards
                 // share a container a few levels up, so scanning past that
-                // point falsely matched Mistake Review for every card.
+                // point falsely matched it for every card.
                 let ancestor = toolBtn.parentElement;
                 let cardName = null;
                 for (let depth = 0; depth < 6 && ancestor; depth++) {
                   const t = ancestor.textContent;
-                  if (t.includes("Mistake Review")) { cardName = "mistake"; break; }
-                  if (t.includes("Pronunciation Fix")) { cardName = "other"; break; }
-                  if (t.includes("Coffee Chat")) { cardName = "other"; break; }
+                  if (t.includes("Ôn lỗi sai")) { cardName = "mistake"; break; }
+                  if (t.includes("Sửa lỗi phát âm")) { cardName = "other"; break; }
+                  if (t.includes("Trò Chuyện Cà Phê")) { cardName = "other"; break; }
                   ancestor = ancestor.parentElement;
                 }
                 location.href = cardName === "mistake" ? "/mistakes.html" : "/chat";
@@ -364,7 +364,7 @@
         { match: "Tất cả", mode: "all" },
         { match: "Ngữ pháp", mode: "none" },
         { match: "Từ vựng", mode: "all" },
-        { match: "AI Practice", mode: "none" }
+        { match: "Luyện tập AI", mode: "none" }
       ];
       const ACTIVE_CLASS =
         "flex items-center gap-2 px-5 py-2 bg-primary text-white rounded-full shadow-md shadow-primary/20 text-sm font-bold transition-all active:scale-95";
@@ -535,6 +535,116 @@
 
       new MutationObserver(scheduleEnsureRow).observe(document.body, { childList: true, subtree: true });
       scheduleEnsureRow();
+    })();
+
+    /*
+      Leftover English UI chrome the compiled bundle never localized —
+      greeting, stat labels, "Gemini Suggests"/"Learning Tools" cards, the
+      bottom-nav "Home" label, tab/badge/relative-time strings, and the
+      Gemini AI config modal's voice/personality options are all hardcoded
+      English regardless of the app's Vietnamese UI everywhere else
+      (verified via devtools — not a language-setting issue, "Ngôn ngữ:
+      English" is a separate, correct, user preference).
+
+      This only rewrites text NODE values (never adds/removes elements),
+      scoped to #root and debounced, so it can't fight React's
+      reconciliation the way an earlier version of the settings-row patch
+      above once did (see that commit's message) — worst case a rewritten
+      node gets reset by a re-render and this quietly rewrites it again on
+      the next debounced pass.
+
+      The click-routing patches elsewhere in this file matched some of
+      these strings by their old English text (toolText.endsWith("Saved"),
+      TAB_DEFS, etc.) — those were updated to match the Vietnamese text
+      below instead, not left pointing at strings that no longer exist.
+    */
+    (function () {
+      const EXACT = {
+        "Good Morning": "Chào buổi sáng",
+        "Good Afternoon": "Chào buổi chiều",
+        "Good Evening": "Chào buổi tối",
+        "ON FIRE": "ĐANG CHÁY",
+        "Practice every day to build your habit!": "Luyện tập mỗi ngày để xây dựng thói quen!",
+        "Daily Goal": "Mục tiêu hàng ngày",
+        "MINUTES": "PHÚT",
+        "WORDS": "TỪ",
+        "Continue Learning": "Tiếp tục học",
+        "See all": "Xem tất cả",
+        "Resume Lesson": "Tiếp tục",
+        "Gemini Suggests": "Gemini Gợi ý",
+        "Pronunciation Fix": "Sửa lỗi phát âm",
+        "You struggled with \"th\" sounds yesterday.": "Bạn đã gặp khó khi phát âm \"th\" hôm qua.",
+        "Start": "Bắt đầu",
+        "Mistake Review": "Ôn lỗi sai",
+        "Review 5 grammar mistakes from writing.": "Ôn lại 5 lỗi ngữ pháp trong bài viết.",
+        "Coffee Chat": "Trò Chuyện Cà Phê",
+        "Simulate a casual conversation in NYC.": "Mô phỏng cuộc trò chuyện thường ngày ở New York.",
+        "Learning Tools": "Công cụ học tập",
+        "AI Tutor": "Gia sư AI",
+        "Flashcards": "Thẻ ghi nhớ",
+        "Saved": "Đã lưu",
+        "Rankings": "Xếp hạng",
+        "Home": "Trang chủ",
+        "AI Practice": "Luyện tập AI",
+        "DONE": "XONG",
+        "GEMINI FEEDBACK": "NHẬN XÉT GEMINI",
+        "VERSION 2.4.0 (BUILD 2026)": "PHIÊN BẢN 2.4.0 (BẢN DỰNG 2026)",
+        "Neutral": "Trung tính",
+        "Male": "Nam",
+        "Female": "Nữ",
+        "Friendly": "Thân thiện",
+        "Strict": "Nghiêm khắc",
+        "Professional": "Chuyên nghiệp",
+        "Browser Native": "Giọng trình duyệt",
+        "AI High Quality": "AI chất lượng cao"
+      };
+
+      const REGEX = [
+        [/^(\d+)m ago$/, (m) => `${m[1]} phút trước`],
+        [/^(\d+)h ago$/, (m) => `${m[1]} giờ trước`],
+        [/^(\d+)d ago$/, (m) => `${m[1]} ngày trước`],
+        [/^Just now$/, () => "Vừa xong"]
+      ];
+
+      function translateNode(node) {
+        const raw = node.nodeValue;
+        const trimmed = raw.trim();
+        if (!trimmed) return;
+        if (Object.prototype.hasOwnProperty.call(EXACT, trimmed)) {
+          if (trimmed === EXACT[trimmed]) return;
+          node.nodeValue = raw.replace(trimmed, EXACT[trimmed]);
+          return;
+        }
+        for (const [re, fn] of REGEX) {
+          const m = trimmed.match(re);
+          if (m) {
+            node.nodeValue = raw.replace(trimmed, fn(m));
+            return;
+          }
+        }
+      }
+
+      function translateAll() {
+        const root = document.getElementById("root");
+        if (!root) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let n;
+        while ((n = walker.nextNode())) translateNode(n);
+      }
+
+      let handle = null;
+      function schedule() {
+        clearTimeout(handle);
+        handle = setTimeout(translateAll, 120);
+      }
+
+      const root = document.getElementById("root");
+      new MutationObserver(schedule).observe(root || document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+      schedule();
     })();
   </script>
 </body>
