@@ -1,0 +1,19 @@
+{
+  "topic": "Areas of Study",
+  "lesson": "Geography",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "areas-of-study/geography/",
+  "items": [
+    { "word": "rain forest", "meaning_vi": "rừng nhiệt đới", "r2_key": "areas-of-study/geography/01-rain-forest.png", "level": "B1", "word_form": "noun" },
+    { "word": "waterfall", "meaning_vi": "thác", "r2_key": "areas-of-study/geography/02-waterfall.png", "level": "A2", "word_form": "noun" },
+    { "word": "river", "meaning_vi": "sông", "r2_key": "areas-of-study/geography/03-river.png", "level": "A1", "word_form": "noun" },
+    { "word": "desert", "meaning_vi": "sa mạc", "r2_key": "areas-of-study/geography/04-desert.png", "level": "A2", "word_form": "noun" },
+    { "word": "sand dune", "meaning_vi": "đồi cát", "r2_key": "areas-of-study/geography/05-sand-dune.png", "level": "B2", "word_form": "noun" },
+    { "word": "ocean", "meaning_vi": "đại dương", "r2_key": "areas-of-study/geography/06-ocean.png", "level": "A1", "word_form": "noun" },
+    { "word": "peninsula", "meaning_vi": "bán đảo", "r2_key": "areas-of-study/geography/07-peninsula.png", "level": "B2", "word_form": "noun" },
+    { "word": "island", "meaning_vi": "đảo", "r2_key": "areas-of-study/geography/08-island.png", "level": "A1", "word_form": "noun" },
+    { "word": "bay", "meaning_vi": "vịnh", "r2_key": "areas-of-study/geography/09-bay.png", "level": "B1", "word_form": "noun" },
+    { "word": "beach", "meaning_vi": "bãi biển", "r2_key": "areas-of-study/geography/10-beach.png", "level": "A1", "word_form": "noun" }
+  ]
+}
