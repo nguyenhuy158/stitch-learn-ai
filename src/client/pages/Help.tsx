@@ -51,7 +51,7 @@ export default function Help() {
     <div className="mx-auto max-w-3xl">
       <PageHeader backTo="/profile" backLabel="Về Hồ sơ" title="Trợ giúp & Phản hồi" />
       <main className="p-5 sm:p-9">
-        <div className="mb-3 mt-1 text-sm font-bold" style={{ color: "var(--teal-dark)" }}>
+        <div className="mb-3 mt-1 text-sm font-bold text-primary-hover">
           Câu hỏi thường gặp
         </div>
         <div className="flex flex-col gap-2.5">
@@ -63,7 +63,7 @@ export default function Help() {
           ))}
         </div>
 
-        <div className="mb-3 mt-6 text-sm font-bold" style={{ color: "var(--teal-dark)" }}>
+        <div className="mb-3 mt-6 text-sm font-bold text-primary-hover">
           Gửi phản hồi
         </div>
         <textarea

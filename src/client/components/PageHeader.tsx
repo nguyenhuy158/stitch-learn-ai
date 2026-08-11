@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-/** Replicates the teal-dark rounded header used by every static page (back link + title + optional subtitle). */
+/** Rounded primary-tone header used by every page (back link + title + optional subtitle). */
 export function PageHeader({
   backTo,
   backLabel = "Về Home",
@@ -14,10 +14,7 @@ export function PageHeader({
   subtitle?: ReactNode;
 }) {
   return (
-    <header
-      className="rounded-b-3xl px-5 pb-7 pt-5 text-white sm:px-9 sm:pb-10 sm:pt-8"
-      style={{ background: "var(--teal-dark)" }}
-    >
+    <header className="rounded-b-3xl bg-primary-hover px-5 pb-7 pt-5 text-white sm:px-9 sm:pb-10 sm:pt-8">
       <Link to={backTo} className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white/85 no-underline">
         ← {backLabel}
       </Link>

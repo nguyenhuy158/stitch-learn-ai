@@ -66,7 +66,7 @@ export default function Mistakes() {
                   <div className="flex flex-wrap items-baseline gap-2 text-[15px]">
                     {c.original && <span className="text-danger line-through">{c.original}</span>}
                     {c.original && c.suggestion && <span>→</span>}
-                    {c.suggestion && <span className="font-bold" style={{ color: "var(--teal)" }}>{c.suggestion}</span>}
+                    {c.suggestion && <span className="font-bold text-primary">{c.suggestion}</span>}
                   </div>
                   {c.explanation && <div className="text-[13px] text-fg-muted">{c.explanation}</div>}
                 </Card>

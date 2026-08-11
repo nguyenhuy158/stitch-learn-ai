@@ -2,8 +2,9 @@
  * Theme presets migrated from public/assets/theme.css (4 themes: teal/ocean/sunset/dark).
  * Each preset maps the old app-specific vars (--teal-dark/--teal/--orange/--bg/--card/--text/--muted)
  * onto ui-kit's semantic tokens (--ui-*) so every copied ui-kit component (Button, Card, HeaderBar...)
- * automatically follows the active theme. We also keep the old var names around (as aliases) for any
- * bit of leftover bespoke CSS that still reads them directly (e.g. flashcard flip faces).
+ * automatically follows the active theme. The old var names are kept only as intermediate palette
+ * values feeding --ui-*; no page CSS reads --teal/--card/etc. directly anymore (except --orange,
+ * which ui-kit has no token for and which .text-accent/.bg-accent/.border-accent expose below).
  *
  * Selection is driven by `data-theme="teal|ocean|sunset|dark"` on <html>, persisted to the same
  * localStorage key "app_theme" the old bundle used. `.dark`/`.light` is also toggled on <html> for
@@ -113,3 +114,4 @@
    used for XP numbers, saved-star, etc). Kept as its own var, set per theme above. */
 .text-accent { color: var(--orange); }
 .bg-accent { background: var(--orange); }
+.border-accent { border-color: var(--orange); }

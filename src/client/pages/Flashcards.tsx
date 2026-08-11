@@ -84,18 +84,16 @@ export default function Flashcards() {
                 style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : undefined }}
               >
                 <div
-                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-6 text-center shadow-lg"
-                  style={{ backfaceVisibility: "hidden", background: "var(--card)" }}
+                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-surface p-6 text-center shadow-lg"
+                  style={{ backfaceVisibility: "hidden" }}
                 >
                   <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
                   <div className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
-                  <div className="text-2xl font-extrabold" style={{ color: "var(--teal-dark)" }}>
-                    {current.term}
-                  </div>
+                  <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
                 </div>
                 <div
-                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl p-6 text-center text-white shadow-lg"
-                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "var(--teal-dark)" }}
+                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-primary-hover p-6 text-center text-white shadow-lg"
+                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                 >
                   <div className="mb-2.5 text-xl font-bold text-accent">{current.meaning}</div>
                   {current.example && <div className="text-sm italic text-white/80">"{current.example}"</div>}

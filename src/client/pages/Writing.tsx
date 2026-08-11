@@ -61,23 +61,23 @@ export default function Writing() {
 
         {result && (
           <div>
-            <div className="mb-2 text-[13px] font-bold uppercase" style={{ color: "var(--teal-dark)" }}>
+            <div className="mb-2 text-[13px] font-bold uppercase text-primary-hover">
               Bản đã sửa
             </div>
             <Card className="p-4 text-[15px] leading-relaxed">{result.corrected}</Card>
 
-            <div className="mb-2 mt-5 text-[13px] font-bold uppercase" style={{ color: "var(--teal-dark)" }}>
+            <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
               Nhận xét chung
             </div>
-            <div className="rounded-xl border-l-3 p-3 text-sm" style={{ background: "#fff7ec", borderColor: "var(--orange)" }}>
+            <div className="rounded-xl border-l-3 border-accent bg-warning-soft p-3 text-sm">
               {result.overallFeedback}
             </div>
 
-            <div className="mb-2 mt-5 text-[13px] font-bold uppercase" style={{ color: "var(--teal-dark)" }}>
+            <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
               Chi tiết sửa lỗi
             </div>
             {result.corrections.length === 0 ? (
-              <div className="rounded-ui p-4 text-center font-semibold" style={{ color: "var(--teal)" }}>
+              <div className="rounded-ui p-4 text-center font-semibold text-primary">
                 Không tìm thấy lỗi nào. Viết tốt lắm!
               </div>
             ) : (
@@ -87,7 +87,7 @@ export default function Writing() {
                     <div className="flex flex-wrap items-baseline gap-2 text-sm">
                       <span className="text-danger line-through">{c.original}</span>
                       <span>→</span>
-                      <span className="font-bold" style={{ color: "var(--teal)" }}>
+                      <span className="font-bold text-primary">
                         {c.suggestion}
                       </span>
                     </div>

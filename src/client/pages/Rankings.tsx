@@ -41,7 +41,7 @@ export default function Rankings() {
         {!error && top && (
           <>
             {myRank && !top.some((u) => u.id === myId) && (
-              <div className="mb-5 rounded-ui p-3.5 text-center font-bold text-white" style={{ background: "var(--teal-dark)" }}>
+              <div className="mb-5 rounded-ui bg-primary-hover p-3.5 text-center font-bold text-white">
                 Hạng của bạn: #{myRank}
               </div>
             )}
@@ -54,7 +54,7 @@ export default function Rankings() {
                     u.id === myId && "border-2 border-primary"
                   )}
                 >
-                  <div className="w-7 text-center font-extrabold" style={{ color: "var(--teal-dark)" }}>
+                  <div className="w-7 text-center font-extrabold text-primary-hover">
                     #{i + 1}
                   </div>
                   <div className="flex-1 font-semibold">

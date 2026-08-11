@@ -42,7 +42,7 @@ export default function Home() {
         <p className="mt-1 text-sm text-fg-muted">Tiếp tục hành trình học tiếng Anh của bạn nào.</p>
       </header>
 
-      <Card className="mb-5 p-4" style={{ background: "var(--teal-dark)", color: "white" }}>
+      <Card className="mb-5 bg-primary-hover p-4 text-white">
         <div className="flex items-center justify-between text-sm text-white/80">
           <span>🔥 Chuỗi {user?.streak ?? 0} ngày</span>
           <span>⭐ {user?.xp ?? 0} XP</span>
@@ -53,8 +53,7 @@ export default function Home() {
             <div className="text-lg font-bold">{continueLesson.title}</div>
             <Link
               to={`/lesson?id=${continueLesson.id}`}
-              className="mt-2 inline-block rounded-ui bg-white px-4 py-2 text-sm font-bold no-underline"
-              style={{ color: "var(--teal-dark)" }}
+              className="mt-2 inline-block rounded-ui bg-white px-4 py-2 text-sm font-bold text-primary-hover no-underline"
             >
               Tiếp tục học →
             </Link>

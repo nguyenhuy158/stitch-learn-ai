@@ -54,9 +54,7 @@ export default function LessonDetail() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {vocab.map((item, i) => (
               <Card key={i} className="p-4 sm:p-5">
-                <div className="text-lg font-bold" style={{ color: "var(--teal-dark)" }}>
-                  {item.term}
-                </div>
+                <div className="text-lg font-bold text-primary-hover">{item.term}</div>
                 <div className="mt-0.5 text-sm font-semibold text-accent">{item.meaning}</div>
                 {item.example && <div className="mt-2 text-sm italic leading-relaxed text-fg-muted">"{item.example}"</div>}
               </Card>

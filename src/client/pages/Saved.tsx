@@ -49,9 +49,7 @@ export default function Saved() {
             {items.map((item) => (
               <Card key={item.id} className="flex items-start justify-between gap-3 p-4">
                 <div>
-                  <div className="text-base font-bold" style={{ color: "var(--teal-dark)" }}>
-                    {item.term}
-                  </div>
+                  <div className="text-base font-bold text-primary-hover">{item.term}</div>
                   <div className="mt-0.5 text-[13px] font-semibold text-accent">{item.meaning}</div>
                   {item.example && <div className="mt-1.5 text-[13px] italic text-fg-muted">"{item.example}"</div>}
                   <div className="mt-1.5 text-[11px] uppercase text-fg-muted">{item.lesson_title}</div>

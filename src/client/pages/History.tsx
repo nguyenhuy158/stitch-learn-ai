@@ -55,7 +55,7 @@ function Entry({ pair }: { pair: Pair }) {
 
   return (
     <div className="mb-2 flex items-start gap-3 rounded-2xl bg-surface p-3.5 shadow-sm">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-lg" style={{ background: "#e5f3f1", color: "var(--teal)" }}>
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-primary-soft text-lg text-primary">
         💬
       </div>
       <div className="min-w-0 flex-1">
@@ -67,9 +67,8 @@ function Entry({ pair }: { pair: Pair }) {
         <span
           className={cn(
             "whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-bold",
-            correctionCount === 0 ? "text-[#1a7f4b]" : "text-accent"
+            correctionCount === 0 ? "bg-success-soft text-success" : "bg-warning-soft text-accent"
           )}
-          style={{ background: correctionCount === 0 ? "#e6f7ed" : "#fff1e0" }}
         >
           {correctionCount === 0 ? "Không lỗi" : `${correctionCount} lỗi`}
         </span>
@@ -113,26 +112,26 @@ export default function History() {
           <>
             <div className="mb-5 grid grid-cols-3 gap-2.5">
               <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
-                <div className="text-xl font-extrabold" style={{ color: "var(--teal-dark)" }}>
+                <div className="text-xl font-extrabold text-primary-hover">
                   {user.streak || 0}
                 </div>
                 <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Chuỗi ngày</div>
               </div>
               <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
-                <div className="text-xl font-extrabold" style={{ color: "var(--teal-dark)" }}>
+                <div className="text-xl font-extrabold text-primary-hover">
                   {user.xp || 0}
                 </div>
                 <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Điểm XP</div>
               </div>
               <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
-                <div className="text-xl font-extrabold" style={{ color: "var(--teal-dark)" }}>
+                <div className="text-xl font-extrabold text-primary-hover">
                   {pairs.length}
                 </div>
                 <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Lượt hội thoại</div>
               </div>
             </div>
 
-            <div className="mb-6 rounded-2xl p-4 text-white" style={{ background: "var(--teal-dark)" }}>
+            <div className="mb-6 rounded-2xl bg-primary-hover p-4 text-white">
               <div className="flex justify-between text-[13px] text-white/70">
                 <span>Trình độ hiện tại</span>
                 <span>{user.level_progress || 0}%</span>
@@ -150,7 +149,7 @@ export default function History() {
                 .reverse()
                 .map(([day, dayPairs]) => (
                   <div key={day} className="mb-5">
-                    <div className="mb-2 text-[13px] font-bold" style={{ color: "var(--teal-dark)" }}>
+                    <div className="mb-2 text-[13px] font-bold text-primary-hover">
                       {day}
                     </div>
                     {[...dayPairs].reverse().map((p, i) => (
