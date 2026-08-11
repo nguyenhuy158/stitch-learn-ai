@@ -1,5 +1,10 @@
 /* Whole-app theme switcher: Teal (default), Ocean, Sunset, Dark.
  *
+ * Only applies the stored theme + exposes the getter/setter — every page
+ * loads this so the choice actually shows up everywhere, but the picker UI
+ * itself lives only in Hồ sơ > Cài đặt & Tùy chọn (see index.html's
+ * ensureThemeSettingsRow), not floating on every screen.
+ *
  * The compiled SPA bundle (index.html) already ships ~160 Tailwind
  * `dark:` rules but never toggles the `dark` class, so "Dark" here is a
  * real, native dark mode there. Ocean/Sunset have no such hooks — the
@@ -38,47 +43,10 @@
     apply(theme);
   };
   window.getAppTheme = getAppTheme;
+  window.__APP_THEMES__ = THEMES;
+  window.__APP_THEME_META__ = THEME_META;
 
   // Runs immediately (this script is a blocking <head> script, not
   // deferred) so the theme is set before first paint — no flash.
   apply(getAppTheme());
-
-  function buildPicker() {
-    if (document.getElementById("app-theme-fab")) return;
-
-    var fab = document.createElement("button");
-    fab.id = "app-theme-fab";
-    fab.type = "button";
-    fab.textContent = "🎨";
-    fab.setAttribute("aria-label", "Đổi giao diện");
-
-    var menu = document.createElement("div");
-    menu.id = "app-theme-menu";
-
-    THEMES.forEach(function (key) {
-      var meta = THEME_META[key];
-      var item = document.createElement("button");
-      item.type = "button";
-      item.innerHTML =
-        '<span class="swatch" style="background:' + meta.color + '"></span><span>' + meta.label + "</span>";
-      item.addEventListener("click", function () {
-        window.setAppTheme(key);
-        menu.classList.remove("open");
-      });
-      menu.appendChild(item);
-    });
-
-    fab.addEventListener("click", function (e) {
-      e.stopPropagation();
-      menu.classList.toggle("open");
-    });
-    document.addEventListener("click", function () {
-      menu.classList.remove("open");
-    });
-
-    document.body.appendChild(fab);
-    document.body.appendChild(menu);
-  }
-
-  document.addEventListener("DOMContentLoaded", buildPicker);
 })();
