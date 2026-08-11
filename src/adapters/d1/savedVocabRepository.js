@@ -12,11 +12,13 @@ export function createD1SavedVocabRepository(db) {
     async listForUser(userId) {
       const { results } = await db
         .prepare(
-          `SELECT v.id, v.term, v.meaning, v.example, l.id AS lesson_id, l.title AS lesson_title
+          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, l.id AS lesson_id, l.title AS lesson_title
            FROM saved_vocab s
-           JOIN lesson_vocab v ON v.id = s.vocab_id
-           JOIN lessons l ON l.id = v.lesson_id
+           JOIN vocab v ON v.id = s.vocab_id
+           LEFT JOIN lesson_vocab lv ON lv.vocab_id = v.id
+           LEFT JOIN lessons l ON l.id = lv.lesson_id
            WHERE s.user_id = ?
+           GROUP BY v.id
            ORDER BY s.created_at DESC`
         )
         .bind(userId)

@@ -22,7 +22,7 @@
  * @typedef {Object} LessonRepository
  * @property {() => Promise<object[]>} listAll
  * @property {(id: number) => Promise<object|null>} findById
- * @property {(lessonId: number) => Promise<Array<{term: string, meaning: string, example: string|null}>>} listVocab
+ * @property {(lessonId: number) => Promise<Array<{id: number, term: string, type: string|null, pronounce: string|null, meaning: string, example: string|null, word_family: string|null}>>} listVocab
  * @property {(lessonId: number, items: Array<{term: string, meaning: string, example?: string}>) => Promise<void>} saveVocab
  * @property {() => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listAllVocab
  *

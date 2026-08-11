@@ -37,6 +37,8 @@
     .card-term { font-size: 26px; font-weight: 800; color: var(--teal-dark); }
     .card-back .card-meaning { font-size: 22px; font-weight: 700; color: var(--orange); margin-bottom: 10px; }
     .card-back .card-example { font-size: 14px; font-style: italic; color: rgba(255,255,255,0.8); }
+    .card-back .card-family { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 10px; }
+    .card-back .card-family span { display: inline-block; background: rgba(255,255,255,0.15); border-radius: 6px; padding: 2px 8px; margin: 2px 4px 2px 0; }
     .hint { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 20px; }
     .controls { display: flex; gap: 10px; align-items: center; }
     .controls button {
@@ -88,6 +90,8 @@
       }
       const c = cards[index];
       const isSaved = savedIds.has(c.id);
+      let family = [];
+      try { family = c.word_family ? JSON.parse(c.word_family) : []; } catch { family = []; }
       content.className = "";
       content.innerHTML = `
         <div class="progress">${index + 1} / ${cards.length} &mdash; ${escapeHtml(c.lesson_title)}</div>
@@ -100,6 +104,7 @@
             <div class="card-face card-back">
               <div class="card-meaning">${escapeHtml(c.meaning)}</div>
               ${c.example ? `<div class="card-example">"${escapeHtml(c.example)}"</div>` : ""}
+              ${family.length ? `<div class="card-family">${family.map(f => `<span>${escapeHtml(f)}</span>`).join("")}</div>` : ""}
             </div>
           </div>
         </div>

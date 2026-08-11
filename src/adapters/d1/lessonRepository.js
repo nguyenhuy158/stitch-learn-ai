@@ -10,20 +10,26 @@ export function createD1LessonRepository(db) {
     },
     async listVocab(lessonId) {
       const { results } = await db.prepare(
-        "SELECT term, meaning, example FROM lesson_vocab WHERE lesson_id = ? ORDER BY sort_order ASC"
+        `SELECT v.id, v.term, v.type, v.pronounce, v.meaning, v.example, v.word_family
+         FROM lesson_vocab lv JOIN vocab v ON v.id = lv.vocab_id
+         WHERE lv.lesson_id = ? ORDER BY lv.sort_order ASC`
       ).bind(lessonId).all();
       return results;
     },
-    // ON CONFLICT DO NOTHING + a UNIQUE(lesson_id, term) index: two concurrent
-    // first-requests for the same lesson can both decide to generate, but
-    // only one's rows survive instead of duplicating every term.
+    // vocab.term is globally unique now (a term can be shared across lessons),
+    // so a new term upserts into `vocab` first, then gets linked to this
+    // lesson. ON CONFLICT DO NOTHING on the link: two concurrent first-requests
+    // for the same lesson can both decide to generate, but only one's links survive.
     async saveVocab(lessonId, items) {
-      const statements = items.map((item, index) =>
-        db.prepare(
-          "INSERT INTO lesson_vocab (lesson_id, term, meaning, example, sort_order) VALUES (?, ?, ?, ?, ?) ON CONFLICT(lesson_id, term) DO NOTHING"
-        ).bind(lessonId, item.term, item.meaning, item.example ?? null, index)
-      );
-      await db.batch(statements);
+      for (const [index, item] of items.entries()) {
+        await db.prepare(
+          "INSERT INTO vocab (term, meaning, example) VALUES (?, ?, ?) ON CONFLICT(term) DO NOTHING"
+        ).bind(item.term, item.meaning, item.example ?? null).run();
+        const vocabRow = await db.prepare("SELECT id FROM vocab WHERE term = ?").bind(item.term).first();
+        await db.prepare(
+          "INSERT INTO lesson_vocab (lesson_id, vocab_id, sort_order) VALUES (?, ?, ?) ON CONFLICT(lesson_id, vocab_id) DO NOTHING"
+        ).bind(lessonId, vocabRow.id, index).run();
+      }
     },
     // Flashcards only ever show vocab that's already been generated (visiting
     // a lesson at least once) — this never triggers a new Gemini call, and
@@ -31,11 +37,12 @@ export function createD1LessonRepository(db) {
     async listAllVocab() {
       const { results } = await db
         .prepare(
-          `SELECT v.id, v.term, v.meaning, v.example, l.id AS lesson_id, l.title AS lesson_title
-           FROM lesson_vocab v
-           JOIN lessons l ON l.id = v.lesson_id
+          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, l.id AS lesson_id, l.title AS lesson_title
+           FROM lesson_vocab lv
+           JOIN vocab v ON v.id = lv.vocab_id
+           JOIN lessons l ON l.id = lv.lesson_id
            WHERE l.is_locked = 0
-           ORDER BY l.sort_order ASC, v.sort_order ASC`
+           ORDER BY l.sort_order ASC, lv.sort_order ASC`
         )
         .all();
       return results;
