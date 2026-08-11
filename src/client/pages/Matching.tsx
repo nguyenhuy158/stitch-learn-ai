@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
 type Tile = { key: string; wordId: number; text: string; kind: "term" | "meaning" };
@@ -20,12 +21,6 @@ function shuffle<T>(arr: T[]): T[] {
   }
   return copy;
 }
-
-const DIFFICULTIES: Difficulty[] = [
-  { key: "easy", label: "Dễ", desc: "A1-A2 · 6 cặp · 60s", pairs: 6, totalSeconds: 60 },
-  { key: "hard", label: "Khó", desc: "B1-B2 · 8 cặp · 45s", pairs: 8, totalSeconds: 45 },
-  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 10 cặp · 35s", pairs: 10, totalSeconds: 35 }
-];
 
 const GAME_KEY = "matching-game";
 
@@ -49,6 +44,13 @@ export default function Matching() {
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { t } = useLanguage();
+
+  const DIFFICULTIES: Difficulty[] = [
+    { key: "easy", label: t("game.difficulty.easy"), desc: t("matching.easyDesc"), pairs: 6, totalSeconds: 60 },
+    { key: "hard", label: t("game.difficulty.hard"), desc: t("matching.hardDesc"), pairs: 8, totalSeconds: 45 },
+    { key: "legend", label: t("game.difficulty.legend"), desc: t("matching.legendDesc"), pairs: 10, totalSeconds: 35 },
+  ];
 
   function stopTimer() {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -141,8 +143,8 @@ export default function Matching() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
-        title="Ghép thẻ"
-        subtitle={`Tìm cặp từ - nghĩa trước khi hết giờ, ghép sai là thua.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        title={t("matching.title")}
+        subtitle={`${t("matching.subtitle")}${best !== null ? t("game.recordSubtitle", { n: best }) : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -168,8 +170,8 @@ export default function Matching() {
         {tiles && difficulty && !over && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
-              <span>Lượt: {moves}</span>
-              <span>Còn {timeLeft}s</span>
+              <span>{t("matching.moves", { n: moves })}</span>
+              <span>{t("matching.timeLeft", { n: timeLeft })}</span>
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div

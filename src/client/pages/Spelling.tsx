@@ -7,15 +7,10 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
 type Difficulty = { key: string; label: string; desc: string; roundSize: number; secondsPerWord: number };
-
-const DIFFICULTIES: Difficulty[] = [
-  { key: "easy", label: "Dễ", desc: "A1-A2 · 8 từ · 15s/từ", roundSize: 8, secondsPerWord: 15 },
-  { key: "hard", label: "Khó", desc: "B1-B2 · 10 từ · 10s/từ", roundSize: 10, secondsPerWord: 10 },
-  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 12 từ · 7s/từ", roundSize: 12, secondsPerWord: 7 }
-];
 
 const GAME_KEY = "spelling-game";
 
@@ -39,6 +34,13 @@ export default function Spelling() {
   const submittedRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { t } = useLanguage();
+
+  const DIFFICULTIES: Difficulty[] = [
+    { key: "easy", label: t("game.difficulty.easy"), desc: t("spelling.easyDesc"), roundSize: 8, secondsPerWord: 15 },
+    { key: "hard", label: t("game.difficulty.hard"), desc: t("spelling.hardDesc"), roundSize: 10, secondsPerWord: 10 },
+    { key: "legend", label: t("game.difficulty.legend"), desc: t("spelling.legendDesc"), roundSize: 12, secondsPerWord: 7 },
+  ];
 
   function stopTimer() {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -135,8 +137,8 @@ export default function Spelling() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
-        title="Gõ chữ theo nghĩa"
-        subtitle={`Đọc nghĩa, gõ đúng từ tiếng Anh trước khi hết giờ — sai là dừng cuộc chơi.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        title={t("spelling.title")}
+        subtitle={`${t("spelling.subtitle")}${best !== null ? t("game.recordSubtitle", { n: best }) : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -163,9 +165,9 @@ export default function Spelling() {
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>
-                Câu {index + 1}/{words!.length}
+                {t("game.questionN", { n: index + 1, total: words!.length })}
               </span>
-              <span>Điểm: {score}</span>
+              <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
@@ -175,7 +177,7 @@ export default function Spelling() {
             </div>
             <Card className="mb-4 p-6 text-center">
               <div className="text-xl font-bold text-primary-hover">{current.meaning}</div>
-              <div className="mt-1 text-xs text-fg-muted">{current.term.length} chữ</div>
+              <div className="mt-1 text-xs text-fg-muted">{t("spelling.letterCount", { n: current.term.length })}</div>
             </Card>
             <form onSubmit={submit} className="flex flex-col gap-3">
               <input
@@ -193,7 +195,7 @@ export default function Spelling() {
                 )}
               />
               <Button type="submit" block disabled={status !== "idle" || !input.trim()}>
-                Kiểm tra
+                {t("game.check")}
               </Button>
             </form>
           </>
@@ -204,10 +206,10 @@ export default function Spelling() {
             <div className="text-2xl font-extrabold text-primary-hover">
               {score} / {words!.length}
             </div>
-            <div className="mt-1 text-sm text-fg-muted">{stopped ? "Sai hoặc hết giờ, dừng cuộc chơi!" : "câu đúng"}</div>
+            <div className="mt-1 text-sm text-fg-muted">{stopped ? t("spelling.wrongStop") : t("spelling.correctSuffix")}</div>
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
-                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.isNewBest ? t("game.newRecord") : t("game.record", { n: submitResult.bestScore })}
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
@@ -220,10 +222,10 @@ export default function Spelling() {
                   setDifficulty(null);
                 }}
               >
-                Đổi độ khó
+                {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={() => load(difficulty)}>
-                Chơi lại
+                {t("game.playAgain")}
               </Button>
             </div>
           </Card>
