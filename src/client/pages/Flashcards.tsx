@@ -135,7 +135,16 @@ export default function Flashcards() {
                 </div>
               </div>
             </div>
-            <div className="mb-3 flex justify-center">
+            <div className="mb-3 flex items-center justify-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => speak(current.term)}
+                title={t("audio.speak")}
+                aria-label={t("audio.speak")}
+                className="flex h-11 w-12 shrink-0 items-center justify-center rounded-ui bg-primary-hover text-xl text-white shadow-sm"
+              >
+                🔊
+              </button>
               <button
                 type="button"
                 onClick={toggleSave}

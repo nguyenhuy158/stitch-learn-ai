@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
@@ -107,6 +108,13 @@ export default function Spelling() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, status, stopped, difficulty]);
 
+  // Only ever speak the answer AFTER it is revealed — saying it during play
+  // would hand the player the spelling for free.
+  useEffect(() => {
+    if (current && status !== "idle") speak(current.term);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, current?.id]);
+
   function fail() {
     if (status !== "idle" || stopped) return;
     setStatus("wrong");
@@ -194,9 +202,23 @@ export default function Spelling() {
                   status === "idle" && "border-border bg-surface"
                 )}
               />
-              <Button type="submit" block disabled={status !== "idle" || !input.trim()}>
-                {t("game.check")}
-              </Button>
+              {status === "idle" ? (
+                <Button type="submit" block disabled={!input.trim()}>
+                  {t("game.check")}
+                </Button>
+              ) : (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => speak(current.term)}
+                    title={t("audio.speak")}
+                    aria-label={t("audio.speak")}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-hover text-2xl text-white"
+                  >
+                    🔊
+                  </button>
+                </div>
+              )}
             </form>
           </>
         )}

@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
@@ -167,8 +168,17 @@ export default function WordGame() {
                 style={{ width: `${(timeLeft / round!.secondsPerWord) * 100}%` }}
               />
             </div>
-            <Card className="mb-4 p-6 text-center">
+            <Card className="mb-4 flex flex-col items-center gap-3 p-6 text-center">
               <div className="text-3xl font-extrabold text-primary-hover">{q.term}</div>
+              <button
+                type="button"
+                onClick={() => speak(q.term)}
+                title={t("audio.speak")}
+                aria-label={t("audio.speak")}
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-hover text-2xl text-white"
+              >
+                🔊
+              </button>
             </Card>
             <div className="flex flex-col gap-2">
               {q.choices.map((choice) => {

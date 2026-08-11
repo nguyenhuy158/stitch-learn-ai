@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
@@ -110,6 +111,9 @@ export default function Matching() {
 
   function pick(tile: Tile) {
     if (over || matched.has(tile.wordId) || selected.some((s) => s.key === tile.key) || selected.length === 2) return;
+    // Tapping an English tile also reads it aloud — free listening practice,
+    // and the tap itself is the user gesture the speech engine needs.
+    if (tile.kind === "term") speak(tile.text);
     const next = [...selected, tile];
     setSelected(next);
     if (next.length === 2) {

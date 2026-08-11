@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
@@ -172,6 +173,15 @@ export default function WordRace() {
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>{"❤️".repeat(lives)}</span>
+              <button
+                type="button"
+                onClick={() => speak(current.term)}
+                title={t("audio.speak")}
+                aria-label={t("audio.speak")}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-hover text-lg text-white"
+              >
+                🔊
+              </button>
               <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="relative mb-4 h-56 overflow-hidden rounded-3xl bg-surface shadow-lg">
