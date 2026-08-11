@@ -1,0 +1,19 @@
+{
+  "topic": "People",
+  "lesson": "Age and Physical Description",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "people/age-physical-description/",
+  "items": [
+    { "word": "children", "meaning_vi": "trẻ con", "r2_key": "people/age-physical-description/01-children.png", "level": "A1", "word_form": "noun" },
+    { "word": "baby", "meaning_vi": "em bé", "r2_key": "people/age-physical-description/02-baby.png", "level": "A1", "word_form": "noun" },
+    { "word": "toddler", "meaning_vi": "trẻ nít", "r2_key": "people/age-physical-description/03-toddler.png", "level": "B1", "word_form": "noun" },
+    { "word": "6-year-old boy", "meaning_vi": "bé trai 6 tuổi", "r2_key": "people/age-physical-description/04-6yo-boy.png", "level": "A1", "word_form": "noun" },
+    { "word": "10-year-old girl", "meaning_vi": "bé gái 10 tuổi", "r2_key": "people/age-physical-description/05-10yo-girl.png", "level": "A1", "word_form": "noun" },
+    { "word": "teenagers", "meaning_vi": "thanh thiếu niên", "r2_key": "people/age-physical-description/06-teenagers.png", "level": "A2", "word_form": "noun" },
+    { "word": "13-year-old boy", "meaning_vi": "thiếu-niên 13 tuổi", "r2_key": "people/age-physical-description/07-13yo-boy.png", "level": "A1", "word_form": "noun" },
+    { "word": "19-year-old girl", "meaning_vi": "thiếu-nữ 19 tuổi", "r2_key": "people/age-physical-description/08-19yo-girl.png", "level": "A1", "word_form": "noun" },
+    { "word": "adults", "meaning_vi": "người lớn", "r2_key": "people/age-physical-description/09-adults.png", "level": "A1", "word_form": "noun" },
+    { "word": "woman", "meaning_vi": "đàn bà", "r2_key": "people/age-physical-description/10-woman.png", "level": "A1", "word_form": "noun" }
+  ]
+}
