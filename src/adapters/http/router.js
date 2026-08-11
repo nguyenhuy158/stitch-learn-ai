@@ -48,8 +48,8 @@ export async function handleRequest(request, url, deps) {
     const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
     if (!authToken) return new Response("Unauthorized", { status: 401 });
     try {
-      await deps.sessionPort.verify(authToken);
-      const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]) }, deps);
+      const { id } = await deps.sessionPort.verify(authToken);
+      const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]), userId: id }, deps);
       return json(detail);
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 404 });

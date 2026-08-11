@@ -9,6 +9,8 @@
  * @property {(email: string) => Promise<object|null>} findByEmail
  * @property {(claims: {email: string, name: string, picture: string}) => Promise<string>} resolveIdFromSso
  * @property {(id: string, fields: {streak: number, last_active_date: string}) => Promise<void>} updateStreak
+ * @property {(id: string, day: string) => Promise<void>} recordActivityDay
+ * @property {(id: string, limit: number) => Promise<string[]>} listActivityDays
  * @property {(id: string, fields: object) => Promise<void>} updateProfile
  * @property {(id: string, amount: number) => Promise<void>} incrementXp
  * @property {(limit: number) => Promise<Array<{id: string, name: string, xp: number, streak: number}>>} listRankings

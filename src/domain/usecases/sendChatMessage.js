@@ -1,3 +1,5 @@
+import { recordLearningActivity } from "./recordLearningActivity.js";
+
 export async function sendChatMessage({ userId, message }, { userRepository, chatRepository, aiTutorPort }) {
   const user = await userRepository.findById(userId);
   const level = user?.level || "B1";
@@ -8,5 +10,6 @@ export async function sendChatMessage({ userId, message }, { userRepository, cha
     corrections: reply.corrections
   });
   await userRepository.incrementXp(userId, 5);
+  await recordLearningActivity({ userId }, { userRepository });
   return reply;
 }

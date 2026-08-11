@@ -1,6 +1,8 @@
 import { ValidationError } from "../errors.js";
+import { recordLearningActivity } from "./recordLearningActivity.js";
 
-export async function getLessonDetail({ lessonId }, { lessonRepository, vocabGeneratorPort }) {
+export async function getLessonDetail({ lessonId, userId }, deps) {
+  const { lessonRepository, vocabGeneratorPort } = deps;
   const lesson = await lessonRepository.findById(lessonId);
   if (!lesson) throw new ValidationError("Lesson not found");
   if (lesson.is_locked) throw new ValidationError("Lesson is locked");
@@ -11,6 +13,9 @@ export async function getLessonDetail({ lessonId }, { lessonRepository, vocabGen
     await lessonRepository.saveVocab(lessonId, items);
     vocab = await lessonRepository.listVocab(lessonId);
   }
+
+  // Opening a lesson is the most common way to study here, so it counts.
+  await recordLearningActivity({ userId }, deps);
 
   return { lesson, vocab };
 }

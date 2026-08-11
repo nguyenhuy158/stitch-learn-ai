@@ -37,6 +37,17 @@ export function createD1UserRepository(db) {
     async updateStreak(id, { streak, last_active_date }) {
       await db.prepare("UPDATE users SET streak = ?, last_active_date = ? WHERE id = ?").bind(streak, last_active_date, id).run();
     },
+    async recordActivityDay(id, day) {
+      await db.prepare("INSERT OR IGNORE INTO activity_days (user_id, day) VALUES (?, ?)").bind(id, day).run();
+    },
+    /** Days the user actually learned on, newest first. */
+    async listActivityDays(id, limit) {
+      const { results } = await db
+        .prepare("SELECT day FROM activity_days WHERE user_id = ? ORDER BY day DESC LIMIT ?")
+        .bind(id, limit)
+        .all();
+      return results.map((row) => row.day);
+    },
     async updateProfile(id, fields) {
       const columns = Object.keys(fields);
       const query = `UPDATE users SET ${columns.map((c) => `${c} = ?`).join(", ")} WHERE id = ?`;
