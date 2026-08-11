@@ -23,6 +23,7 @@ const TOOL_KEYS = [
   { key: "spellingGame", to: "/spelling-game", icon: "⌨️" },
   { key: "wordRace", to: "/word-race", icon: "🌧️" },
   { key: "gamesLeaderboard", to: "/games-leaderboard", icon: "🏅" },
+  { key: "pictureVocab", to: "/picture-vocab", icon: "🖼️" },
   { key: "saved", to: "/saved", icon: "⭐" },
   { key: "rankings", to: "/rankings", icon: "🏆" },
 ] as const;

@@ -170,8 +170,16 @@ export const translations: Record<string, TranslationEntry> = {
   "home.tool.spellingGame": { vi: "Gõ chữ theo nghĩa", en: "Spell the Word" },
   "home.tool.wordRace": { vi: "Từ rơi", en: "Word Race" },
   "home.tool.gamesLeaderboard": { vi: "Xếp hạng trò chơi", en: "Game Leaderboards" },
+  "home.tool.pictureVocab": { vi: "Từ vựng qua hình", en: "Picture Vocabulary" },
   "home.tool.saved": { vi: "Đã lưu", en: "Saved" },
   "home.tool.rankings": { vi: "Xếp hạng", en: "Rankings" },
+
+  "pictureVocab.title": { vi: "Từ vựng qua hình", en: "Picture Vocabulary" },
+  "pictureVocab.subtitle": {
+    vi: "Mỗi từ kèm hình minh hoạ, nghĩa tiếng Việt và trình độ CEFR",
+    en: "Each word comes with an illustration, Vietnamese meaning and CEFR level"
+  },
+  "pictureVocab.loadError": { vi: "Không tải được từ vựng: ", en: "Couldn't load vocabulary: " },
 
   "flashcards.title": { vi: "Thẻ ghi nhớ", en: "Flashcards" },
   "flashcards.loadError": { vi: "Không tải được flashcards: ", en: "Couldn't load flashcards: " },
