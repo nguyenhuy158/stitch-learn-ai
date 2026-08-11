@@ -1,0 +1,115 @@
+/*
+ * Theme presets migrated from public/assets/theme.css (4 themes: teal/ocean/sunset/dark).
+ * Each preset maps the old app-specific vars (--teal-dark/--teal/--orange/--bg/--card/--text/--muted)
+ * onto ui-kit's semantic tokens (--ui-*) so every copied ui-kit component (Button, Card, HeaderBar...)
+ * automatically follows the active theme. We also keep the old var names around (as aliases) for any
+ * bit of leftover bespoke CSS that still reads them directly (e.g. flashcard flip faces).
+ *
+ * Selection is driven by `data-theme="teal|ocean|sunset|dark"` on <html>, persisted to the same
+ * localStorage key "app_theme" the old bundle used. `.dark`/`.light` is also toggled on <html> for
+ * compatibility with ui-kit's `.dark` variant selector and any future plain-CSS dark-mode rules.
+ */
+
+:root[data-theme="teal"],
+:root:not([data-theme]) {
+  --teal-dark: #0f3d38;
+  --teal: #0f766e;
+  --orange: #f2792e;
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --text: #14201e;
+  --muted: #6b7a78;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(97% 0.004 280);
+  --ui-border: oklch(90% 0.006 280);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(from var(--teal-dark) l c h);
+  --ui-primary-fg: oklch(100% 0 0);
+  --ui-primary-soft: oklch(96% 0.03 165);
+
+  --ui-ring: oklch(from var(--teal) l c h / 35%);
+}
+
+:root[data-theme="ocean"] {
+  --teal-dark: #163949;
+  --teal: #216d94;
+  --orange: #b58f08;
+  --bg: #f2f7fa;
+  --card: #ffffff;
+  --text: #132430;
+  --muted: #5c7683;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(96% 0.006 230);
+  --ui-border: oklch(88% 0.01 230);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(from var(--teal-dark) l c h);
+  --ui-primary-fg: oklch(100% 0 0);
+  --ui-primary-soft: oklch(95% 0.03 230);
+
+  --ui-ring: oklch(from var(--teal) l c h / 35%);
+}
+
+:root[data-theme="sunset"] {
+  --teal-dark: #532b22;
+  --teal: #a64f36;
+  --orange: #4f93ff;
+  --bg: #fdf6f3;
+  --card: #ffffff;
+  --text: #301a12;
+  --muted: #8a6a5c;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(96% 0.01 40);
+  --ui-border: oklch(88% 0.015 40);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(from var(--teal-dark) l c h);
+  --ui-primary-fg: oklch(100% 0 0);
+  --ui-primary-soft: oklch(95% 0.03 40);
+
+  --ui-ring: oklch(from var(--teal) l c h / 35%);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --teal-dark: #0b1f1c;
+  --teal: #14b8a6;
+  --orange: #fb923c;
+  --bg: #101513;
+  --card: #1b2320;
+  --text: #e8f0ee;
+  --muted: #8aa39c;
+
+  --ui-bg: oklch(from var(--bg) l c h);
+  --ui-surface: oklch(from var(--card) l c h);
+  --ui-surface-muted: oklch(25% 0.01 165);
+  --ui-border: oklch(32% 0.012 165);
+  --ui-fg: oklch(from var(--text) l c h);
+  --ui-fg-muted: oklch(from var(--muted) l c h);
+
+  --ui-primary: oklch(from var(--teal) l c h);
+  --ui-primary-hover: oklch(72% 0.14 165);
+  --ui-primary-fg: oklch(18% 0.02 165);
+  --ui-primary-soft: oklch(30% 0.06 165);
+
+  --ui-ring: oklch(from var(--teal) l c h / 45%);
+}
+
+/* App-only accent that ui-kit has no direct token for (old --orange highlight,
+   used for XP numbers, saved-star, etc). Kept as its own var, set per theme above. */
+.text-accent { color: var(--orange); }
+.bg-accent { background: var(--orange); }
