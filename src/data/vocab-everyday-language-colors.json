@@ -1,0 +1,19 @@
+{
+  "topic": "Everyday Language",
+  "lesson": "Colors",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "everyday-language/colors/",
+  "items": [
+    { "word": "blue", "meaning_vi": "xanh nước biển", "r2_key": "everyday-language/colors/01-blue.png", "level": "A1", "word_form": "adjective" },
+    { "word": "dark blue", "meaning_vi": "xanh đậm", "r2_key": "everyday-language/colors/02-dark-blue.png", "level": "A1", "word_form": "adjective" },
+    { "word": "light blue", "meaning_vi": "xanh lạt", "r2_key": "everyday-language/colors/03-light-blue.png", "level": "A1", "word_form": "adjective" },
+    { "word": "turquoise", "meaning_vi": "óng ánh xanh", "r2_key": "everyday-language/colors/04-turquoise.png", "level": "B1", "word_form": "adjective" },
+    { "word": "gray", "meaning_vi": "xám", "r2_key": "everyday-language/colors/05-gray.png", "level": "A1", "word_form": "adjective" },
+    { "word": "orange", "meaning_vi": "màu cam", "r2_key": "everyday-language/colors/06-orange.png", "level": "A1", "word_form": "adjective" },
+    { "word": "purple", "meaning_vi": "tím", "r2_key": "everyday-language/colors/07-purple.png", "level": "A1", "word_form": "adjective" },
+    { "word": "green", "meaning_vi": "xanh lá cây", "r2_key": "everyday-language/colors/08-green.png", "level": "A1", "word_form": "adjective" },
+    { "word": "beige", "meaning_vi": "nâu vàng lạt", "r2_key": "everyday-language/colors/09-beige.png", "level": "B1", "word_form": "adjective" },
+    { "word": "pink", "meaning_vi": "hồng", "r2_key": "everyday-language/colors/10-pink.png", "level": "A1", "word_form": "adjective" }
+  ]
+}
