@@ -15,6 +15,11 @@
       "database_id": "90b7f345-12cd-45de-b975-6836a0177e12"
     }
   ],
+  "services": [{ "binding": "MAILER", "service": "mailer" }],
+  // 13:30 UTC = 20:30 gio Viet Nam, cuoi ngay hoc nhung chua qua muon de con kip.
+  "triggers": {
+    "crons": ["30 13 * * *"]
+  },
   "vars": {
     "GEMINI_MODEL": "gemini-2.5-flash",
     "SSO_ISSUER": "https://auth.huyab.click",

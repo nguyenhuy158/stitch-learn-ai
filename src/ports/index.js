@@ -15,6 +15,7 @@
  * @property {(id: string, amount: number) => Promise<void>} incrementXp
  * @property {(limit: number) => Promise<Array<{id: string, name: string, xp: number, streak: number}>>} listRankings
  * @property {(id: string) => Promise<number|null>} getRank
+ * @property {(day: string) => Promise<Array<{id: string, email: string, name: string|null, streak: number}>>} listInactiveToday
  *
  * @typedef {Object} ChatRepository
  * @property {(userId: string, limit: number) => Promise<Array<{role: string, parts: Array<{text: string}>}>>} listRecent
@@ -67,5 +68,8 @@
  * @property {(userId: string, day: string) => Promise<{xp_awarded: number}|null>} getForDay
  * @property {(userId: string, day: string, xpAwarded: number, completedAt: string) => Promise<void>} markCompleted
  * @property {(count: number) => Promise<Array<{id: number, term: string, meaning: string}>>} pickRandomVocab
+ *
+ * @typedef {Object} MailerPort
+ * @property {(input: {to: string, subject: string, html: string}) => Promise<void>} send
  */
 export {};

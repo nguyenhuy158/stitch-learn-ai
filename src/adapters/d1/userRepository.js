@@ -56,6 +56,18 @@ export function createD1UserRepository(db) {
     async incrementXp(id, amount) {
       await db.prepare("UPDATE users SET xp = COALESCE(xp, 0) + ? WHERE id = ?").bind(amount, id).run();
     },
+    /** Users who haven't logged any activity_days row for `day` yet — the streak-reminder cron's target list. */
+    async listInactiveToday(day) {
+      const { results } = await db
+        .prepare(
+          `SELECT u.id, u.email, u.name, u.streak FROM users u
+           WHERE u.email IS NOT NULL
+             AND NOT EXISTS (SELECT 1 FROM activity_days a WHERE a.user_id = u.id AND a.day = ?)`
+        )
+        .bind(day)
+        .all();
+      return results;
+    },
     async listRankings(limit) {
       const { results } = await db.prepare(
         "SELECT id, name, xp, streak FROM users ORDER BY xp DESC, streak DESC LIMIT ?"

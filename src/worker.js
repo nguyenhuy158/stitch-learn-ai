@@ -12,31 +12,37 @@ import { createGeminiVocabGenerator } from "./adapters/gemini/vocabGenerator.js"
 import { createGeminiWritingReviewer } from "./adapters/gemini/writingReviewer.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { passwordHasher } from "./domain/services/passwordHasher.js";
+import { createMailerPort } from "./adapters/mailer/mailerPort.js";
 import { handleRequest } from "./adapters/http/router.js";
+import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
+
+function buildDeps(env) {
+  return {
+    env,
+    userRepository: createD1UserRepository(env.DB),
+    chatRepository: createD1ChatRepository(env.DB),
+    lessonRepository: createD1LessonRepository(env.DB),
+    feedbackRepository: createD1FeedbackRepository(env.DB),
+    savedVocabRepository: createD1SavedVocabRepository(env.DB),
+    vocabReviewRepository: createD1VocabReviewRepository(env.DB),
+    dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),
+    sessionPort: createJoseSessionProvider(env.JWT_SECRET),
+    ssoPort: env.SSO_ISSUER
+      ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
+      : null,
+    aiTutorPort: createGeminiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    writingReviewerPort: createGeminiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    avatarGeneratorPort: createDicebearAvatarGenerator(),
+    mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY),
+    passwordHasher
+  };
+}
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-
-    const deps = {
-      env,
-      userRepository: createD1UserRepository(env.DB),
-      chatRepository: createD1ChatRepository(env.DB),
-      lessonRepository: createD1LessonRepository(env.DB),
-      feedbackRepository: createD1FeedbackRepository(env.DB),
-      savedVocabRepository: createD1SavedVocabRepository(env.DB),
-      vocabReviewRepository: createD1VocabReviewRepository(env.DB),
-      dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),
-      sessionPort: createJoseSessionProvider(env.JWT_SECRET),
-      ssoPort: env.SSO_ISSUER
-        ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
-        : null,
-      aiTutorPort: createGeminiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-      vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-      writingReviewerPort: createGeminiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-      avatarGeneratorPort: createDicebearAvatarGenerator(),
-      passwordHasher
-    };
+    const deps = buildDeps(env);
 
     const apiResponse = await handleRequest(request, url, deps);
     if (apiResponse) return apiResponse;
@@ -47,5 +53,10 @@ export default {
       response = await env.ASSETS.fetch(indexRequest);
     }
     return response;
+  },
+
+  async scheduled(_event, env) {
+    const result = await sendStreakReminders({}, buildDeps(env));
+    console.log(`Streak reminders: ${result.sent}/${result.checked} sent`);
   }
 };
