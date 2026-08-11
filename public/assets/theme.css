@@ -1,0 +1,57 @@
+/* Shared theme presets for the static pages (flashcards, saved, lesson,
+   history, mistakes, rankings, writing, help). Each page still declares its
+   own default `:root { --teal-dark: ...; }` block — these rules use
+   `:root[data-theme="x"]`, which is more specific than a bare `:root`, so
+   they win regardless of whether this file loads before or after the
+   page's inline <style>. theme.js sets data-theme on <html> and keeps it
+   in sync with localStorage. */
+
+:root[data-theme="ocean"] {
+  --teal-dark: #163949;
+  --teal: #216d94;
+  --orange: #b58f08;
+  --bg: #f2f7fa;
+  --card: #ffffff;
+  --text: #132430;
+  --muted: #5c7683;
+}
+
+:root[data-theme="sunset"] {
+  --teal-dark: #532b22;
+  --teal: #a64f36;
+  --orange: #4f93ff;
+  --bg: #fdf6f3;
+  --card: #ffffff;
+  --text: #301a12;
+  --muted: #8a6a5c;
+}
+
+:root[data-theme="dark"] {
+  --teal-dark: #0b1f1c;
+  --teal: #14b8a6;
+  --orange: #fb923c;
+  --bg: #101513;
+  --card: #1b2320;
+  --text: #e8f0ee;
+  --muted: #8aa39c;
+}
+
+#app-theme-fab {
+  position: fixed; top: 16px; right: 16px; z-index: 9999;
+  width: 40px; height: 40px; border-radius: 50%; border: none;
+  background: var(--card, #fff); box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+#app-theme-menu {
+  position: fixed; top: 62px; right: 16px; z-index: 9999;
+  background: var(--card, #fff); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 150px;
+}
+#app-theme-menu.open { display: flex; }
+#app-theme-menu button {
+  display: flex; align-items: center; gap: 10px; border: none; background: transparent;
+  padding: 8px 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px;
+  font-weight: 600; color: var(--text, #14201e); text-align: left;
+}
+#app-theme-menu button:hover { background: rgba(127,127,127,0.12); }
+#app-theme-menu .swatch { width: 16px; height: 16px; border-radius: 50%; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
