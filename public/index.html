@@ -705,6 +705,17 @@
         const raw = node.nodeValue;
         const trimmed = raw.trim();
         if (!trimmed) return;
+        // /lessons renders a lesson's vocab count as a bare, unlabeled "0"
+        // (direct text-node child of the row's `.flex-1` wrapper — verified
+        // via devtools) whenever a lesson hasn't generated vocab yet, with
+        // no wrapping element to target by class; only the active lesson
+        // (which shows a progress bar instead) skips it. Not the same as
+        // "0%" on /profile (level progress), which is legitimate and has
+        // its own "%" sibling node — only bare, parentless "0" is dropped.
+        if (trimmed === "0" && node.parentElement?.classList.contains("flex-1")) {
+          node.nodeValue = "";
+          return;
+        }
         if (Object.prototype.hasOwnProperty.call(EXACT, trimmed)) {
           if (trimmed === EXACT[trimmed]) return;
           node.nodeValue = raw.replace(trimmed, EXACT[trimmed]);
