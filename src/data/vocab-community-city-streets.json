@@ -1,0 +1,29 @@
+{
+  "topic": "Community",
+  "lesson": "City Streets",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "community/city-streets/",
+  "items": [
+    { "word": "fire station", "meaning_vi": "trạm chữa lửa/cứu hỏa", "r2_key": "community/city-streets/01-fire-station.png", "level": "A1", "word_form": "noun" },
+    { "word": "coffee shop", "meaning_vi": "quán cà-phê", "r2_key": "community/city-streets/02-coffee-shop.png", "level": "A1", "word_form": "noun" },
+    { "word": "bank", "meaning_vi": "ngân hàng", "r2_key": "community/city-streets/03-bank.png", "level": "A1", "word_form": "noun" },
+    { "word": "car dealership", "meaning_vi": "đại lý bán xe hơi", "r2_key": "community/city-streets/04-car-dealership.png", "level": "B1", "word_form": "noun" },
+    { "word": "hotel", "meaning_vi": "khách sạn", "r2_key": "community/city-streets/05-hotel.png", "level": "A1", "word_form": "noun" },
+    { "word": "church", "meaning_vi": "nhà thờ", "r2_key": "community/city-streets/06-church.png", "level": "A1", "word_form": "noun" },
+    { "word": "hospital", "meaning_vi": "bệnh viện", "r2_key": "community/city-streets/07-hospital.png", "level": "A1", "word_form": "noun" },
+    { "word": "park", "meaning_vi": "công viên", "r2_key": "community/city-streets/08-park.png", "level": "A1", "word_form": "noun" },
+    { "word": "synagogue", "meaning_vi": "nhà thờ Do-thái giáo", "r2_key": "community/city-streets/09-synagogue.png", "level": "B2", "word_form": "noun" },
+    { "word": "theater", "meaning_vi": "rạp hát", "r2_key": "community/city-streets/10-theater.png", "level": "A2", "word_form": "noun" },
+    { "word": "movie theater", "meaning_vi": "rạp hát bóng/xi-nê", "r2_key": "community/city-streets/11-movie-theater.png", "level": "A1", "word_form": "noun" },
+    { "word": "gas station", "meaning_vi": "trạm xăng", "r2_key": "community/city-streets/12-gas-station.png", "level": "A1", "word_form": "noun" },
+    { "word": "furniture store", "meaning_vi": "tiệm bán bàn ghế", "r2_key": "community/city-streets/13-furniture-store.png", "level": "A2", "word_form": "noun" },
+    { "word": "hardware store", "meaning_vi": "tiệm bán đồ sắt", "r2_key": "community/city-streets/14-hardware-store.png", "level": "A2", "word_form": "noun" },
+    { "word": "barber shop", "meaning_vi": "tiệm hớt tóc", "r2_key": "community/city-streets/15-barber-shop.png", "level": "A2", "word_form": "noun" },
+    { "word": "bakery", "meaning_vi": "tiệm bánh", "r2_key": "community/city-streets/16-bakery.png", "level": "A1", "word_form": "noun" },
+    { "word": "city hall", "meaning_vi": "tòa thị chính", "r2_key": "community/city-streets/17-city-hall.png", "level": "B1", "word_form": "noun" },
+    { "word": "courthouse", "meaning_vi": "tòa án", "r2_key": "community/city-streets/18-courthouse.png", "level": "B1", "word_form": "noun" },
+    { "word": "police station", "meaning_vi": "sở cảnh sát", "r2_key": "community/city-streets/19-police-station.png", "level": "A1", "word_form": "noun" },
+    { "word": "market", "meaning_vi": "chợ", "r2_key": "community/city-streets/20-market.png", "level": "A1", "word_form": "noun" }
+  ]
+}

@@ -16,6 +16,9 @@
     }
   ],
   "services": [{ "binding": "MAILER", "service": "mailer" }],
+  "r2_buckets": [
+    { "binding": "VOCAB_IMAGES", "bucket_name": "ai-english-vocab" }
+  ],
   // 13:30 UTC = 20:30 gio Viet Nam, cuoi ngay hoc nhung chua qua muon de con kip.
   "triggers": {
     "crons": ["30 13 * * *"]
