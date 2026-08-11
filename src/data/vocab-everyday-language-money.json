@@ -1,0 +1,19 @@
+{
+  "topic": "Everyday Language",
+  "lesson": "Money",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "everyday-language/money/",
+  "items": [
+    { "word": "a penny", "meaning_vi": "một xu (1 cent)", "r2_key": "everyday-language/money/01-penny.png", "level": "A1", "word_form": "noun" },
+    { "word": "a nickel", "meaning_vi": "năm xu (5 cents)", "r2_key": "everyday-language/money/02-nickel.png", "level": "A1", "word_form": "noun" },
+    { "word": "a dime", "meaning_vi": "một hào/mười xu (10 cents)", "r2_key": "everyday-language/money/03-dime.png", "level": "A1", "word_form": "noun" },
+    { "word": "a quarter", "meaning_vi": "hai mươi lăm xu (25 cents)", "r2_key": "everyday-language/money/04-quarter.png", "level": "A2", "word_form": "noun" },
+    { "word": "a half dollar", "meaning_vi": "năm mươi xu/nửa đô-la", "r2_key": "everyday-language/money/05-half-dollar.png", "level": "A2", "word_form": "noun" },
+    { "word": "a silver dollar", "meaning_vi": "một đô-la bạc", "r2_key": "everyday-language/money/06-silver-dollar.png", "level": "A2", "word_form": "noun" },
+    { "word": "a dollar", "meaning_vi": "một đô-la", "r2_key": "everyday-language/money/07-dollar.png", "level": "A1", "word_form": "noun" },
+    { "word": "five dollars", "meaning_vi": "năm đô-la", "r2_key": "everyday-language/money/08-five-dollars.png", "level": "A1", "word_form": "noun" },
+    { "word": "ten dollars", "meaning_vi": "mười đô-la", "r2_key": "everyday-language/money/09-ten-dollars.png", "level": "A1", "word_form": "noun" },
+    { "word": "fifty dollars", "meaning_vi": "năm mươi đô-la", "r2_key": "everyday-language/money/10-fifty-dollars.png", "level": "A1", "word_form": "noun" }
+  ]
+}
