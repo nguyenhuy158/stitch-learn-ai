@@ -19,7 +19,7 @@
       --text: #14201e;
       --muted: #6b7a78;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-overflow-scrolling: touch; }
     body { margin: 0; font-family: "Be Vietnam Pro", "Noto Sans", sans-serif; background: var(--bg); color: var(--text); }
     .page { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 40px; }
     header {
@@ -42,7 +42,7 @@
     .contact a { color: var(--teal); font-weight: 600; text-decoration: none; }
     textarea {
       width: 100%; min-height: 100px; border-radius: 14px; border: 1px solid #e2e6e5;
-      padding: 12px 14px; font-family: inherit; font-size: 14px; resize: vertical; background: var(--card); color: var(--text);
+      padding: 12px 14px; font-family: inherit; font-size: 16px; resize: vertical; background: var(--card); color: var(--text);
     }
     textarea:focus { outline: 2px solid var(--teal); }
     button.submit {

@@ -28,6 +28,18 @@
       font-family: "Material Symbols Outlined" !important;
     }
     /*
+      iOS Safari specifics the compiled bundle never set: a gray flash on
+      every tap/click (no -webkit-tap-highlight-color), and horizontal
+      scrollers like the "Gemini Gợi ý" card carousel without momentum
+      scrolling (-webkit-overflow-scrolling). Applied to `*` — harmless on
+      elements that don't scroll/aren't tappable, no source to scope it
+      to just the interactive ones.
+    */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+    /*
       The floating "AI Chat" button centered above the bottom nav is a
       purple/indigo rounded-square in the compiled bundle — clashes with the
       rest of the app's teal/orange palette. Scoped to its exact (unique)
