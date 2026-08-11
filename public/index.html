@@ -112,6 +112,54 @@
         font-size: 16px;
         padding: 8px 14px 20px;
       }
+
+      /*
+        Home ("/") on a wide screen was a single ~880px-max column with
+        the rest of the viewport left blank — a widened mobile layout, not
+        a real desktop one. This reflows it into 2 columns using the
+        space instead: greeting spans both, streak+"Tiếp tục học" stay
+        left, "Gemini Gợi ý" becomes a right sidebar (its cards switch
+        from horizontal-scroll to stacked — 3 cards at their 260px
+        min-width don't fit side by side in a ~1/3 column), "Công cụ học
+        tập" spans full width at the bottom. Scoped by body[data-page="/"]
+        (stamped by the router-tracking script at the end of <body>,
+        since this exact Tailwind utility-class combo could coincidentally
+        recur on another route — there's no page-level class to hook
+        otherwise).
+      */
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(1) {
+        grid-column: 1 / -1;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(3) {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(4) {
+        grid-column: 2;
+        grid-row: 2 / 4;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(5) {
+        grid-column: 1 / -1;
+        grid-row: 4;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(4) .overflow-x-auto {
+        flex-direction: column;
+        overflow-x: visible;
+      }
+      body[data-page="/"] .flex.flex-col.gap-6.pt-4.px-4.pb-24 > :nth-child(4) .overflow-x-auto > * {
+        min-width: 0 !important;
+        width: 100%;
+      }
     }
 
     /*
@@ -165,6 +213,35 @@
     document.querySelectorAll("#app-sidebar a[data-path]").forEach((link) => {
       if (link.dataset.path === location.pathname) link.classList.add("active");
     });
+
+    /*
+      Stamps the current route onto <body data-page="..."> — the compiled
+      bundle's client-side router has no page-level class or attribute to
+      hook a CSS selector onto, and several patches in this file need to
+      scope a rule to one specific route (e.g. the "/" desktop 2-column
+      grid below) without risking a coincidental Tailwind utility-class
+      collision on another page. Wrapping history.push/replaceState is the
+      standard way to observe SPA navigation without touching the router
+      itself — this only reads location.pathname after the call, it
+      doesn't change what the app does.
+    */
+    (function () {
+      function stamp() {
+        document.body.setAttribute("data-page", location.pathname);
+      }
+      const origPush = history.pushState;
+      const origReplace = history.replaceState;
+      history.pushState = function (...args) {
+        origPush.apply(this, args);
+        stamp();
+      };
+      history.replaceState = function (...args) {
+        origReplace.apply(this, args);
+        stamp();
+      };
+      window.addEventListener("popstate", stamp);
+      stamp();
+    })();
 
     /*
       The lesson list/cards render from real data but have no click handler
