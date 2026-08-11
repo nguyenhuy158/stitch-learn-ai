@@ -127,14 +127,14 @@
     [data-theme="ocean"] #root { filter: hue-rotate(30deg) saturate(1.05); }
     [data-theme="sunset"] #root { filter: hue-rotate(200deg) saturate(1.1); }
 
-    /*
-      Theme picker menu — anchored under the "Giao diện" row in Hồ sơ >
-      Cài đặt & Tùy chọn (injected by ensureThemeSettingsRow below), not a
-      floating button on every screen. Position is set inline per-open via
-      the row's bounding rect; only the visual chrome lives here.
-    */
+    #app-theme-fab {
+      position: fixed; top: 16px; right: 16px; z-index: 9999;
+      width: 40px; height: 40px; border-radius: 50%; border: none;
+      background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
     #app-theme-menu {
-      position: fixed; z-index: 9999;
+      position: fixed; top: 62px; right: 16px; z-index: 9999;
       background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 150px;
     }
@@ -146,6 +146,7 @@
     }
     #app-theme-menu button:hover { background: rgba(127,127,127,0.12); }
     #app-theme-menu .swatch { width: 16px; height: 16px; border-radius: 50%; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
+    [data-theme="dark"] #app-theme-fab,
     [data-theme="dark"] #app-theme-menu { background: #1b2320; }
     [data-theme="dark"] #app-theme-menu button { color: #e8f0ee; }
   </style>
@@ -428,95 +429,6 @@
         setActiveTab(hit.btn);
         applyFilter();
       });
-    })();
-
-    /*
-      Theme picker lives only in Hồ sơ > Cài đặt & Tùy chọn, as a row
-      matching the existing ones (Ngôn ngữ, Giọng đọc & Phát âm, ...) —
-      not a button floating over every screen. The section is only in the
-      DOM while on /profile and React re-renders it on every visit, so a
-      MutationObserver (rather than a one-off check on load) re-inserts the
-      row whenever it reappears.
-    */
-    (function () {
-      function findSettingsHeading() {
-        return [...document.querySelectorAll("*")].find(
-          (el) => el.children.length === 0 && el.textContent.trim() === "Cài đặt & Tùy chọn"
-        );
-      }
-
-      function updateValueLabel() {
-        const value = document.getElementById("theme-settings-value");
-        if (value) value.textContent = window.__APP_THEME_META__[window.getAppTheme()].label;
-      }
-
-      function ensureMenu() {
-        let menu = document.getElementById("app-theme-menu");
-        if (menu) return menu;
-        menu = document.createElement("div");
-        menu.id = "app-theme-menu";
-        window.__APP_THEMES__.forEach((key) => {
-          const meta = window.__APP_THEME_META__[key];
-          const item = document.createElement("button");
-          item.type = "button";
-          item.innerHTML = `<span class="swatch" style="background:${meta.color}"></span><span>${meta.label}</span>`;
-          item.addEventListener("click", () => {
-            window.setAppTheme(key);
-            updateValueLabel();
-            menu.classList.remove("open");
-          });
-          menu.appendChild(item);
-        });
-        document.body.appendChild(menu);
-        document.addEventListener("click", () => menu.classList.remove("open"));
-        return menu;
-      }
-
-      function buildThemeRow() {
-        const row = document.createElement("button");
-        row.id = "theme-settings-row";
-        row.type = "button";
-        row.className =
-          "flex w-full items-center justify-between rounded-3xl bg-white dark:bg-card-dark p-4 shadow-sm border border-gray-100 dark:border-gray-800 active:scale-[0.98] transition-all hover:border-primary/20";
-        row.innerHTML = `
-          <div class="flex items-center gap-4">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-800/50 text-gray-500">
-              <span class="material-symbols-outlined text-[24px]">palette</span>
-            </div>
-            <div class="flex flex-col items-start">
-              <span class="text-gray-900 dark:text-white font-black text-sm tracking-tight">Giao diện</span>
-              <span id="theme-settings-value" class="text-[11px] font-bold text-gray-400 mt-0.5"></span>
-            </div>
-          </div>
-          <span class="material-symbols-outlined text-gray-300">chevron_right</span>
-        `;
-        row.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const menu = ensureMenu();
-          const opening = !menu.classList.contains("open");
-          if (opening) {
-            const rect = row.getBoundingClientRect();
-            menu.style.top = rect.bottom + 8 + "px";
-            menu.style.left = Math.min(rect.left, window.innerWidth - 166) + "px";
-          }
-          menu.classList.toggle("open", opening);
-        });
-        return row;
-      }
-
-      function ensureRow() {
-        const heading = findSettingsHeading();
-        if (!heading) return;
-        if (document.getElementById("theme-settings-row")) {
-          updateValueLabel();
-          return;
-        }
-        heading.insertAdjacentElement("afterend", buildThemeRow());
-        updateValueLabel();
-      }
-
-      new MutationObserver(ensureRow).observe(document.body, { childList: true, subtree: true });
-      ensureRow();
     })();
   </script>
 </body>
