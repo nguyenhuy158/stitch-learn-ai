@@ -7,6 +7,8 @@ export const translations: Record<string, TranslationEntry> = {
   "common.confirm": { vi: "Xác nhận", en: "Confirm" },
   "common.cancel": { vi: "Huỷ", en: "Cancel" },
 
+  "audio.speak": { vi: "Nghe phát âm", en: "Hear pronunciation" },
+
   "nav.home": { vi: "Trang chủ", en: "Home" },
   "nav.learn": { vi: "Học", en: "Learn" },
   "nav.chat": { vi: "AI Chat", en: "AI Chat" },

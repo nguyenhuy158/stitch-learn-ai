@@ -59,6 +59,8 @@ export const api = {
     request(`/api/games/${game}/score`, { method: "POST", body: JSON.stringify({ score, correct }) }),
   gameLeaderboard: (game) => request(`/api/games/${game}/leaderboard`),
 
+  pictureVocab: (topic) => request(`/api/picture-vocab${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
+
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
 
   sendFeedback: (message) => request("/api/feedback", { method: "POST", body: JSON.stringify({ message }) }),

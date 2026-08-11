@@ -14,6 +14,7 @@ import Spelling from "./pages/Spelling";
 import WordRace from "./pages/WordRace";
 import GamesLeaderboard from "./pages/GamesLeaderboard";
 import Challenge from "./pages/Challenge";
+import PictureVocab from "./pages/PictureVocab";
 import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
 import Mistakes from "./pages/Mistakes";
@@ -46,6 +47,7 @@ export default function App() {
       <Route path="/word-race" element={<WordRace />} />
       <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
+      <Route path="/picture-vocab" element={<PictureVocab />} />
       <Route path="/saved" element={<Saved />} />
       <Route path="/rankings" element={<Rankings />} />
       <Route path="/mistakes" element={<Mistakes />} />

@@ -20,6 +20,8 @@ import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
 import { getWordPool, DIFFICULTY_LEVELS } from "../../domain/usecases/getWordPool.js";
 import { submitGameScore } from "../../domain/usecases/submitGameScore.js";
 import { getGameLeaderboard } from "../../domain/usecases/getGameLeaderboard.js";
+import { getPictureVocab } from "../../domain/usecases/getPictureVocab.js";
+import { KNOWN_IMAGE_KEYS } from "../../data/pictureVocab.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -39,6 +41,30 @@ function sanitizeUser(user) {
 /** Returns a Response for known API routes, or null if the request should fall through to static assets. */
 export async function handleRequest(request, url, deps) {
   const isSecure = url.protocol === "https:";
+
+  if (url.pathname === "/api/picture-vocab") {
+    const topic = url.searchParams.get("topic");
+    const result = await getPictureVocab({ topic });
+    if (!result) return json({ error: "Topic not found" }, { status: 404 });
+    return json(result, { headers: { "Cache-Control": "public, max-age=3600" } });
+  }
+
+  const imageMatch = url.pathname.match(/^\/api\/vocab-image\/(.+)$/);
+  if (imageMatch) {
+    // Only keys that appear in our bundled vocab data — otherwise this route
+    // would let anyone read arbitrary objects out of the bucket.
+    const key = decodeURIComponent(imageMatch[1]);
+    if (!KNOWN_IMAGE_KEYS.has(key)) return new Response("Not found", { status: 404 });
+    const image = await deps.vocabImagePort.get(key);
+    if (!image) return new Response("Not found", { status: 404 });
+    return new Response(image.body, {
+      headers: {
+        "Content-Type": image.contentType || "image/png",
+        "Cache-Control": "public, max-age=31536000, immutable",
+        ETag: image.httpEtag
+      }
+    });
+  }
 
   if (url.pathname === "/api/lessons") {
     try {
