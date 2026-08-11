@@ -1,0 +1,19 @@
+{
+  "topic": "Food",
+  "lesson": "Fruit",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "food/fruit/",
+  "items": [
+    { "word": "grapes", "meaning_vi": "nho", "r2_key": "food/fruit/01-grapes.png", "level": "A1", "word_form": "noun" },
+    { "word": "pineapple", "meaning_vi": "thơm (dứa)", "r2_key": "food/fruit/02-pineapple.png", "level": "A1", "word_form": "noun" },
+    { "word": "bananas", "meaning_vi": "chuối", "r2_key": "food/fruit/03-bananas.png", "level": "A1", "word_form": "noun" },
+    { "word": "apples", "meaning_vi": "táo (bom)", "r2_key": "food/fruit/04-apples.png", "level": "A1", "word_form": "noun" },
+    { "word": "peaches", "meaning_vi": "đào", "r2_key": "food/fruit/05-peaches.png", "level": "A2", "word_form": "noun" },
+    { "word": "pears", "meaning_vi": "lê", "r2_key": "food/fruit/06-pears.png", "level": "A1", "word_form": "noun" },
+    { "word": "apricots", "meaning_vi": "mơ", "r2_key": "food/fruit/07-apricots.png", "level": "B1", "word_form": "noun" },
+    { "word": "plums", "meaning_vi": "mận", "r2_key": "food/fruit/08-plums.png", "level": "A2", "word_form": "noun" },
+    { "word": "grapefruit", "meaning_vi": "bưởi", "r2_key": "food/fruit/09-grapefruit.png", "level": "A2", "word_form": "noun" },
+    { "word": "oranges", "meaning_vi": "cam", "r2_key": "food/fruit/10-oranges.png", "level": "A1", "word_form": "noun" }
+  ]
+}
