@@ -11,6 +11,7 @@ import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 type Word = { id: number; term: string; meaning: string };
 
 const ROUND_SIZE = 10;
+const GAME_KEY = "spelling-game";
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -24,9 +25,18 @@ export default function Spelling() {
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
   const [error, setError] = useState("");
+  const [best, setBest] = useState<number | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const submittedRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
+  }, []);
+
   function load() {
+    submittedRef.current = false;
+    setSubmitResult(null);
     api
       .wordPool(ROUND_SIZE)
       .then((data: { words: Word[] }) => {
@@ -48,6 +58,15 @@ export default function Spelling() {
   const current = words && index < words.length ? words[index] : null;
   const finished = words && index >= words.length;
 
+  useEffect(() => {
+    if (!finished || submittedRef.current) return;
+    submittedRef.current = true;
+    api
+      .submitGameScore(GAME_KEY, score * 10)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .catch(() => {});
+  }, [finished, score]);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!current || status !== "idle") return;
@@ -68,7 +87,11 @@ export default function Spelling() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Gõ chữ theo nghĩa" subtitle="Đọc nghĩa, gõ đúng từ tiếng Anh." />
+      <PageHeader
+        backTo="/"
+        title="Gõ chữ theo nghĩa"
+        subtitle={`Đọc nghĩa, gõ đúng từ tiếng Anh.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+      />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && words === null && (
@@ -117,6 +140,11 @@ export default function Spelling() {
               {score} / {words!.length}
             </div>
             <div className="mt-1 text-sm text-fg-muted">câu đúng</div>
+            {submitResult && (
+              <div className="mt-2 text-sm font-semibold text-accent">
+                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+              </div>
+            )}
             <Button block className="mt-4" onClick={load}>
               Chơi lại
             </Button>

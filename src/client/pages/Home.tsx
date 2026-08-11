@@ -21,6 +21,7 @@ const TOOLS = [
   { title: "Ghép thẻ", to: "/matching-game", icon: "🧩" },
   { title: "Gõ chữ theo nghĩa", to: "/spelling-game", icon: "⌨️" },
   { title: "Từ rơi", to: "/word-race", icon: "🌧️" },
+  { title: "Xếp hạng trò chơi", to: "/games-leaderboard", icon: "🏅" },
   { title: "Đã lưu", to: "/saved", icon: "⭐" },
   { title: "Xếp hạng", to: "/rankings", icon: "🏆" },
 ];

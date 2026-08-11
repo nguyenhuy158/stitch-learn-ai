@@ -5,6 +5,7 @@ import { PageHeader, PageState } from "../components/PageHeader";
 import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
+import { speak } from "../lib/speak";
 
 type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
 
@@ -22,13 +23,15 @@ export default function Flashcards() {
   const [flipped, setFlipped] = useState(false);
   const [error, setError] = useState("");
   const [grading, setGrading] = useState(false);
+  const [audioOn, setAudioOn] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const [vocab, saved] = await Promise.all([api.vocab(), api.savedVocab()]);
+        const [vocab, saved, me] = await Promise.all([api.vocab(), api.savedVocab(), api.me()]);
         setCards(Array.isArray(vocab) ? vocab : []);
         setSavedIds(new Set((Array.isArray(saved) ? saved : []).map((s: any) => s.id)));
+        setAudioOn(me.user?.flashcard_audio !== 0);
       } catch (err: any) {
         if (isUnauthorized(err)) return navigate("/login");
         setError("Không tải được flashcards: " + err.message);
@@ -37,6 +40,11 @@ export default function Flashcards() {
   }, [navigate]);
 
   const current = cards && cards.length ? cards[0] : null;
+
+  useEffect(() => {
+    if (current && audioOn) speak(current.term);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.id, audioOn]);
   const family = useMemo(() => {
     if (!current?.word_family) return [];
     try {

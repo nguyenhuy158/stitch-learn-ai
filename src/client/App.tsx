@@ -12,6 +12,7 @@ import Listening from "./pages/Listening";
 import Matching from "./pages/Matching";
 import Spelling from "./pages/Spelling";
 import WordRace from "./pages/WordRace";
+import GamesLeaderboard from "./pages/GamesLeaderboard";
 import Challenge from "./pages/Challenge";
 import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
@@ -42,6 +43,7 @@ export default function App() {
       <Route path="/matching-game" element={<Matching />} />
       <Route path="/spelling-game" element={<Spelling />} />
       <Route path="/word-race" element={<WordRace />} />
+      <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/saved" element={<Saved />} />
       <Route path="/rankings" element={<Rankings />} />

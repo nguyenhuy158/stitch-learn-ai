@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
@@ -7,18 +7,12 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { speak } from "../lib/speak";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { questions: Question[] };
 
-function speak(term: string) {
-  if (!("speechSynthesis" in window)) return;
-  const utter = new SpeechSynthesisUtterance(term);
-  utter.lang = "en-US";
-  utter.rate = 0.9;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utter);
-}
+const GAME_KEY = "listening-game";
 
 export default function Listening() {
   const navigate = useNavigate();
@@ -27,6 +21,13 @@ export default function Listening() {
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [best, setBest] = useState<number | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const submittedRef = useRef(false);
+
+  useEffect(() => {
+    api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     api
@@ -40,6 +41,15 @@ export default function Listening() {
 
   const finished = round && index >= round.questions.length;
   const q = round && !finished ? round.questions[index] : null;
+
+  useEffect(() => {
+    if (!finished || submittedRef.current) return;
+    submittedRef.current = true;
+    api
+      .submitGameScore(GAME_KEY, score)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .catch(() => {});
+  }, [finished, score]);
 
   useEffect(() => {
     if (q) speak(q.term);
@@ -65,6 +75,8 @@ export default function Listening() {
     setRound(null);
     setIndex(0);
     setScore(0);
+    setSubmitResult(null);
+    submittedRef.current = false;
     api
       .wordGameRound("legend")
       .then((data) => setRound({ questions: data.questions.slice(0, 12) }))
@@ -73,7 +85,11 @@ export default function Listening() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Nghe đoán từ" subtitle="Nghe phát âm rồi chọn nghĩa đúng." />
+      <PageHeader
+        backTo="/"
+        title="Nghe đoán từ"
+        subtitle={`Nghe phát âm rồi chọn nghĩa đúng.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+      />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && round === null && (
@@ -132,6 +148,11 @@ export default function Listening() {
               {score} / {round!.questions.length}
             </div>
             <div className="mt-1 text-sm text-fg-muted">câu đúng</div>
+            {submitResult && (
+              <div className="mt-2 text-sm font-semibold text-accent">
+                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+              </div>
+            )}
             <Button block className="mt-4" onClick={restart}>
               Chơi lại
             </Button>

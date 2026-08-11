@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
@@ -21,6 +21,12 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const PAIRS = 8;
+const GAME_KEY = "matching-game";
+
+/** Fewer moves = more points; a perfect run (moves === PAIRS) scores max. */
+function scoreFor(moves: number) {
+  return Math.max(50, 500 - Math.max(0, moves - PAIRS) * 30);
+}
 
 export default function Matching() {
   const navigate = useNavigate();
@@ -30,8 +36,17 @@ export default function Matching() {
   const [wrongPair, setWrongPair] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [error, setError] = useState("");
+  const [best, setBest] = useState<number | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const submittedRef = useRef(false);
+
+  useEffect(() => {
+    api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
+  }, []);
 
   function load() {
+    submittedRef.current = false;
+    setSubmitResult(null);
     api
       .wordPool(PAIRS)
       .then((data: { words: Word[] }) => {
@@ -79,9 +94,22 @@ export default function Matching() {
 
   const done = tiles && matched.size === PAIRS;
 
+  useEffect(() => {
+    if (!done || submittedRef.current) return;
+    submittedRef.current = true;
+    api
+      .submitGameScore(GAME_KEY, scoreFor(moves))
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .catch(() => {});
+  }, [done, moves]);
+
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Ghép thẻ" subtitle="Tìm cặp từ - nghĩa khớp nhau." />
+      <PageHeader
+        backTo="/"
+        title="Ghép thẻ"
+        subtitle={`Tìm cặp từ - nghĩa khớp nhau. Ít lượt hơn = điểm cao hơn.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+      />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && tiles === null && (
@@ -122,7 +150,12 @@ export default function Matching() {
 
         {done && (
           <Card className="mt-5 p-5 text-center">
-            <div className="text-lg font-bold text-primary-hover">Xong! {moves} lượt</div>
+            <div className="text-lg font-bold text-primary-hover">Xong! {moves} lượt — {scoreFor(moves)} điểm</div>
+            {submitResult && (
+              <div className="mt-2 text-sm font-semibold text-accent">
+                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+              </div>
+            )}
             <Button block className="mt-4" onClick={load}>
               Chơi lại
             </Button>

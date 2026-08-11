@@ -18,6 +18,8 @@ import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
 import { getWordPool } from "../../domain/usecases/getWordPool.js";
+import { submitGameScore } from "../../domain/usecases/submitGameScore.js";
+import { getGameLeaderboard } from "../../domain/usecases/getGameLeaderboard.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -194,6 +196,37 @@ export async function handleRequest(request, url, deps) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
       console.error("Word pool error:", error);
       return json({ error: "Failed to load words" }, { status: 500 });
+    }
+  }
+
+  const gameScoreMatch = url.pathname.match(/^\/api\/games\/([\w-]+)\/score$/);
+  if (gameScoreMatch && request.method === "POST") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const { score } = await request.json();
+      const result = await submitGameScore({ userId: id, game: gameScoreMatch[1], score }, deps);
+      return json(result);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Submit game score error:", error);
+      return json({ error: "Failed to submit score" }, { status: 500 });
+    }
+  }
+
+  const gameLeaderboardMatch = url.pathname.match(/^\/api\/games\/([\w-]+)\/leaderboard$/);
+  if (gameLeaderboardMatch && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const result = await getGameLeaderboard({ userId: id, game: gameLeaderboardMatch[1] }, deps);
+      return json(result);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Game leaderboard error:", error);
+      return json({ error: "Failed to load leaderboard" }, { status: 500 });
     }
   }
 

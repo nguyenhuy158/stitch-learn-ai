@@ -14,6 +14,7 @@ const START_MS = 6000;
 const MIN_MS = 2200;
 const STEP_MS = 250;
 const START_LIVES = 3;
+const GAME_KEY = "word-race";
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -29,12 +30,21 @@ export default function WordRace() {
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [error, setError] = useState("");
+  const [best, setBest] = useState<number | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
   const durationRef = useRef(START_MS);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const submittedRef = useRef(false);
+
+  useEffect(() => {
+    api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
+  }, []);
 
   function load() {
+    submittedRef.current = false;
+    setSubmitResult(null);
     api
       .wordPool(20)
       .then((data: { words: Word[] }) => {
@@ -54,6 +64,15 @@ export default function WordRace() {
 
   const current = words && index < words.length && lives > 0 ? words[index] : null;
   const gameOver = words && (lives <= 0 || index >= words.length);
+
+  useEffect(() => {
+    if (!gameOver || submittedRef.current) return;
+    submittedRef.current = true;
+    api
+      .submitGameScore(GAME_KEY, score * 10)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .catch(() => {});
+  }, [gameOver, score]);
 
   function stopLoop() {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -112,7 +131,11 @@ export default function WordRace() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Từ rơi" subtitle="Gõ nghĩa trước khi từ chạm đáy — tốc độ tăng dần." />
+      <PageHeader
+        backTo="/"
+        title="Từ rơi"
+        subtitle={`Gõ nghĩa trước khi từ chạm đáy — tốc độ tăng dần.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+      />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && words === null && (
@@ -162,6 +185,11 @@ export default function WordRace() {
           <Card className="p-5 text-center">
             <div className="text-2xl font-extrabold text-primary-hover">{score} điểm</div>
             <div className="mt-1 text-sm text-fg-muted">{lives <= 0 ? "Hết mạng!" : "Hoàn thành!"}</div>
+            {submitResult && (
+              <div className="mt-2 text-sm font-semibold text-accent">
+                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+              </div>
+            )}
             <Button block className="mt-4" onClick={load}>
               Chơi lại
             </Button>

@@ -5,6 +5,7 @@ import { Avatar } from "../ui/Avatar";
 import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
 import { ThemePicker } from "../theme/ThemePicker";
+import { Switch } from "../ui/Switch";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -68,6 +69,18 @@ export default function Profile() {
         <div className="flex items-center justify-between p-4">
           <span className="text-sm">Giao diện</span>
           <ThemePicker />
+        </div>
+        <div className="p-4">
+          <Switch
+            checked={user.flashcard_audio !== 0}
+            label="Phát âm khi học flashcard"
+            description="Tự đọc từ tiếng Anh khi mở thẻ ghi nhớ."
+            onChange={(checked) => {
+              const value = checked ? 1 : 0;
+              setUser((u: any) => ({ ...u, flashcard_audio: value }));
+              api.updateProfile({ flashcard_audio: value }).catch(() => {});
+            }}
+          />
         </div>
       </Card>
 
