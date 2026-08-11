@@ -26,7 +26,7 @@ export default function Spelling() {
   const [score, setScore] = useState(0);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
-  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -62,8 +62,8 @@ export default function Spelling() {
     if (!finished || submittedRef.current) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, score * 10)
-      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .submitGameScore(GAME_KEY, score * 10, score)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
   }, [finished, score]);
 
@@ -143,6 +143,7 @@ export default function Spelling() {
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
             <Button block className="mt-4" onClick={load}>

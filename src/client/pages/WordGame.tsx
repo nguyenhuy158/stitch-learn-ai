@@ -31,11 +31,12 @@ export default function WordGame() {
   const [round, setRound] = useState<Round | null>(null);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [stopped, setStopped] = useState(false);
   const [best, setBest] = useState<number | null>(null);
-  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const [error, setError] = useState("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const questionStartRef = useRef(0);
@@ -58,6 +59,7 @@ export default function WordGame() {
       setRound(data);
       setIndex(0);
       setScore(0);
+      setCorrectCount(0);
       setPicked(null);
       setStopped(false);
       setSubmitResult(null);
@@ -98,6 +100,7 @@ export default function WordGame() {
     if (choice === q.correctMeaning) {
       playCorrectSound();
       setScore((s) => s + scoreFor(remainingMs, totalMs));
+      setCorrectCount((c) => c + 1);
       setTimeout(() => {
         setPicked(null);
         setIndex((i) => i + 1);
@@ -116,10 +119,10 @@ export default function WordGame() {
     if (!over || !round || submittedRef.current) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, score)
-      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .submitGameScore(GAME_KEY, score, correctCount)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
-  }, [over, round, score]);
+  }, [over, round, score, correctCount]);
 
   return (
     <div className="mx-auto max-w-xl">
@@ -200,6 +203,7 @@ export default function WordGame() {
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
             <div className="mt-4 flex gap-2.5">

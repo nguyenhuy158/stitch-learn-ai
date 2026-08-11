@@ -31,7 +31,7 @@ export default function WordRace() {
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
-  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const durationRef = useRef(START_MS);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef(0);
@@ -69,8 +69,8 @@ export default function WordRace() {
     if (!gameOver || submittedRef.current) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, score * 10)
-      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .submitGameScore(GAME_KEY, score * 10, score)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
   }, [gameOver, score]);
 
@@ -188,6 +188,7 @@ export default function WordRace() {
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
             <Button block className="mt-4" onClick={load}>

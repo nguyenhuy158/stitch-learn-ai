@@ -22,7 +22,7 @@ export default function Listening() {
   const [picked, setPicked] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
-  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
 
   useEffect(() => {
@@ -46,8 +46,8 @@ export default function Listening() {
     if (!finished || submittedRef.current) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, score)
-      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .submitGameScore(GAME_KEY, score, score)
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
   }, [finished, score]);
 
@@ -151,6 +151,7 @@ export default function Listening() {
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
             <Button block className="mt-4" onClick={restart}>

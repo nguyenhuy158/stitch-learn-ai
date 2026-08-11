@@ -37,7 +37,7 @@ export default function Matching() {
   const [moves, setMoves] = useState(0);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
-  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean } | null>(null);
+  const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export default function Matching() {
     submittedRef.current = true;
     api
       .submitGameScore(GAME_KEY, scoreFor(moves))
-      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest }))
+      .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
   }, [done, moves]);
 
@@ -154,6 +154,7 @@ export default function Matching() {
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
             <Button block className="mt-4" onClick={load}>

@@ -205,8 +205,8 @@ export async function handleRequest(request, url, deps) {
     if (!authToken) return new Response("Unauthorized", { status: 401 });
     try {
       const { id } = await deps.sessionPort.verify(authToken);
-      const { score } = await request.json();
-      const result = await submitGameScore({ userId: id, game: gameScoreMatch[1], score }, deps);
+      const { score, correct } = await request.json();
+      const result = await submitGameScore({ userId: id, game: gameScoreMatch[1], score, correct }, deps);
       return json(result);
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });

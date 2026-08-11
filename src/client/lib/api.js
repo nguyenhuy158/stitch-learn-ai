@@ -54,7 +54,8 @@ export const api = {
 
   wordGameRound: (difficulty) => request(`/api/game/round?difficulty=${difficulty}`),
   wordPool: (count) => request(`/api/game/words?count=${count}`),
-  submitGameScore: (game, score) => request(`/api/games/${game}/score`, { method: "POST", body: JSON.stringify({ score }) }),
+  submitGameScore: (game, score, correct = 0) =>
+    request(`/api/games/${game}/score`, { method: "POST", body: JSON.stringify({ score, correct }) }),
   gameLeaderboard: (game) => request(`/api/games/${game}/leaderboard`),
 
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
