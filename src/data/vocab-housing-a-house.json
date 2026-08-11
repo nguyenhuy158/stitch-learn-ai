@@ -1,0 +1,19 @@
+{
+  "topic": "Housing",
+  "lesson": "A House",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "housing/a-house/",
+  "items": [
+    { "word": "floor plan", "meaning_vi": "họa đồ kiến trúc", "r2_key": "housing/a-house/01-floor-plan.png", "level": "B1", "word_form": "noun" },
+    { "word": "backyard", "meaning_vi": "sân sau", "r2_key": "housing/a-house/02-backyard.png", "level": "A1", "word_form": "noun" },
+    { "word": "fence", "meaning_vi": "hàng rào", "r2_key": "housing/a-house/03-fence.png", "level": "A1", "word_form": "noun" },
+    { "word": "mailbox", "meaning_vi": "thùng thư", "r2_key": "housing/a-house/04-mailbox.png", "level": "A1", "word_form": "noun" },
+    { "word": "driveway", "meaning_vi": "lối xe vào", "r2_key": "housing/a-house/05-driveway.png", "level": "A2", "word_form": "noun" },
+    { "word": "garage", "meaning_vi": "nhà để xe", "r2_key": "housing/a-house/06-garage.png", "level": "A1", "word_form": "noun" },
+    { "word": "garage door", "meaning_vi": "cửa nhà để xe", "r2_key": "housing/a-house/07-garage-door.png", "level": "A2", "word_form": "noun" },
+    { "word": "screen door", "meaning_vi": "cửa lưới", "r2_key": "housing/a-house/08-screen-door.png", "level": "B1", "word_form": "noun" },
+    { "word": "porch light", "meaning_vi": "đèn trước hiên", "r2_key": "housing/a-house/09-porch-light.png", "level": "B1", "word_form": "noun" },
+    { "word": "doorbell", "meaning_vi": "chuông", "r2_key": "housing/a-house/10-doorbell.png", "level": "A2", "word_form": "noun" }
+  ]
+}
