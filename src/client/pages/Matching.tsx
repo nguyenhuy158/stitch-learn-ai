@@ -235,10 +235,10 @@ export default function Matching() {
                   setDifficulty(null);
                 }}
               >
-                Đổi độ khó
+                {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={() => load(difficulty)}>
-                Chơi lại
+                {t("game.playAgain")}
               </Button>
             </div>
           </Card>
