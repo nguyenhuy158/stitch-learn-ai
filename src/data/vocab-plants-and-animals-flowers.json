@@ -1,0 +1,19 @@
+{
+  "topic": "Plants and Animals",
+  "lesson": "Flowers",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "plants-and-animals/flowers/",
+  "items": [
+    { "word": "sunflower", "meaning_vi": "hoa hướng dương", "r2_key": "plants-and-animals/flowers/10-sunflower.png", "level": "A2", "word_form": "noun" },
+    { "word": "tulip", "meaning_vi": "hoa tu-líp", "r2_key": "plants-and-animals/flowers/11-tulip.png", "level": "A2", "word_form": "noun" },
+    { "word": "hibiscus", "meaning_vi": "hoa dâm bụt", "r2_key": "plants-and-animals/flowers/12-hibiscus.png", "level": "B2", "word_form": "noun" },
+    { "word": "marigold", "meaning_vi": "hoa cúc vạn thọ", "r2_key": "plants-and-animals/flowers/13-marigold.png", "level": "B2", "word_form": "noun" },
+    { "word": "daisy", "meaning_vi": "hoa cúc dại", "r2_key": "plants-and-animals/flowers/14-daisy.png", "level": "A2", "word_form": "noun" },
+    { "word": "rose", "meaning_vi": "hoa hồng", "r2_key": "plants-and-animals/flowers/15-rose.png", "level": "A1", "word_form": "noun" },
+    { "word": "gardenia", "meaning_vi": "hoa sơn chi", "r2_key": "plants-and-animals/flowers/16-gardenia.png", "level": "C1", "word_form": "noun" },
+    { "word": "orchid", "meaning_vi": "hoa lan", "r2_key": "plants-and-animals/flowers/17-orchid.png", "level": "B1", "word_form": "noun" },
+    { "word": "carnation", "meaning_vi": "hoa cẩm chướng", "r2_key": "plants-and-animals/flowers/18-carnation.png", "level": "B2", "word_form": "noun" },
+    { "word": "chrysanthemum", "meaning_vi": "hoa cúc", "r2_key": "plants-and-animals/flowers/19-chrysanthemum.png", "level": "B2", "word_form": "noun" }
+  ]
+}
