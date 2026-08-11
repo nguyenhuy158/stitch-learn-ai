@@ -234,6 +234,8 @@ export const translations: Record<string, TranslationEntry> = {
   "matching.lost": { vi: "Thua rồi!", en: "Game over!" },
   "matching.timeUp": { vi: "Hết giờ", en: "Time's up" },
   "matching.wrongMatch": { vi: "Ghép sai", en: "Wrong match" },
+  "matching.newRecord": { vi: "Kỷ lục mới!", en: "New record!" },
+  "matching.bestScore": { vi: "Kỷ lục: {score}", en: "Best: {score}" },
 
   "spelling.title": { vi: "Gõ chữ theo nghĩa", en: "Spell the Word" },
   "spelling.subtitle": { vi: "Đọc nghĩa, gõ đúng từ tiếng Anh trước khi hết giờ — sai là dừng cuộc chơi.", en: "Read the meaning and type the correct English word before time runs out — one mistake ends the run." },

@@ -213,12 +213,16 @@ export default function Matching() {
         {over && difficulty && (
           <Card className="mt-5 p-5 text-center">
             <div className="text-lg font-bold text-primary-hover">
-              {won ? `Xong! ${moves} lượt — ${scoreFor(moves, difficulty.pairs)} điểm` : "Thua rồi!"}
+              {won ? t("matching.won", { moves, score: scoreFor(moves, difficulty.pairs) }) : t("matching.lost")}
             </div>
-            {!won && <div className="mt-1 text-sm text-fg-muted">{failed && timeLeft === 0 ? "Hết giờ" : "Ghép sai"}</div>}
+            {!won && (
+              <div className="mt-1 text-sm text-fg-muted">
+                {failed && timeLeft === 0 ? t("matching.timeUp") : t("matching.wrongMatch")}
+              </div>
+            )}
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
-                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.isNewBest ? t("matching.newRecord") : t("matching.bestScore", { score: submitResult.bestScore })}
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
