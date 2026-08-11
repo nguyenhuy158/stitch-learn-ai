@@ -22,6 +22,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 const PAIRS = 8;
 const GAME_KEY = "matching-game";
+const TOTAL_SECONDS = 45;
 
 /** Fewer moves = more points; a perfect run (moves === PAIRS) scores max. */
 function scoreFor(moves: number) {
@@ -35,10 +36,18 @@ export default function Matching() {
   const [selected, setSelected] = useState<Tile[]>([]);
   const [wrongPair, setWrongPair] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(TOTAL_SECONDS);
+  const [failed, setFailed] = useState(false);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  function stopTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = null;
+  }
 
   useEffect(() => {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
@@ -47,6 +56,8 @@ export default function Matching() {
   function load() {
     submittedRef.current = false;
     setSubmitResult(null);
+    setFailed(false);
+    setTimeLeft(TOTAL_SECONDS);
     api
       .wordPool(PAIRS)
       .then((data: { words: Word[] }) => {
@@ -68,8 +79,27 @@ export default function Matching() {
 
   useEffect(load, [navigate]);
 
+  const won = tiles && matched.size === PAIRS;
+  const over = won || failed;
+
+  useEffect(() => {
+    if (!tiles || over) return;
+    stopTimer();
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          stopTimer();
+          setFailed(true);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return stopTimer;
+  }, [tiles, over]);
+
   function pick(tile: Tile) {
-    if (matched.has(tile.wordId) || selected.some((s) => s.key === tile.key) || selected.length === 2) return;
+    if (over || matched.has(tile.wordId) || selected.some((s) => s.key === tile.key) || selected.length === 2) return;
     const next = [...selected, tile];
     setSelected(next);
     if (next.length === 2) {
@@ -84,31 +114,27 @@ export default function Matching() {
       } else {
         playWrongSound();
         setWrongPair([a.key, b.key]);
-        setTimeout(() => {
-          setWrongPair([]);
-          setSelected([]);
-        }, 600);
+        stopTimer();
+        setTimeout(() => setFailed(true), 700);
       }
     }
   }
 
-  const done = tiles && matched.size === PAIRS;
-
   useEffect(() => {
-    if (!done || submittedRef.current) return;
+    if (!over || submittedRef.current) return;
     submittedRef.current = true;
     api
-      .submitGameScore(GAME_KEY, scoreFor(moves))
+      .submitGameScore(GAME_KEY, won ? scoreFor(moves) : 0)
       .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
-  }, [done, moves]);
+  }, [over, won, moves]);
 
   return (
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
         title="Ghép thẻ"
-        subtitle={`Tìm cặp từ - nghĩa khớp nhau. Ít lượt hơn = điểm cao hơn.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        subtitle={`Tìm cặp từ - nghĩa trước khi hết giờ, ghép sai là thua.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -118,9 +144,18 @@ export default function Matching() {
           </div>
         )}
 
-        {tiles && (
+        {tiles && !over && (
           <>
-            <div className="mb-3 text-center text-sm text-fg-muted">Lượt: {moves}</div>
+            <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
+              <span>Lượt: {moves}</span>
+              <span>Còn {timeLeft}s</span>
+            </div>
+            <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
+              <div
+                className={cn("h-full rounded-full transition-all", timeLeft <= 8 ? "bg-red-500" : "bg-primary")}
+                style={{ width: `${(timeLeft / TOTAL_SECONDS) * 100}%` }}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {tiles.map((tile) => {
                 const isMatched = matched.has(tile.wordId);
@@ -148,9 +183,12 @@ export default function Matching() {
           </>
         )}
 
-        {done && (
+        {over && (
           <Card className="mt-5 p-5 text-center">
-            <div className="text-lg font-bold text-primary-hover">Xong! {moves} lượt — {scoreFor(moves)} điểm</div>
+            <div className="text-lg font-bold text-primary-hover">
+              {won ? `Xong! ${moves} lượt — ${scoreFor(moves)} điểm` : "Thua rồi!"}
+            </div>
+            {!won && <div className="mt-1 text-sm text-fg-muted">{failed && timeLeft === 0 ? "Hết giờ" : "Ghép sai"}</div>}
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}

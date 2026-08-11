@@ -13,6 +13,7 @@ type Question = { id: number; term: string; choices: string[]; correctMeaning: s
 type Round = { questions: Question[] };
 
 const GAME_KEY = "listening-game";
+const SECONDS_PER_QUESTION = 10;
 
 export default function Listening() {
   const navigate = useNavigate();
@@ -20,10 +21,18 @@ export default function Listening() {
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState(SECONDS_PER_QUESTION);
+  const [stopped, setStopped] = useState(false);
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  function stopTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = null;
+  }
 
   useEffect(() => {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
@@ -40,41 +49,63 @@ export default function Listening() {
   }, [navigate]);
 
   const finished = round && index >= round.questions.length;
-  const q = round && !finished ? round.questions[index] : null;
+  const over = finished || stopped;
+  const q = round && !over ? round.questions[index] : null;
 
   useEffect(() => {
-    if (!finished || submittedRef.current) return;
+    if (!over || submittedRef.current) return;
     submittedRef.current = true;
     api
       .submitGameScore(GAME_KEY, score, score)
       .then((res) => setSubmitResult({ bestScore: res.bestScore, isNewBest: res.isNewBest, xpAwarded: res.xpAwarded }))
       .catch(() => {});
-  }, [finished, score]);
+  }, [over, score]);
 
   useEffect(() => {
     if (q) speak(q.term);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q?.id]);
 
-  function answer(choice: string) {
-    if (!round || picked) return;
-    setPicked(choice);
+  useEffect(() => {
+    if (!q || picked) return;
+    setTimeLeft(SECONDS_PER_QUESTION);
+    stopTimer();
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          stopTimer();
+          answer(null);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return stopTimer;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, picked]);
+
+  function answer(choice: string | null) {
+    if (!round || picked || stopped) return;
+    stopTimer();
+    setPicked(choice ?? "");
     if (choice === q!.correctMeaning) {
       playCorrectSound();
       setScore((s) => s + 1);
+      setTimeout(() => {
+        setPicked(null);
+        setIndex((i) => i + 1);
+      }, 600);
     } else {
       playWrongSound();
+      setTimeout(() => setStopped(true), 900);
     }
-    setTimeout(() => {
-      setPicked(null);
-      setIndex((i) => i + 1);
-    }, 900);
   }
 
   function restart() {
     setRound(null);
     setIndex(0);
     setScore(0);
+    setStopped(false);
     setSubmitResult(null);
     submittedRef.current = false;
     api
@@ -88,7 +119,7 @@ export default function Listening() {
       <PageHeader
         backTo="/"
         title="Nghe đoán từ"
-        subtitle={`Nghe phát âm rồi chọn nghĩa đúng.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        subtitle={`Nghe phát âm rồi chọn nghĩa đúng — sai là dừng cuộc chơi.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -105,6 +136,12 @@ export default function Listening() {
                 Câu {index + 1}/{round!.questions.length}
               </span>
               <span>Điểm: {score}</span>
+            </div>
+            <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
+              <div
+                className={cn("h-full rounded-full transition-all", timeLeft <= 2 ? "bg-red-500" : "bg-primary")}
+                style={{ width: `${(timeLeft / SECONDS_PER_QUESTION) * 100}%` }}
+              />
             </div>
             <Card className="mb-4 flex flex-col items-center gap-3 p-6 text-center">
               <button
@@ -142,12 +179,12 @@ export default function Listening() {
           </>
         )}
 
-        {finished && (
+        {over && (
           <Card className="p-5 text-center">
             <div className="text-2xl font-extrabold text-primary-hover">
               {score} / {round!.questions.length}
             </div>
-            <div className="mt-1 text-sm text-fg-muted">câu đúng</div>
+            <div className="mt-1 text-sm text-fg-muted">{stopped ? "Sai rồi, dừng cuộc chơi!" : "câu đúng"}</div>
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}

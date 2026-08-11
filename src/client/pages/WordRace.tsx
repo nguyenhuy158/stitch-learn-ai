@@ -13,7 +13,7 @@ type Word = { id: number; term: string; meaning: string };
 const START_MS = 6000;
 const MIN_MS = 2200;
 const STEP_MS = 250;
-const START_LIVES = 3;
+const START_LIVES = 1;
 const GAME_KEY = "word-race";
 
 function normalize(s: string) {
