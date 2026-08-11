@@ -1,0 +1,19 @@
+{
+  "topic": "Health",
+  "lesson": "The Body",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "health/the-body/",
+  "items": [
+    { "word": "head", "meaning_vi": "đầu", "r2_key": "health/the-body/01-head.png", "level": "A1", "word_form": "noun" },
+    { "word": "neck", "meaning_vi": "cổ", "r2_key": "health/the-body/02-neck.png", "level": "A1", "word_form": "noun" },
+    { "word": "abdomen", "meaning_vi": "bụng", "r2_key": "health/the-body/03-abdomen.png", "level": "B1", "word_form": "noun" },
+    { "word": "waist", "meaning_vi": "vòng bụng", "r2_key": "health/the-body/04-waist.png", "level": "A2", "word_form": "noun" },
+    { "word": "hip", "meaning_vi": "hông", "r2_key": "health/the-body/05-hip.png", "level": "A2", "word_form": "noun" },
+    { "word": "leg", "meaning_vi": "cẳng chân", "r2_key": "health/the-body/06-leg.png", "level": "A1", "word_form": "noun" },
+    { "word": "foot", "meaning_vi": "bàn chân", "r2_key": "health/the-body/07-foot.png", "level": "A1", "word_form": "noun" },
+    { "word": "hand", "meaning_vi": "tay/bàn tay", "r2_key": "health/the-body/08-hand.png", "level": "A1", "word_form": "noun" },
+    { "word": "arm", "meaning_vi": "cánh tay", "r2_key": "health/the-body/09-arm.png", "level": "A1", "word_form": "noun" },
+    { "word": "shoulder", "meaning_vi": "vai", "r2_key": "health/the-body/10-shoulder.png", "level": "A1", "word_form": "noun" }
+  ]
+}
