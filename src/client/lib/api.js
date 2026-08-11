@@ -44,6 +44,7 @@ export const api = {
   vocab: () => request("/api/vocab"),
   savedVocab: () => request("/api/vocab/saved"),
   saveVocab: (id, save) => request(`/api/vocab/${id}/save`, { method: "POST", body: JSON.stringify({ save }) }),
+  reviewVocab: (id, quality) => request(`/api/vocab/${id}/review`, { method: "POST", body: JSON.stringify({ quality }) }),
 
   rankings: () => request("/api/rankings"),
 

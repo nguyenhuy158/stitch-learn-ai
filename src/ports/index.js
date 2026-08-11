@@ -57,5 +57,10 @@
  * @property {(userId: string, vocabId: number) => Promise<void>} save
  * @property {(userId: string, vocabId: number) => Promise<void>} unsave
  * @property {(userId: string) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listForUser
+ *
+ * @typedef {Object} VocabReviewRepository
+ * @property {(userId: string, today: string, limit: number) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string, interval_days: number|null, repetitions: number|null}>>} listDue - cards due today or never reviewed, due-soonest first
+ * @property {(userId: string, vocabId: number) => Promise<{ease_factor: number, interval_days: number, repetitions: number, due_date: string}|null>} get
+ * @property {(userId: string, vocabId: number, fields: {easeFactor: number, intervalDays: number, repetitions: number, dueDate: string, reviewedAt: string}) => Promise<void>} upsert
  */
 export {};

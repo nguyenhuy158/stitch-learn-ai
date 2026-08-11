@@ -19,9 +19,9 @@ export default function Flashcards() {
   const navigate = useNavigate();
   const [cards, setCards] = useState<Card[] | null>(null);
   const [savedIds, setSavedIds] = useState<Set<number>>(new Set());
-  const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [error, setError] = useState("");
+  const [grading, setGrading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -36,7 +36,7 @@ export default function Flashcards() {
     })();
   }, [navigate]);
 
-  const current = cards && cards.length ? cards[index] : null;
+  const current = cards && cards.length ? cards[0] : null;
   const family = useMemo(() => {
     if (!current?.word_family) return [];
     try {
@@ -61,6 +61,22 @@ export default function Flashcards() {
     }
   }
 
+  async function grade(quality: number) {
+    if (!current || grading) return;
+    const gradedId = current.id;
+    setGrading(true);
+    try {
+      await api.reviewVocab(gradedId, quality);
+    } catch (err: any) {
+      if (isUnauthorized(err)) return navigate("/login");
+      // Best-effort: card still leaves the deck locally even if the write failed.
+    } finally {
+      setGrading(false);
+      setFlipped(false);
+      setCards((prev) => (prev ? prev.filter((c) => c.id !== gradedId) : prev));
+    }
+  }
+
   return (
     <div className="mx-auto max-w-xl">
       <PageHeader backTo="/" title="Thẻ ghi nhớ" />
@@ -75,7 +91,7 @@ export default function Flashcards() {
         {!error && current && (
           <>
             <div className="mb-3 text-center text-[13px] text-fg-muted">
-              {index + 1} / {cards!.length} — {current.lesson_title}
+              Còn {cards!.length} thẻ cần ôn — {current.lesson_title}
             </div>
             <div className="mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
               <div
@@ -109,19 +125,7 @@ export default function Flashcards() {
                 </div>
               </div>
             </div>
-            <div className="mb-5 text-center text-xs text-fg-muted">Chạm vào thẻ để lật</div>
-            <div className="flex items-center gap-2.5">
-              <Button
-                variant="outline"
-                block
-                disabled={index === 0}
-                onClick={() => {
-                  setIndex((i) => i - 1);
-                  setFlipped(false);
-                }}
-              >
-                ← Trước
-              </Button>
+            <div className="mb-3 flex justify-center">
               <button
                 type="button"
                 onClick={toggleSave}
@@ -133,18 +137,23 @@ export default function Flashcards() {
               >
                 {savedIds.has(current.id) ? "★" : "☆"}
               </button>
-              <Button
-                variant="outline"
-                block
-                disabled={index === cards!.length - 1}
-                onClick={() => {
-                  setIndex((i) => i + 1);
-                  setFlipped(false);
-                }}
-              >
-                Tiếp →
-              </Button>
             </div>
+            {!flipped && (
+              <div className="text-center text-xs text-fg-muted">Chạm vào thẻ để lật, rồi chấm điểm mức độ nhớ</div>
+            )}
+            {flipped && (
+              <div className="flex items-center gap-2.5">
+                <Button variant="outline" block disabled={grading} onClick={() => grade(2)}>
+                  Quên rồi
+                </Button>
+                <Button variant="outline" block disabled={grading} onClick={() => grade(4)}>
+                  Nhớ được
+                </Button>
+                <Button block disabled={grading} onClick={() => grade(5)}>
+                  Dễ quá
+                </Button>
+              </div>
+            )}
           </>
         )}
       </main>

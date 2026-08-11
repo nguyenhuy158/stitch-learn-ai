@@ -10,6 +10,7 @@ import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
 import { getFlashcards } from "../../domain/usecases/getFlashcards.js";
+import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings } from "../../domain/usecases/getRankings.js";
@@ -62,11 +63,27 @@ export async function handleRequest(request, url, deps) {
     const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
     if (!authToken) return new Response("Unauthorized", { status: 401 });
     try {
-      await deps.sessionPort.verify(authToken);
-      return json(await getFlashcards({}, deps));
+      const { id } = await deps.sessionPort.verify(authToken);
+      return json(await getFlashcards({ userId: id }, deps));
     } catch (error) {
       console.error("Flashcards error:", error);
       return json({ error: "Failed to load flashcards" }, { status: 500 });
+    }
+  }
+
+  const reviewVocabMatch = url.pathname.match(/^\/api\/vocab\/(\d+)\/review$/);
+  if (reviewVocabMatch && request.method === "POST") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const { quality } = await request.json();
+      const result = await reviewVocab({ userId: id, vocabId: Number(reviewVocabMatch[1]), quality }, deps);
+      return json(result);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Review vocab error:", error);
+      return json({ error: "Failed to record review" }, { status: 500 });
     }
   }
 

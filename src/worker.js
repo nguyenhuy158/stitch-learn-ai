@@ -3,6 +3,7 @@ import { createD1ChatRepository } from "./adapters/d1/chatRepository.js";
 import { createD1LessonRepository } from "./adapters/d1/lessonRepository.js";
 import { createD1FeedbackRepository } from "./adapters/d1/feedbackRepository.js";
 import { createD1SavedVocabRepository } from "./adapters/d1/savedVocabRepository.js";
+import { createD1VocabReviewRepository } from "./adapters/d1/vocabReviewRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createGeminiTutor } from "./adapters/gemini/tutor.js";
@@ -23,6 +24,7 @@ export default {
       lessonRepository: createD1LessonRepository(env.DB),
       feedbackRepository: createD1FeedbackRepository(env.DB),
       savedVocabRepository: createD1SavedVocabRepository(env.DB),
+      vocabReviewRepository: createD1VocabReviewRepository(env.DB),
       sessionPort: createJoseSessionProvider(env.JWT_SECRET),
       ssoPort: env.SSO_ISSUER
         ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
