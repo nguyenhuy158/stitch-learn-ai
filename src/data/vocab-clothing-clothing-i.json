@@ -1,0 +1,19 @@
+{
+  "topic": "Clothing",
+  "lesson": "Clothing I",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "clothing/clothing-i/",
+  "items": [
+    { "word": "three-piece suit", "meaning_vi": "bộ đồ vét 3 miếng", "r2_key": "clothing/clothing-i/01-three-piece-suit.png", "level": "B1", "word_form": "noun" },
+    { "word": "suit", "meaning_vi": "đồ vét", "r2_key": "clothing/clothing-i/02-suit.png", "level": "A2", "word_form": "noun" },
+    { "word": "dress", "meaning_vi": "áo đầm/đồ đầm", "r2_key": "clothing/clothing-i/03-dress.png", "level": "A1", "word_form": "noun" },
+    { "word": "shirt", "meaning_vi": "áo sơ-mi", "r2_key": "clothing/clothing-i/04-shirt.png", "level": "A1", "word_form": "noun" },
+    { "word": "jeans", "meaning_vi": "quần dzin", "r2_key": "clothing/clothing-i/05-jeans.png", "level": "A1", "word_form": "noun" },
+    { "word": "sports coat", "meaning_vi": "áo khoác ngoài", "r2_key": "clothing/clothing-i/06-sports-coat.png", "level": "B1", "word_form": "noun" },
+    { "word": "turtleneck", "meaning_vi": "áo cao cổ", "r2_key": "clothing/clothing-i/07-turtleneck.png", "level": "B1", "word_form": "noun" },
+    { "word": "slacks/pants", "meaning_vi": "quần dài", "r2_key": "clothing/clothing-i/08-slacks-pants.png", "level": "A2", "word_form": "noun" },
+    { "word": "blouse", "meaning_vi": "áo sơ-mi", "r2_key": "clothing/clothing-i/09-blouse.png", "level": "A2", "word_form": "noun" },
+    { "word": "skirt", "meaning_vi": "váy đầm", "r2_key": "clothing/clothing-i/10-skirt.png", "level": "A1", "word_form": "noun" }
+  ]
+}
