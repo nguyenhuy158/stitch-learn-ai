@@ -1,0 +1,19 @@
+{
+  "topic": "Recreation",
+  "lesson": "The Beach",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "recreation/the-beach/",
+  "items": [
+    { "word": "ocean/water", "meaning_vi": "đại dương/nước", "r2_key": "recreation/the-beach/01-ocean-water.png", "level": "A1", "word_form": "noun" },
+    { "word": "fins", "meaning_vi": "chân vịt", "r2_key": "recreation/the-beach/02-fins.png", "level": "B1", "word_form": "noun" },
+    { "word": "diving mask", "meaning_vi": "mặt nạ lặn, kính lặn", "r2_key": "recreation/the-beach/03-diving-mask.png", "level": "B1", "word_form": "noun" },
+    { "word": "sailboat", "meaning_vi": "thuyền buồm", "r2_key": "recreation/the-beach/04-sailboat.png", "level": "A2", "word_form": "noun" },
+    { "word": "surfboard", "meaning_vi": "ván trượt sóng", "r2_key": "recreation/the-beach/05-surfboard.png", "level": "A2", "word_form": "noun" },
+    { "word": "wave", "meaning_vi": "sóng", "r2_key": "recreation/the-beach/06-wave.png", "level": "A1", "word_form": "noun" },
+    { "word": "wet suit", "meaning_vi": "quần áo lặn", "r2_key": "recreation/the-beach/07-wet-suit.png", "level": "B2", "word_form": "noun" },
+    { "word": "scuba tank", "meaning_vi": "bình hơi", "r2_key": "recreation/the-beach/08-scuba-tank.png", "level": "B2", "word_form": "noun" },
+    { "word": "beach umbrella", "meaning_vi": "dù che nắng ở bãi biển", "r2_key": "recreation/the-beach/09-beach-umbrella.png", "level": "A2", "word_form": "noun" },
+    { "word": "sand castle", "meaning_vi": "lâu đài bằng cát", "r2_key": "recreation/the-beach/10-sand-castle.png", "level": "A2", "word_form": "noun" }
+  ]
+}
