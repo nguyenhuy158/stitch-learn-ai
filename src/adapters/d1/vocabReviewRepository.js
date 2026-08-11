@@ -15,7 +15,7 @@ export function createD1VocabReviewRepository(db) {
            LEFT JOIN vocab_review r ON r.vocab_id = v.id AND r.user_id = ?
            WHERE l.is_locked = 0 AND (r.vocab_id IS NULL OR r.due_date <= ?)
            GROUP BY v.id
-           ORDER BY (r.due_date IS NOT NULL) DESC, r.due_date ASC
+           ORDER BY (r.due_date IS NOT NULL) DESC, r.due_date ASC, RANDOM()
            LIMIT ?`
         )
         .bind(userId, today, limit)
