@@ -8,16 +8,11 @@ import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 import { speak } from "../lib/speak";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { questions: Question[] };
 type Difficulty = { key: string; label: string; desc: string; questions: number; secondsPerQuestion: number };
-
-const DIFFICULTIES: Difficulty[] = [
-  { key: "easy", label: "Dễ", desc: "A1-A2 · 10 câu · 12s/câu", questions: 10, secondsPerQuestion: 12 },
-  { key: "hard", label: "Khó", desc: "B1-B2 · 12 câu · 9s/câu", questions: 12, secondsPerQuestion: 9 },
-  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 15 câu · 6s/câu", questions: 15, secondsPerQuestion: 6 }
-];
 
 const GAME_KEY = "listening-game";
 
@@ -35,6 +30,13 @@ export default function Listening() {
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
   const submittedRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { t } = useLanguage();
+
+  const DIFFICULTIES: Difficulty[] = [
+    { key: "easy", label: t("game.difficulty.easy"), desc: t("listening.easyDesc"), questions: 10, secondsPerQuestion: 12 },
+    { key: "hard", label: t("game.difficulty.hard"), desc: t("listening.hardDesc"), questions: 12, secondsPerQuestion: 9 },
+    { key: "legend", label: t("game.difficulty.legend"), desc: t("listening.legendDesc"), questions: 15, secondsPerQuestion: 6 },
+  ];
 
   function stopTimer() {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -126,8 +128,8 @@ export default function Listening() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
-        title="Nghe đoán từ"
-        subtitle={`Nghe phát âm rồi chọn nghĩa đúng — sai là dừng cuộc chơi.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        title={t("listening.title")}
+        subtitle={`${t("listening.subtitle")}${best !== null ? t("game.recordSubtitle", { n: best }) : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -163,9 +165,9 @@ export default function Listening() {
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>
-                Câu {index + 1}/{round!.questions.length}
+                {t("game.questionN", { n: index + 1, total: round!.questions.length })}
               </span>
-              <span>Điểm: {score}</span>
+              <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
@@ -178,7 +180,7 @@ export default function Listening() {
                 type="button"
                 onClick={() => speak(q.term)}
                 className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-hover text-3xl text-white"
-                title="Nghe lại"
+                title={t("listening.replay")}
               >
                 🔊
               </button>
@@ -214,10 +216,10 @@ export default function Listening() {
             <div className="text-2xl font-extrabold text-primary-hover">
               {score} / {round!.questions.length}
             </div>
-            <div className="mt-1 text-sm text-fg-muted">{stopped ? "Sai rồi, dừng cuộc chơi!" : "câu đúng"}</div>
+            <div className="mt-1 text-sm text-fg-muted">{stopped ? t("listening.wrongStop") : t("listening.correctSuffix")}</div>
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
-                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.isNewBest ? t("game.newRecord") : t("game.record", { n: submitResult.bestScore })}
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
@@ -230,10 +232,10 @@ export default function Listening() {
                   setDifficulty(null);
                 }}
               >
-                Đổi độ khó
+                {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={restart}>
-                Chơi lại
+                {t("game.playAgain")}
               </Button>
             </div>
           </Card>

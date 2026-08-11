@@ -5,6 +5,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { SendIcon } from "../components/icons";
 import { cn } from "../ui/cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Message = { role: "user" | "model"; content: string; created_at?: string };
 
@@ -15,6 +16,7 @@ export default function Chat() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     api
@@ -51,7 +53,7 @@ export default function Chat() {
     <div className="mx-auto flex h-dvh max-w-3xl flex-col">
       <header className="border-b border-border px-5 py-4">
         <h1 className="m-0 text-lg font-bold">AI Chat</h1>
-        <p className="m-0 text-xs text-fg-muted">Luyện nói tiếng Anh với Gemini, có sửa lỗi kèm giải thích.</p>
+        <p className="m-0 text-xs text-fg-muted">{t("chat.subtitle")}</p>
       </header>
 
       <div className="flex-1 overflow-y-auto p-5">
@@ -62,7 +64,7 @@ export default function Chat() {
           </div>
         )}
         {!error && messages && messages.length === 0 && (
-          <div className="py-16 text-center text-sm text-fg-muted">Chưa có hội thoại nào. Gõ gì đó bằng tiếng Anh để bắt đầu!</div>
+          <div className="py-16 text-center text-sm text-fg-muted">{t("chat.empty")}</div>
         )}
         {!error && messages && (
           <div className="flex flex-col gap-3">
@@ -92,10 +94,10 @@ export default function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
-          placeholder="Nhập tiếng Anh..."
+          placeholder={t("chat.placeholder")}
           className="min-h-11 flex-1 rounded-ui border border-border bg-surface px-3.5 text-base text-fg focus:outline-2 focus:outline-primary"
         />
-        <Button size="icon" onClick={send} disabled={sending || !input.trim()} aria-label="Gửi">
+        <Button size="icon" onClick={send} disabled={sending || !input.trim()} aria-label={t("chat.send")}>
           <SendIcon size={18} />
         </Button>
       </div>

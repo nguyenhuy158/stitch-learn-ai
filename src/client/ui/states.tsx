@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "./cn";
 import { Spinner } from "./Spinner";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 /** Khoi xam nhap nho, dung lam khung cho trong khi cho du lieu. */
 export function Skeleton({ className }: { className?: string }) {
@@ -50,11 +51,13 @@ export function EmptyState({ title, description, icon, action, className }: Empt
   );
 }
 
-export function LoadingState({ label = "Đang tải..." }: { label?: string }) {
+export function LoadingState({ label }: { label?: string }) {
+  const { t } = useLanguage();
+  const resolvedLabel = label ?? t("common.loading");
   return (
     <div className="flex items-center justify-center gap-2 py-10 text-sm text-fg-muted">
-      <Spinner size={16} label={label} />
-      {label}
+      <Spinner size={16} label={resolvedLabel} />
+      {resolvedLabel}
     </div>
   );
 }

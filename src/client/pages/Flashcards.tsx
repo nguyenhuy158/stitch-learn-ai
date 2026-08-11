@@ -6,6 +6,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
 
@@ -24,6 +25,7 @@ export default function Flashcards() {
   const [error, setError] = useState("");
   const [grading, setGrading] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -34,10 +36,10 @@ export default function Flashcards() {
         setAudioOn(me.user?.flashcard_audio !== 0);
       } catch (err: any) {
         if (isUnauthorized(err)) return navigate("/login");
-        setError("Không tải được flashcards: " + err.message);
+        setError(t("flashcards.loadError") + err.message);
       }
     })();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const current = cards && cards.length ? cards[0] : null;
 
@@ -87,7 +89,7 @@ export default function Flashcards() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Thẻ ghi nhớ" />
+      <PageHeader backTo="/" title={t("flashcards.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && cards === null && (
@@ -95,11 +97,11 @@ export default function Flashcards() {
             <Spinner />
           </div>
         )}
-        {!error && cards && cards.length === 0 && <PageState>Chưa có flashcard nào. Vào một bài học để tạo từ vựng trước.</PageState>}
+        {!error && cards && cards.length === 0 && <PageState>{t("flashcards.empty")}</PageState>}
         {!error && current && (
           <>
             <div className="mb-3 text-center text-[13px] text-fg-muted">
-              Còn {cards!.length} thẻ cần ôn — {current.lesson_title}
+              {t("flashcards.remaining", { n: cards!.length })} — {current.lesson_title}
             </div>
             <div className="mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
               <div
@@ -137,7 +139,7 @@ export default function Flashcards() {
               <button
                 type="button"
                 onClick={toggleSave}
-                title="Lưu từ này"
+                title={t("flashcards.save")}
                 className={cn(
                   "flex h-11 w-12 shrink-0 items-center justify-center rounded-ui text-xl shadow-sm",
                   savedIds.has(current.id) ? "bg-accent text-white" : "bg-surface"
@@ -147,18 +149,18 @@ export default function Flashcards() {
               </button>
             </div>
             {!flipped && (
-              <div className="text-center text-xs text-fg-muted">Chạm vào thẻ để lật, rồi chấm điểm mức độ nhớ</div>
+              <div className="text-center text-xs text-fg-muted">{t("flashcards.tapHint")}</div>
             )}
             {flipped && (
               <div className="flex items-center gap-2.5">
                 <Button variant="outline" block disabled={grading} onClick={() => grade(2)}>
-                  Quên rồi
+                  {t("flashcards.forgot")}
                 </Button>
                 <Button variant="outline" block disabled={grading} onClick={() => grade(4)}>
-                  Nhớ được
+                  {t("flashcards.remembered")}
                 </Button>
                 <Button block disabled={grading} onClick={() => grade(5)}>
-                  Dễ quá
+                  {t("flashcards.easy")}
                 </Button>
               </div>
             )}

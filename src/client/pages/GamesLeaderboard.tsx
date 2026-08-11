@@ -6,12 +6,14 @@ import { Spinner } from "../ui/Spinner";
 import { Tabs } from "../ui/Tabs";
 import { cn } from "../ui/cn";
 import { GAMES, type GameKey } from "../lib/games";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Row = { user_id: string; name?: string; best: number };
 type Board = { top: Row[]; myBest: number; myRank: number | null };
 
 export default function GamesLeaderboard() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [game, setGame] = useState<GameKey>(GAMES[0].key);
   const [myId, setMyId] = useState<string | null>(null);
   const [data, setData] = useState<Partial<Record<GameKey, Board>>>({});
@@ -36,12 +38,12 @@ export default function GamesLeaderboard() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <PageHeader backTo="/" title="Xếp hạng trò chơi" />
+      <PageHeader backTo="/" title={t("gamesLeaderboard.title")} />
       <main className="p-5 sm:p-9">
         <Tabs
           className="mb-5"
           variant="pill"
-          items={GAMES.map((g) => ({ id: g.key, label: g.label }))}
+          items={GAMES.map((g) => ({ id: g.key, label: t(`game.${g.key}.label`) }))}
           active={game}
           onChange={(id) => setGame(id as GameKey)}
         />
@@ -55,10 +57,12 @@ export default function GamesLeaderboard() {
         {!error && current && (
           <>
             <div className="mb-5 rounded-ui bg-primary-hover p-3.5 text-center font-bold text-white">
-              Điểm cao nhất của bạn: {current.myBest}
-              {current.myRank ? ` — Hạng #${current.myRank}` : ""}
+              {t("gamesLeaderboard.yourBest")}: {current.myBest}
+              {current.myRank ? ` — ${t("gamesLeaderboard.rank")} #${current.myRank}` : ""}
             </div>
-            {current.top.length === 0 && <PageState>Chưa ai chơi game này.</PageState>}
+            {current.top.length === 0 && (
+              <PageState>{t("gamesLeaderboard.empty")}</PageState>
+            )}
             <div className="flex flex-col gap-2">
               {current.top.map((row, i) => (
                 <div
@@ -70,8 +74,8 @@ export default function GamesLeaderboard() {
                 >
                   <div className="w-7 text-center font-extrabold text-primary-hover">#{i + 1}</div>
                   <div className="flex-1 font-semibold">
-                    {row.name || "Ẩn danh"}
-                    {row.user_id === myId ? " (Bạn)" : ""}
+                    {row.name || t("common.anonymous")}
+                    {row.user_id === myId ? ` (${t("common.you")})` : ""}
                   </div>
                   <div className="font-bold text-accent">{row.best}</div>
                 </div>

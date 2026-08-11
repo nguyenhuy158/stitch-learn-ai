@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Vocab = { term: string; meaning: string; example?: string };
 type Lesson = { title: string; sub_title?: string };
@@ -16,10 +17,11 @@ export default function LessonDetail() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [vocab, setVocab] = useState<Vocab[] | null>(null);
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!id) {
-      setError("Thiếu id bài học.");
+      setError(t("lessonDetail.missingId"));
       return;
     }
     (async () => {
@@ -32,14 +34,14 @@ export default function LessonDetail() {
         setError(err.message);
       }
     })();
-  }, [id, navigate]);
+  }, [id, navigate, t]);
 
   return (
     <div className="mx-auto max-w-5xl">
       <PageHeader
         backTo="/lessons"
-        backLabel="Quay lại danh sách"
-        title={error ? "Không tải được bài học" : lesson?.title ?? "Đang tải..."}
+        backLabel={t("lessonDetail.backToList")}
+        title={error ? t("lessonDetail.loadError") : lesson?.title ?? t("common.loading")}
         subtitle={lesson?.sub_title}
       />
       <main className="p-5 sm:p-9">
@@ -49,7 +51,7 @@ export default function LessonDetail() {
             <Spinner />
           </div>
         )}
-        {!error && vocab && vocab.length === 0 && <PageState>Bài học này chưa có nội dung.</PageState>}
+        {!error && vocab && vocab.length === 0 && <PageState>{t("lessonDetail.empty")}</PageState>}
         {!error && vocab && vocab.length > 0 && (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {vocab.map((item, i) => (

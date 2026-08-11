@@ -4,22 +4,23 @@ import { api } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Message = { role: string; content: string; created_at: string; metadata?: string };
 type Pair = { user: Message; reply: Message | null };
 
-function dayLabel(dateStr: string) {
+function dayLabel(dateStr: string, t: (key: string) => string, locale: string) {
   const d = new Date(dateStr.replace(" ", "T") + "Z");
   const today = new Date();
   const diffDays = Math.floor((today.setHours(0, 0, 0, 0) - new Date(d).setHours(0, 0, 0, 0)) / 86400000);
-  if (diffDays === 0) return "Hôm nay";
-  if (diffDays === 1) return "Hôm qua";
-  return d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" });
+  if (diffDays === 0) return t("history.today");
+  if (diffDays === 1) return t("history.yesterday");
+  return d.toLocaleDateString(locale, { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-function formatTime(dateStr: string) {
+function formatTime(dateStr: string, locale: string) {
   const d = new Date(dateStr.replace(" ", "T") + "Z");
-  return d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 }
 
 function pairMessages(messages: Message[]): Pair[] {
@@ -34,17 +35,17 @@ function pairMessages(messages: Message[]): Pair[] {
   return pairs;
 }
 
-function groupByDay(pairs: Pair[]) {
+function groupByDay(pairs: Pair[], t: (key: string) => string, locale: string) {
   const groups = new Map<string, Pair[]>();
   for (const pair of pairs) {
-    const key = dayLabel(pair.user.created_at);
+    const key = dayLabel(pair.user.created_at, t, locale);
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key)!.push(pair);
   }
   return groups;
 }
 
-function Entry({ pair }: { pair: Pair }) {
+function Entry({ pair, t, locale }: { pair: Pair; t: (key: string, params?: Record<string, string | number>) => string; locale: string }) {
   let metadata: any = null;
   try {
     metadata = pair.reply?.metadata ? JSON.parse(pair.reply.metadata) : null;
@@ -59,9 +60,9 @@ function Entry({ pair }: { pair: Pair }) {
         💬
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-bold">Luyện nói AI</div>
+        <div className="text-sm font-bold">{t("history.entry.speaking")}</div>
         <div className="mt-0.5 overflow-hidden truncate text-[13px] text-fg-muted">{pair.user.content}</div>
-        <div className="mt-1 text-xs text-fg-muted">{formatTime(pair.user.created_at)}</div>
+        <div className="mt-1 text-xs text-fg-muted">{formatTime(pair.user.created_at, locale)}</div>
       </div>
       {pair.reply && (
         <span
@@ -70,7 +71,7 @@ function Entry({ pair }: { pair: Pair }) {
             correctionCount === 0 ? "bg-success-soft text-success" : "bg-warning-soft text-accent"
           )}
         >
-          {correctionCount === 0 ? "Không lỗi" : `${correctionCount} lỗi`}
+          {correctionCount === 0 ? t("history.entry.noErrors") : t("history.entry.errorsCount", { n: correctionCount })}
         </span>
       )}
     </div>
@@ -82,6 +83,8 @@ export default function History() {
   const [user, setUser] = useState<any>(null);
   const [pairs, setPairs] = useState<Pair[] | null>(null);
   const [error, setError] = useState("");
+  const { t, lang } = useLanguage();
+  const locale = lang === "en" ? "en-US" : "vi-VN";
 
   useEffect(() => {
     (async () => {
@@ -91,16 +94,16 @@ export default function History() {
         setUser(me.user);
         setPairs(pairMessages(Array.isArray(history) ? history : []));
       } catch (err: any) {
-        setError("Không tải được lịch sử: " + err.message);
+        setError(t("history.loadError") + err.message);
       }
     })();
-  }, [navigate]);
+  }, [navigate, t]);
 
-  const groups = pairs ? groupByDay(pairs) : null;
+  const groups = pairs ? groupByDay(pairs, t, locale) : null;
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader backTo="/" title="Lịch sử học tập" />
+      <PageHeader backTo="/" title={t("history.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && !pairs && (
@@ -115,25 +118,25 @@ export default function History() {
                 <div className="text-xl font-extrabold text-primary-hover">
                   {user.streak || 0}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Chuỗi ngày</div>
+                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.streak")}</div>
               </div>
               <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
                 <div className="text-xl font-extrabold text-primary-hover">
                   {user.xp || 0}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Điểm XP</div>
+                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.xp")}</div>
               </div>
               <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
                 <div className="text-xl font-extrabold text-primary-hover">
                   {pairs.length}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">Lượt hội thoại</div>
+                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.conversations")}</div>
               </div>
             </div>
 
             <div className="mb-6 rounded-2xl bg-primary-hover p-4 text-white">
               <div className="flex justify-between text-[13px] text-white/70">
-                <span>Trình độ hiện tại</span>
+                <span>{t("history.currentLevel")}</span>
                 <span>{user.level_progress || 0}%</span>
               </div>
               <div className="my-0.5 mb-2.5 text-lg font-bold">{user.level || "B1"}</div>
@@ -142,7 +145,7 @@ export default function History() {
               </div>
             </div>
 
-            {groups && groups.size === 0 && <PageState>Chưa có hoạt động nào. Vào AI Chat để bắt đầu!</PageState>}
+            {groups && groups.size === 0 && <PageState>{t("history.empty")}</PageState>}
 
             {groups &&
               [...groups.entries()]
@@ -153,7 +156,7 @@ export default function History() {
                       {day}
                     </div>
                     {[...dayPairs].reverse().map((p, i) => (
-                      <Entry key={i} pair={p} />
+                      <Entry key={i} pair={p} t={t} locale={locale} />
                     ))}
                   </div>
                 ))}

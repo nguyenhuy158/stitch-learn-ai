@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Word = { id: number; term: string; meaning: string };
 type Difficulty = { key: string; label: string; desc: string; startMs: number; minMs: number; poolSize: number };
@@ -14,12 +15,6 @@ type Difficulty = { key: string; label: string; desc: string; startMs: number; m
 const STEP_MS = 250;
 const START_LIVES = 1;
 const GAME_KEY = "word-race";
-
-const DIFFICULTIES: Difficulty[] = [
-  { key: "easy", label: "Dễ", desc: "A1-A2 · 20 từ · rơi chậm dần", startMs: 7000, minMs: 3000, poolSize: 20 },
-  { key: "hard", label: "Khó", desc: "B1-B2 · 20 từ · rơi nhanh", startMs: 6000, minMs: 2200, poolSize: 20 },
-  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 20 từ · rơi rất nhanh", startMs: 4500, minMs: 1600, poolSize: 20 }
-];
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -43,6 +38,13 @@ export default function WordRace() {
   const startRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const submittedRef = useRef(false);
+  const { t } = useLanguage();
+
+  const DIFFICULTIES: Difficulty[] = [
+    { key: "easy", label: t("game.difficulty.easy"), desc: t("wordRace.easyDesc"), startMs: 7000, minMs: 3000, poolSize: 20 },
+    { key: "hard", label: t("game.difficulty.hard"), desc: t("wordRace.hardDesc"), startMs: 6000, minMs: 2200, poolSize: 20 },
+    { key: "legend", label: t("game.difficulty.legend"), desc: t("wordRace.legendDesc"), startMs: 4500, minMs: 1600, poolSize: 20 },
+  ];
 
   useEffect(() => {
     api.gameLeaderboard(GAME_KEY).then((res) => setBest(res.myBest)).catch(() => {});
@@ -142,8 +144,8 @@ export default function WordRace() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
-        title="Từ rơi"
-        subtitle={`Gõ nghĩa trước khi từ chạm đáy — tốc độ tăng dần.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        title={t("wordRace.title")}
+        subtitle={`${t("wordRace.subtitle")}${best !== null ? t("game.recordSubtitle", { n: best }) : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -170,7 +172,7 @@ export default function WordRace() {
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>{"❤️".repeat(lives)}</span>
-              <span>Điểm: {score}</span>
+              <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="relative mb-4 h-56 overflow-hidden rounded-3xl bg-surface shadow-lg">
               <div
@@ -188,7 +190,7 @@ export default function WordRace() {
                 onChange={(e) => setInput(e.target.value)}
                 disabled={!!feedback}
                 autoComplete="off"
-                placeholder="Nhập nghĩa tiếng Việt..."
+                placeholder={t("wordRace.placeholder")}
                 className={cn(
                   "rounded-ui border px-3.5 py-3 text-center text-lg",
                   feedback === "correct" && "border-green-500 bg-green-500/10",
@@ -197,7 +199,7 @@ export default function WordRace() {
                 )}
               />
               {feedback === "wrong" && (
-                <div className="text-center text-sm text-fg-muted">Đáp án: {current.meaning}</div>
+                <div className="text-center text-sm text-fg-muted">{t("wordRace.answer", { meaning: current.meaning })}</div>
               )}
             </form>
           </>
@@ -205,11 +207,11 @@ export default function WordRace() {
 
         {gameOver && difficulty && (
           <Card className="p-5 text-center">
-            <div className="text-2xl font-extrabold text-primary-hover">{score} điểm</div>
-            <div className="mt-1 text-sm text-fg-muted">{lives <= 0 ? "Hết mạng!" : "Hoàn thành!"}</div>
+            <div className="text-2xl font-extrabold text-primary-hover">{t("wordRace.points", { n: score })}</div>
+            <div className="mt-1 text-sm text-fg-muted">{lives <= 0 ? t("wordRace.outOfLives") : t("wordRace.completed")}</div>
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
-                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.isNewBest ? t("game.newRecord") : t("game.record", { n: submitResult.bestScore })}
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
@@ -222,10 +224,10 @@ export default function WordRace() {
                   setDifficulty(null);
                 }}
               >
-                Đổi độ khó
+                {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={() => load(difficulty)}>
-                Chơi lại
+                {t("game.playAgain")}
               </Button>
             </div>
           </Card>

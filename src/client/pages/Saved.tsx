@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type VocabItem = { id: number; term: string; meaning: string; example?: string; lesson_title: string };
 
@@ -11,6 +12,7 @@ export default function Saved() {
   const navigate = useNavigate();
   const [items, setItems] = useState<VocabItem[] | null>(null);
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   const load = useCallback(async () => {
     try {
@@ -18,9 +20,9 @@ export default function Saved() {
       setItems(Array.isArray(data) ? data : []);
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
-      setError("Không tải được: " + err.message);
+      setError(t("saved.loadError") + err.message);
     }
-  }, [navigate]);
+  }, [navigate, t]);
 
   useEffect(() => {
     load();
@@ -33,7 +35,7 @@ export default function Saved() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader backTo="/" title="Từ vựng đã lưu" />
+      <PageHeader backTo="/" title={t("saved.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && items === null && (
@@ -42,7 +44,7 @@ export default function Saved() {
           </div>
         )}
         {!error && items && items.length === 0 && (
-          <PageState>Chưa lưu từ vựng nào. Vào Thẻ ghi nhớ và bấm ★ để lưu.</PageState>
+          <PageState>{t("saved.empty")}</PageState>
         )}
         {!error && items && items.length > 0 && (
           <div className="flex flex-col gap-2.5">
@@ -57,7 +59,7 @@ export default function Saved() {
                 <button
                   type="button"
                   onClick={() => unsave(item.id)}
-                  title="Bỏ lưu"
+                  title={t("saved.unsave")}
                   className="shrink-0 border-none bg-transparent text-xl text-fg-muted"
                 >
                   ★

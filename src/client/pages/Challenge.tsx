@@ -6,6 +6,7 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Question = { vocabId: number; term: string; correctMeaning: string; choices: string[] };
 
@@ -16,6 +17,7 @@ export default function Challenge() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<{ xpAwarded: number; score: number } | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     api
@@ -51,7 +53,7 @@ export default function Challenge() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageHeader backTo="/" title="Thử thách hôm nay" subtitle="5 câu trắc nghiệm, đổi ngày lại được." />
+      <PageHeader backTo="/" title={t("challenge.title")} subtitle={t("challenge.subtitle")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && state === null && (
@@ -61,11 +63,11 @@ export default function Challenge() {
         )}
         {!error && state?.completed && !result && (
           <PageState>
-            Hôm nay làm rồi, được +{state.xpAwarded} XP. Quay lại vào ngày mai nhé!
+            {t("challenge.doneToday", { n: state.xpAwarded })}
           </PageState>
         )}
         {!error && state && !state.completed && state.questions.length === 0 && (
-          <PageState>Chưa có đủ từ vựng để tạo thử thách. Học thêm vài bài học trước đã.</PageState>
+          <PageState>{t("challenge.notEnoughVocab")}</PageState>
         )}
 
         {!error && result && (
@@ -73,7 +75,7 @@ export default function Challenge() {
             <div className="text-2xl font-extrabold text-primary-hover">
               {result.score} / {state?.questions.length}
             </div>
-            <div className="mt-1 text-sm text-fg-muted">câu đúng — +{result.xpAwarded} XP</div>
+            <div className="mt-1 text-sm text-fg-muted">{t("challenge.correctSuffix", { n: result.xpAwarded })}</div>
           </Card>
         )}
 
@@ -82,7 +84,7 @@ export default function Challenge() {
             <div className="flex flex-col gap-4">
               {state.questions.map((q, i) => (
                 <Card key={q.vocabId} className="p-4">
-                  <div className="mb-2.5 text-sm text-fg-muted">Câu {i + 1}</div>
+                  <div className="mb-2.5 text-sm text-fg-muted">{t("challenge.questionN", { n: i + 1 })}</div>
                   <div className="mb-3 text-lg font-bold text-primary-hover">{q.term}</div>
                   <div className="flex flex-col gap-2">
                     {q.choices.map((choice) => (
@@ -103,7 +105,7 @@ export default function Challenge() {
               ))}
             </div>
             <Button block className="mt-5" disabled={!allAnswered || submitting} onClick={submit}>
-              Nộp bài
+              {t("challenge.submit")}
             </Button>
           </>
         )}

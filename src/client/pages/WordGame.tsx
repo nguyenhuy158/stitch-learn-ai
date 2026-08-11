@@ -7,16 +7,10 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { difficulty: string; secondsPerWord: number; questions: Question[] };
-type Difficulty = { key: string; label: string; desc: string };
-
-const DIFFICULTIES: Difficulty[] = [
-  { key: "easy", label: "Dễ", desc: "A1-A2 · 10 từ · 10s/từ" },
-  { key: "hard", label: "Khó", desc: "B1-B2 · 15 từ · 7s/từ" },
-  { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 20 từ · 5s/từ" }
-];
 
 const GAME_KEY = "word-game";
 
@@ -41,6 +35,13 @@ export default function WordGame() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const questionStartRef = useRef(0);
   const submittedRef = useRef(false);
+  const { t } = useLanguage();
+
+  const DIFFICULTIES = [
+    { key: "easy", label: t("game.difficulty.easy"), desc: t("wordGame.easyDesc") },
+    { key: "hard", label: t("game.difficulty.hard"), desc: t("wordGame.hardDesc") },
+    { key: "legend", label: t("game.difficulty.legend"), desc: t("wordGame.legendDesc") },
+  ];
 
   function stopTimer() {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -128,8 +129,8 @@ export default function WordGame() {
     <div className="mx-auto max-w-xl">
       <PageHeader
         backTo="/"
-        title="Đoán nghĩa từ"
-        subtitle={`Càng nhanh càng nhiều điểm — sai là dừng cuộc chơi.${best !== null ? ` Kỷ lục: ${best}` : ""}`}
+        title={t("wordGame.title")}
+        subtitle={`${t("wordGame.subtitle")}${best !== null ? t("game.recordSubtitle", { n: best }) : ""}`}
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
@@ -156,9 +157,9 @@ export default function WordGame() {
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
               <span>
-                Câu {index + 1}/{round!.questions.length}
+                {t("game.questionN", { n: index + 1, total: round!.questions.length })}
               </span>
-              <span>Điểm: {score}</span>
+              <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
@@ -196,13 +197,13 @@ export default function WordGame() {
 
         {over && (
           <Card className="p-5 text-center">
-            <div className="text-2xl font-extrabold text-primary-hover">{score} điểm</div>
+            <div className="text-2xl font-extrabold text-primary-hover">{t("wordGame.points", { n: score })}</div>
             <div className="mt-1 text-sm text-fg-muted">
-              {stopped ? "Sai rồi, dừng cuộc chơi!" : "Hoàn thành cả bài!"}
+              {stopped ? t("wordGame.wrongStop") : t("wordGame.allDone")}
             </div>
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
-                {submitResult.isNewBest ? "Kỷ lục mới!" : `Kỷ lục: ${submitResult.bestScore}`}
+                {submitResult.isNewBest ? t("game.newRecord") : t("game.record", { n: submitResult.bestScore })}
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
@@ -215,10 +216,10 @@ export default function WordGame() {
                   setDifficulty(null);
                 }}
               >
-                Đổi độ khó
+                {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={() => start(round!.difficulty)}>
-                Chơi lại
+                {t("game.playAgain")}
               </Button>
             </div>
           </Card>

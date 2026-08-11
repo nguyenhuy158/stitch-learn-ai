@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Correction = { original: string; suggestion: string; explanation: string };
 type Result = { corrected: string; overallFeedback: string; corrections: Correction[] };
@@ -14,15 +15,16 @@ export default function Writing() {
   const [state, setState] = useState<{ tone: "info" | "error"; text: string } | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const { t } = useLanguage();
 
   async function submit() {
     const trimmed = text.trim();
     if (!trimmed) {
-      setState({ tone: "error", text: "Vui lòng nhập đoạn văn cần sửa." });
+      setState({ tone: "error", text: t("writing.emptyError") });
       return;
     }
     setSubmitting(true);
-    setState({ tone: "info", text: "Đang kiểm tra..." });
+    setState({ tone: "info", text: t("writing.checking") });
     setResult(null);
     try {
       const data = await api.reviewWriting(trimmed);
@@ -38,19 +40,19 @@ export default function Writing() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <PageHeader backTo="/lessons" backLabel="Quay lại danh sách" title="Sửa lỗi viết" subtitle="Viết đoạn văn tiếng Anh, Gemini sẽ sửa lỗi và giải thích." />
+      <PageHeader backTo="/lessons" backLabel={t("lessonDetail.backToList")} title={t("writing.title")} subtitle={t("writing.subtitle")} />
       <main className="grid gap-8 p-5 sm:p-9 lg:grid-cols-2">
         <div>
           <textarea
             value={text}
             maxLength={2000}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Nhập đoạn văn tiếng Anh của bạn ở đây..."
+            placeholder={t("writing.placeholder")}
             className="min-h-[140px] w-full resize-y rounded-2xl border border-border bg-surface p-4 text-base text-fg focus:outline-2 focus:outline-primary"
           />
           <div className="mt-1.5 text-right text-[13px] text-fg-muted">{text.length}/2000</div>
           <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting}>
-            Kiểm tra & Sửa lỗi
+            {t("writing.submit")}
           </Button>
           {state && (
             <div className={"mt-3 text-center text-sm " + (state.tone === "error" ? "text-danger" : "text-fg-muted")}>
@@ -62,23 +64,23 @@ export default function Writing() {
         {result && (
           <div>
             <div className="mb-2 text-[13px] font-bold uppercase text-primary-hover">
-              Bản đã sửa
+              {t("writing.correctedTitle")}
             </div>
             <Card className="p-4 text-[15px] leading-relaxed">{result.corrected}</Card>
 
             <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
-              Nhận xét chung
+              {t("writing.feedbackTitle")}
             </div>
             <div className="rounded-xl border-l-3 border-accent bg-warning-soft p-3 text-sm">
               {result.overallFeedback}
             </div>
 
             <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
-              Chi tiết sửa lỗi
+              {t("writing.detailsTitle")}
             </div>
             {result.corrections.length === 0 ? (
               <div className="rounded-ui p-4 text-center font-semibold text-primary">
-                Không tìm thấy lỗi nào. Viết tốt lắm!
+                {t("writing.noErrors")}
               </div>
             ) : (
               <div className="flex flex-col gap-2.5">

@@ -2,19 +2,22 @@ import type { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNav } from "../ui/BottomNav";
 import { HomeIcon, BookIcon, ChatIcon, HistoryIcon, UserIcon } from "./icons";
+import { useLanguage } from "../i18n/LanguageProvider";
 
-const NAV_ITEMS = [
-  { id: "/", label: "Trang chủ", icon: HomeIcon },
-  { id: "/lessons", label: "Học", icon: BookIcon },
-  { id: "/chat", label: "AI Chat", icon: ChatIcon },
-  { id: "/history", label: "Lịch sử", icon: HistoryIcon },
-  { id: "/profile", label: "Hồ sơ", icon: UserIcon },
+const NAV_ITEMS_BASE = [
+  { id: "/", key: "nav.home", icon: HomeIcon },
+  { id: "/lessons", key: "nav.learn", icon: BookIcon },
+  { id: "/chat", key: "nav.chat", icon: ChatIcon },
+  { id: "/history", key: "nav.history", icon: HistoryIcon },
+  { id: "/profile", key: "nav.profile", icon: UserIcon },
 ] as const;
 
 /** 5-tab bottom nav (mobile) / left sidebar (desktop >=1024px), per the old bundle shell. */
 export function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const NAV_ITEMS = NAV_ITEMS_BASE.map((item) => ({ ...item, label: t(item.key) }));
   const active = NAV_ITEMS.find((i) => i.id === location.pathname)?.id ?? "/";
 
   return (

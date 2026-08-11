@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { cn } from "./cn";
 import { useOverlay } from "./use-overlay";
 import { Button } from "./Button";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 export type ModalProps = {
   open: boolean;
@@ -101,11 +102,12 @@ export function ConfirmDialog({
   onConfirm,
   title,
   description,
-  confirmLabel = "Xác nhận",
-  cancelLabel = "Huỷ",
+  confirmLabel,
+  cancelLabel,
   destructive = false,
   loading = false,
 }: ConfirmDialogProps) {
+  const { t } = useLanguage();
   return (
     <Modal
       open={open}
@@ -116,14 +118,14 @@ export function ConfirmDialog({
       footer={
         <>
           <Button variant="ghost" onClick={onClose} disabled={loading}>
-            {cancelLabel}
+            {cancelLabel ?? t("common.cancel")}
           </Button>
           <Button
             variant={destructive ? "danger" : "primary"}
             onClick={onConfirm}
             loading={loading}
           >
-            {confirmLabel}
+            {confirmLabel ?? t("common.confirm")}
           </Button>
         </>
       }

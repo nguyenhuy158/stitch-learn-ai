@@ -5,6 +5,7 @@ import { PageHeader, PageState } from "../components/PageHeader";
 import { Spinner } from "../ui/Spinner";
 import { Tabs } from "../ui/Tabs";
 import { cn } from "../ui/cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type RankUser = { id: number; name?: string; streak?: number; xp?: number; weekly_xp?: number };
 type Board = "all" | "weekly";
@@ -18,6 +19,7 @@ export default function Rankings() {
     weekly: null
   });
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   useEffect(() => {
     api.me().then((me) => setMyId(me.user?.id ?? null)).catch(() => {});
@@ -30,22 +32,22 @@ export default function Rankings() {
       .then((rank) => setData((prev) => ({ ...prev, [board]: { top: rank.top || [], myRank: rank.myRank ?? null } })))
       .catch((err) => {
         if (isUnauthorized(err)) return navigate("/login");
-        setError("Không tải được xếp hạng: " + err.message);
+        setError(t("rankings.loadError") + err.message);
       });
-  }, [board, data, navigate]);
+  }, [board, data, navigate, t]);
 
   const current = data[board];
 
   return (
     <div className="mx-auto max-w-2xl">
-      <PageHeader backTo="/" title="Xếp hạng" />
+      <PageHeader backTo="/" title={t("rankings.title")} />
       <main className="p-5 sm:p-9">
         <Tabs
           className="mb-5"
           variant="pill"
           items={[
-            { id: "all", label: "Toàn thời gian" },
-            { id: "weekly", label: "Tuần này" }
+            { id: "all", label: t("rankings.allTime") },
+            { id: "weekly", label: t("rankings.weekly") }
           ]}
           active={board}
           onChange={(id) => setBoard(id as Board)}
@@ -61,11 +63,11 @@ export default function Rankings() {
           <>
             {current.myRank && !current.top.some((u) => u.id === myId) && (
               <div className="mb-5 rounded-ui bg-primary-hover p-3.5 text-center font-bold text-white">
-                Hạng của bạn: #{current.myRank}
+                {t("rankings.yourRank")}: #{current.myRank}
               </div>
             )}
             {current.top.length === 0 && (
-              <PageState>{board === "weekly" ? "Chưa ai kiếm XP trong tuần này." : "Chưa có ai trên bảng xếp hạng."}</PageState>
+              <PageState>{board === "weekly" ? t("rankings.emptyWeekly") : t("rankings.emptyAll")}</PageState>
             )}
             <div className="flex flex-col gap-2">
               {current.top.map((u, i) => (
@@ -78,9 +80,9 @@ export default function Rankings() {
                 >
                   <div className="w-7 text-center font-extrabold text-primary-hover">#{i + 1}</div>
                   <div className="flex-1 font-semibold">
-                    {u.name || "Ẩn danh"}
-                    {u.id === myId ? " (Bạn)" : ""}
-                    <div className="text-xs text-fg-muted">Chuỗi {u.streak || 0} ngày</div>
+                    {u.name || t("common.anonymous")}
+                    {u.id === myId ? ` (${t("common.you")})` : ""}
+                    <div className="text-xs text-fg-muted">{t("rankings.streak", { n: u.streak || 0 })}</div>
                   </div>
                   <div className="font-bold text-accent">{board === "weekly" ? u.weekly_xp || 0 : u.xp || 0} XP</div>
                 </div>

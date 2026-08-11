@@ -3,31 +3,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
 import { BookIcon, ChatIcon } from "../components/icons";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Lesson = { id: number; title: string; sub_title?: string; status?: string };
 
-const SUGGESTIONS = [
-  { title: "Sửa lỗi phát âm", desc: "Luyện phát âm cùng Gemini", to: "/chat" },
-  { title: "Ôn lỗi sai", desc: "Xem lại các lỗi đã mắc", to: "/mistakes" },
-  { title: "Trò Chuyện Cà Phê", desc: "Chat chủ đề tự do", to: "/chat" },
-];
+const SUGGESTION_KEYS = [
+  { key: "pronunciation", to: "/chat" },
+  { key: "mistakes", to: "/mistakes" },
+  { key: "coffee", to: "/chat" },
+] as const;
 
-const TOOLS = [
-  { title: "Gia sư AI", to: "/chat", icon: "🎓" },
-  { title: "Thẻ ghi nhớ", to: "/flashcards", icon: "🗂️" },
-  { title: "Thử thách hôm nay", to: "/challenge", icon: "🎯" },
-  { title: "Đoán nghĩa từ", to: "/word-game", icon: "🎮" },
-  { title: "Nghe đoán từ", to: "/listening-game", icon: "🔊" },
-  { title: "Ghép thẻ", to: "/matching-game", icon: "🧩" },
-  { title: "Gõ chữ theo nghĩa", to: "/spelling-game", icon: "⌨️" },
-  { title: "Từ rơi", to: "/word-race", icon: "🌧️" },
-  { title: "Xếp hạng trò chơi", to: "/games-leaderboard", icon: "🏅" },
-  { title: "Đã lưu", to: "/saved", icon: "⭐" },
-  { title: "Xếp hạng", to: "/rankings", icon: "🏆" },
-];
+const TOOL_KEYS = [
+  { key: "tutor", to: "/chat", icon: "🎓" },
+  { key: "flashcards", to: "/flashcards", icon: "🗂️" },
+  { key: "challenge", to: "/challenge", icon: "🎯" },
+  { key: "wordGame", to: "/word-game", icon: "🎮" },
+  { key: "listeningGame", to: "/listening-game", icon: "🔊" },
+  { key: "matchingGame", to: "/matching-game", icon: "🧩" },
+  { key: "spellingGame", to: "/spelling-game", icon: "⌨️" },
+  { key: "wordRace", to: "/word-race", icon: "🌧️" },
+  { key: "gamesLeaderboard", to: "/games-leaderboard", icon: "🏅" },
+  { key: "saved", to: "/saved", icon: "⭐" },
+  { key: "rankings", to: "/rankings", icon: "🏆" },
+] as const;
 
 export default function Home() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [user, setUser] = useState<any>(null);
   const [lessons, setLessons] = useState<Lesson[] | null>(null);
 
@@ -44,26 +46,26 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-3xl p-5 sm:p-9">
       <header className="mb-5">
-        <h1 className="m-0 text-2xl font-extrabold">Xin chào{user?.name ? `, ${user.name}` : ""} 👋</h1>
-        <p className="mt-1 text-sm text-fg-muted">Tiếp tục hành trình học tiếng Anh của bạn nào.</p>
+        <h1 className="m-0 text-2xl font-extrabold">{t("home.greeting")}{user?.name ? `, ${user.name}` : ""} 👋</h1>
+        <p className="mt-1 text-sm text-fg-muted">{t("home.subtitle")}</p>
       </header>
 
       {/* Khong dung <Card>: class bg-surface cua no thang bg-primary-hover theo thu tu CSS
           (cn() khong merge nhu tailwind-merge), lam the streak trang tren trang, chu trang mat hut. */}
       <div className="mb-5 rounded-ui border border-border bg-primary-hover p-4 text-white shadow-sm">
         <div className="flex items-center justify-between text-sm text-white/80">
-          <span>🔥 Chuỗi {user?.streak ?? 0} ngày</span>
+          <span>🔥 {t("home.streakDays", { n: user?.streak ?? 0 })}</span>
           <span>⭐ {user?.xp ?? 0} XP</span>
         </div>
         {continueLesson ? (
           <div className="mt-3">
-            <div className="text-xs uppercase text-white/70">Tiếp tục học</div>
+            <div className="text-xs uppercase text-white/70">{t("home.continueLearning")}</div>
             <div className="text-lg font-bold">{continueLesson.title}</div>
             <Link
               to={`/lesson?id=${continueLesson.id}`}
               className="mt-2 inline-block rounded-ui bg-white px-4 py-2 text-sm font-bold text-primary-hover no-underline"
             >
-              Tiếp tục học →
+              {t("home.continueButton")}
             </Link>
           </div>
         ) : (
@@ -76,9 +78,9 @@ export default function Home() {
       </div>
 
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="m-0 text-base font-bold">Bài học</h2>
+        <h2 className="m-0 text-base font-bold">{t("home.lessonsTitle")}</h2>
         <Link to="/lessons" className="text-sm font-semibold text-primary no-underline">
-          Xem tất cả
+          {t("home.viewAll")}
         </Link>
       </div>
 
@@ -95,23 +97,23 @@ export default function Home() {
         ))}
       </div>
 
-      <h2 className="mb-3 text-base font-bold">Gemini Gợi ý</h2>
+      <h2 className="mb-3 text-base font-bold">{t("home.suggestionsTitle")}</h2>
       <div className="mb-7 flex gap-3 overflow-x-auto pb-2">
-        {SUGGESTIONS.map((s) => (
-          <Link key={s.title} to={s.to} className="w-56 shrink-0 rounded-2xl bg-surface p-4 shadow-sm no-underline">
+        {SUGGESTION_KEYS.map((s) => (
+          <Link key={s.key} to={s.to} className="w-56 shrink-0 rounded-2xl bg-surface p-4 shadow-sm no-underline">
             <ChatIcon size={20} />
-            <div className="mt-2 text-sm font-bold text-fg">{s.title}</div>
-            <div className="mt-1 text-xs text-fg-muted">{s.desc}</div>
+            <div className="mt-2 text-sm font-bold text-fg">{t(`home.suggestion.${s.key}.title`)}</div>
+            <div className="mt-1 text-xs text-fg-muted">{t(`home.suggestion.${s.key}.desc`)}</div>
           </Link>
         ))}
       </div>
 
-      <h2 className="mb-3 text-base font-bold">Công cụ học tập</h2>
+      <h2 className="mb-3 text-base font-bold">{t("home.toolsTitle")}</h2>
       <div className="grid grid-cols-2 gap-3">
-        {TOOLS.map((t) => (
-          <Link key={t.title} to={t.to} className="rounded-2xl bg-surface p-4 text-center shadow-sm no-underline">
-            <div className="text-2xl">{t.icon}</div>
-            <div className="mt-1.5 text-sm font-semibold text-fg">{t.title}</div>
+        {TOOL_KEYS.map((tool) => (
+          <Link key={tool.key} to={tool.to} className="rounded-2xl bg-surface p-4 text-center shadow-sm no-underline">
+            <div className="text-2xl">{tool.icon}</div>
+            <div className="mt-1.5 text-sm font-semibold text-fg">{t(`home.tool.${tool.key}`)}</div>
           </Link>
         ))}
       </div>

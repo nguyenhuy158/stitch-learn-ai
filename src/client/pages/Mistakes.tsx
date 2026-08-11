@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Correction = { original?: string; suggestion?: string; explanation?: string } | string;
 
@@ -11,6 +12,7 @@ export default function Mistakes() {
   const navigate = useNavigate();
   const [mistakes, setMistakes] = useState<Correction[] | null>(null);
   const [error, setError] = useState("");
+  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -36,14 +38,14 @@ export default function Mistakes() {
         setMistakes(list);
       } catch (err: any) {
         if (isUnauthorized(err)) return navigate("/login");
-        setError("Không tải được: " + err.message);
+        setError(t("mistakes.loadError") + err.message);
       }
     })();
-  }, [navigate]);
+  }, [navigate, t]);
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader backTo="/" title="Ôn lỗi sai" subtitle="Tổng hợp các lỗi ngữ pháp Gemini đã sửa cho bạn trong AI Chat." />
+      <PageHeader backTo="/" title={t("mistakes.title")} subtitle={t("mistakes.subtitle")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
         {!error && mistakes === null && (
@@ -52,7 +54,7 @@ export default function Mistakes() {
           </div>
         )}
         {!error && mistakes && mistakes.length === 0 && (
-          <PageState>Chưa có lỗi nào được ghi nhận. Cứ chat với AI Tutor, lỗi sẽ hiện ở đây.</PageState>
+          <PageState>{t("mistakes.empty")}</PageState>
         )}
         {!error && mistakes && mistakes.length > 0 && (
           <div className="flex flex-col gap-2.5">

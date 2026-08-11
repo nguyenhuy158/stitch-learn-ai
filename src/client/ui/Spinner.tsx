@@ -1,4 +1,5 @@
 import { cn } from "./cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type SpinnerProps = {
   size?: number;
@@ -8,10 +9,11 @@ type SpinnerProps = {
 
 /** Vong xoay thuan CSS, khong dung SVG animate de nhe va tat duoc bang reduced-motion. */
 export function Spinner({ size = 16, className, label }: SpinnerProps) {
+  const { t } = useLanguage();
   return (
     <span
       role="status"
-      aria-label={label ?? "Đang tải"}
+      aria-label={label ?? t("common.loadingShort")}
       style={{
         width: size,
         height: size,

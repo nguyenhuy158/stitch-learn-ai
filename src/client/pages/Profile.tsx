@@ -6,11 +6,13 @@ import { Card } from "../ui/Card";
 import { Spinner } from "../ui/Spinner";
 import { Switch } from "../ui/Switch";
 import { useTheme } from "../theme/ThemeProvider";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 export default function Profile() {
   const navigate = useNavigate();
   const { theme, mode, themes } = useTheme();
-  const currentThemeLabel = themes.find((t) => t.id === theme)?.label ?? theme;
+  const { t, lang, setLang } = useLanguage();
+  const currentThemeLabel = t(`appearance.accent.${themes.find((th) => th.id === theme)?.id ?? theme}`);
   const [user, setUser] = useState<any>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -38,7 +40,7 @@ export default function Profile() {
       <div className="mb-6 flex items-center gap-4">
         <Avatar name={user.name || user.email || "?"} src={user.avatar_url} size="lg" />
         <div>
-          <div className="text-xl font-bold">{user.name || "Chưa đặt tên"}</div>
+          <div className="text-xl font-bold">{user.name || t("profile.unnamed")}</div>
           <div className="text-sm text-fg-muted">{user.email}</div>
         </div>
       </div>
@@ -46,7 +48,7 @@ export default function Profile() {
       <div className="mb-6 grid grid-cols-3 gap-2.5 text-center">
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.streak || 0}</div>
-          <div className="text-[11px] text-fg-muted">Chuỗi ngày</div>
+          <div className="text-[11px] text-fg-muted">{t("profile.streak")}</div>
         </Card>
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.xp || 0}</div>
@@ -54,35 +56,58 @@ export default function Profile() {
         </Card>
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.level || "B1"}</div>
-          <div className="text-[11px] text-fg-muted">Trình độ</div>
+          <div className="text-[11px] text-fg-muted">{t("profile.level")}</div>
         </Card>
       </div>
 
-      <div className="mb-2 text-sm font-bold text-fg-muted">Cài đặt & Tùy chọn</div>
+      <div className="mb-2 text-sm font-bold text-fg-muted">{t("profile.settingsTitle")}</div>
       <Card padded={false} className="mb-6 divide-y divide-border overflow-hidden">
-        <div className="flex items-center justify-between p-4">
-          <span className="text-sm">Ngôn ngữ</span>
-          <span className="text-sm text-fg-muted">Tiếng Việt</span>
+        <div className="flex items-center justify-between gap-3 p-4">
+          <span className="text-sm">{t("profile.language")}</span>
+          <div className="inline-flex shrink-0 overflow-hidden rounded-full border border-border text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setLang("vi")}
+              aria-pressed={lang === "vi"}
+              className={
+                "px-3 py-1.5 transition " +
+                (lang === "vi" ? "bg-primary text-primary-fg" : "bg-surface text-fg-muted")
+              }
+            >
+              Tiếng Việt
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang("en")}
+              aria-pressed={lang === "en"}
+              className={
+                "px-3 py-1.5 transition " +
+                (lang === "en" ? "bg-primary text-primary-fg" : "bg-surface text-fg-muted")
+              }
+            >
+              English
+            </button>
+          </div>
         </div>
         <div className="flex items-center justify-between p-4">
-          <span className="text-sm">Giọng đọc & Phát âm</span>
-          <span className="text-sm text-fg-muted">Mặc định</span>
+          <span className="text-sm">{t("profile.voice")}</span>
+          <span className="text-sm text-fg-muted">{t("profile.voiceDefault")}</span>
         </div>
         <Link
           to="/theme"
           className="flex items-center justify-between p-4 text-sm no-underline"
         >
-          <span>Giao diện</span>
+          <span>{t("profile.appearance")}</span>
           <span className="flex items-center gap-1.5 text-fg-muted">
-            {currentThemeLabel} · {mode === "dark" ? "Tối" : "Sáng"}
+            {currentThemeLabel} · {mode === "dark" ? t("appearance.dark") : t("appearance.light")}
             <span aria-hidden>›</span>
           </span>
         </Link>
         <div className="p-4">
           <Switch
             checked={user.flashcard_audio !== 0}
-            label="Phát âm khi học flashcard"
-            description="Tự đọc từ tiếng Anh khi mở thẻ ghi nhớ."
+            label={t("profile.flashcardAudioLabel")}
+            description={t("profile.flashcardAudioDesc")}
             onChange={(checked) => {
               const value = checked ? 1 : 0;
               setUser((u: any) => ({ ...u, flashcard_audio: value }));
@@ -92,10 +117,10 @@ export default function Profile() {
         </div>
       </Card>
 
-      <div className="mb-2 text-sm font-bold text-fg-muted">Trợ giúp & Phản hồi</div>
+      <div className="mb-2 text-sm font-bold text-fg-muted">{t("profile.helpTitle")}</div>
       <Card padded={false} className="mb-6 overflow-hidden">
         <Link to="/help" className="block p-4 text-sm no-underline">
-          Trợ giúp & Phản hồi →
+          {t("profile.helpLink")}
         </Link>
       </Card>
 
@@ -104,10 +129,10 @@ export default function Profile() {
         onClick={() => api.logout()}
         className="w-full rounded-ui border border-danger py-3 text-sm font-semibold text-danger"
       >
-        Đăng xuất
+        {t("profile.logout")}
       </button>
 
-      <p className="mt-6 text-center text-xs text-fg-muted">Phiên bản 2.4.0 (Bản dựng 2026)</p>
+      <p className="mt-6 text-center text-xs text-fg-muted">{t("profile.version")}</p>
     </div>
   );
 }

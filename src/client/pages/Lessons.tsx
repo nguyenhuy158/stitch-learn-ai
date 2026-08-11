@@ -6,15 +6,9 @@ import { Spinner } from "../ui/Spinner";
 import { EmptyState } from "../ui/states";
 import { LockIcon, CheckIcon, BookIcon } from "../components/icons";
 import { cn } from "../ui/cn";
+import { useLanguage } from "../i18n/LanguageProvider";
 
 type Lesson = { id: number; title: string; sub_title?: string; status?: "locked" | "active" | "completed" };
-
-const TABS = [
-  { id: "all", label: "Tất cả" },
-  { id: "grammar", label: "Ngữ pháp" },
-  { id: "vocab", label: "Từ vựng" },
-  { id: "ai", label: "Luyện tập AI" },
-];
 
 // The old bundle only ever populated "Tất cả" / "Từ vựng" with the same full list — there is no
 // per-lesson category data in the backend, so "Ngữ pháp" and "Luyện tập AI" faithfully show empty.
@@ -22,6 +16,13 @@ const TABS_WITH_DATA = new Set(["all", "vocab"]);
 
 export default function Lessons() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const TABS = [
+    { id: "all", label: t("lessons.tab.all") },
+    { id: "grammar", label: t("lessons.tab.grammar") },
+    { id: "vocab", label: t("lessons.tab.vocab") },
+    { id: "ai", label: t("lessons.tab.ai") },
+  ];
   const [tab, setTab] = useState("all");
   const [lessons, setLessons] = useState<Lesson[] | null>(null);
   const [error, setError] = useState("");
@@ -41,7 +42,7 @@ export default function Lessons() {
   return (
     <div className="mx-auto max-w-3xl">
       <header className="px-5 pb-5 pt-6 sm:px-9">
-        <h1 className="m-0 text-2xl font-extrabold">Lộ trình học</h1>
+        <h1 className="m-0 text-2xl font-extrabold">{t("lessons.title")}</h1>
       </header>
       <div className="px-5 sm:px-9">
         <Tabs items={TABS} active={tab} onChange={setTab} />
@@ -54,7 +55,7 @@ export default function Lessons() {
           </div>
         )}
         {!error && lessons && showLessons && showLessons.length === 0 && (
-          <EmptyState title="Chưa có nội dung" description="Danh mục này chưa có bài học nào." icon={<BookIcon size={28} />} />
+          <EmptyState title={t("lessons.emptyTitle")} description={t("lessons.emptyDesc")} icon={<BookIcon size={28} />} />
         )}
         {!error && showLessons && showLessons.length > 0 && (
           <ol className="flex flex-col gap-3">
