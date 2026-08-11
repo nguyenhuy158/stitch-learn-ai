@@ -1,0 +1,19 @@
+{
+  "topic": "Work",
+  "lesson": "Jobs and Occupations, A-H",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "work/jobs-and-occupations-a-h/",
+  "items": [
+    { "word": "accountant", "meaning_vi": "kế toán viên", "r2_key": "work/jobs-and-occupations-a-h/01-accountant.png", "level": "A2", "word_form": "noun" },
+    { "word": "actor", "meaning_vi": "diễn viên", "r2_key": "work/jobs-and-occupations-a-h/02-actor.png", "level": "A1", "word_form": "noun" },
+    { "word": "administrative assistant", "meaning_vi": "trợ tá hành chính", "r2_key": "work/jobs-and-occupations-a-h/03-administrative-assistant.png", "level": "B1", "word_form": "noun" },
+    { "word": "architect", "meaning_vi": "kiến trúc sư", "r2_key": "work/jobs-and-occupations-a-h/04-architect.png", "level": "A2", "word_form": "noun" },
+    { "word": "artist", "meaning_vi": "nghệ sĩ", "r2_key": "work/jobs-and-occupations-a-h/05-artist.png", "level": "A1", "word_form": "noun" },
+    { "word": "assembler", "meaning_vi": "thợ lắp ráp", "r2_key": "work/jobs-and-occupations-a-h/06-assembler.png", "level": "B1", "word_form": "noun" },
+    { "word": "auto mechanic", "meaning_vi": "thợ máy ô tô", "r2_key": "work/jobs-and-occupations-a-h/07-auto-mechanic.png", "level": "A2", "word_form": "noun" },
+    { "word": "baker", "meaning_vi": "thợ làm bánh", "r2_key": "work/jobs-and-occupations-a-h/08-baker.png", "level": "A1", "word_form": "noun" },
+    { "word": "bricklayer", "meaning_vi": "thợ nề", "r2_key": "work/jobs-and-occupations-a-h/09-bricklayer.png", "level": "B1", "word_form": "noun" },
+    { "word": "businessman/businesswoman", "meaning_vi": "nhà doanh nghiệp (nam/nữ)", "r2_key": "work/jobs-and-occupations-a-h/10-businessman-businesswoman.png", "level": "A2", "word_form": "noun" }
+  ]
+}
