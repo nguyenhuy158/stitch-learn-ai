@@ -17,6 +17,7 @@ import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
+import { getWordPool } from "../../domain/usecases/getWordPool.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -179,6 +180,20 @@ export async function handleRequest(request, url, deps) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
       console.error("Word game round error:", error);
       return json({ error: "Failed to load game round" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/game/words" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      await deps.sessionPort.verify(authToken);
+      const count = url.searchParams.get("count");
+      return json(await getWordPool({ count }, deps));
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Word pool error:", error);
+      return json({ error: "Failed to load words" }, { status: 500 });
     }
   }
 

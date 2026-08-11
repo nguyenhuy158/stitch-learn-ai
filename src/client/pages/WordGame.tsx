@@ -6,6 +6,7 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
+import { playWrongSound } from "../lib/gameSounds";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { difficulty: string; secondsPerWord: number; questions: Question[] };
@@ -16,26 +17,6 @@ const DIFFICULTIES: Difficulty[] = [
   { key: "hard", label: "Khó", desc: "B1-B2 · 15 từ · 7s/từ" },
   { key: "legend", label: "Huyền thoại", desc: "Trộn mọi trình độ · 20 từ · 5s/từ" }
 ];
-
-/** Descending "tè tè tèo tèo" buzzer for a wrong answer, synthesized so no audio asset is needed. */
-function playWrongSound() {
-  const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-  const ctx = new AudioCtx();
-  const notes = [392, 349, 330, 294];
-  notes.forEach((freq, i) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sawtooth";
-    osc.frequency.value = freq;
-    const start = ctx.currentTime + i * 0.15;
-    gain.gain.setValueAtTime(0.15, start);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.14);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(start);
-    osc.stop(start + 0.15);
-  });
-  setTimeout(() => ctx.close(), notes.length * 150 + 200);
-}
 
 export default function WordGame() {
   const navigate = useNavigate();

@@ -17,6 +17,10 @@ const TOOLS = [
   { title: "Thẻ ghi nhớ", to: "/flashcards", icon: "🗂️" },
   { title: "Thử thách hôm nay", to: "/challenge", icon: "🎯" },
   { title: "Đoán nghĩa từ", to: "/word-game", icon: "🎮" },
+  { title: "Nghe đoán từ", to: "/listening-game", icon: "🔊" },
+  { title: "Ghép thẻ", to: "/matching-game", icon: "🧩" },
+  { title: "Gõ chữ theo nghĩa", to: "/spelling-game", icon: "⌨️" },
+  { title: "Từ rơi", to: "/word-race", icon: "🌧️" },
   { title: "Đã lưu", to: "/saved", icon: "⭐" },
   { title: "Xếp hạng", to: "/rankings", icon: "🏆" },
 ];

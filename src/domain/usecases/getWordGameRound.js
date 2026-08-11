@@ -1,4 +1,5 @@
 import { ValidationError } from "../errors.js";
+import { shuffle } from "../shuffle.js";
 
 export const DIFFICULTIES = {
   easy: { levels: ["A1", "A2"], words: 10, secondsPerWord: 10 },
@@ -7,15 +8,6 @@ export const DIFFICULTIES = {
 };
 
 const OPTIONS_PER_QUESTION = 4;
-
-function shuffle(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
 
 /** One round of the word-guess game: a random word per question, 4 meaning choices, one correct. */
 export async function getWordGameRound({ difficulty }, { wordGameRepository }) {

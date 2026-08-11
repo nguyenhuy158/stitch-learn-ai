@@ -8,6 +8,10 @@ import History from "./pages/History";
 import Profile from "./pages/Profile";
 import Flashcards from "./pages/Flashcards";
 import WordGame from "./pages/WordGame";
+import Listening from "./pages/Listening";
+import Matching from "./pages/Matching";
+import Spelling from "./pages/Spelling";
+import WordRace from "./pages/WordRace";
 import Challenge from "./pages/Challenge";
 import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
@@ -34,6 +38,10 @@ export default function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/flashcards" element={<Flashcards />} />
       <Route path="/word-game" element={<WordGame />} />
+      <Route path="/listening-game" element={<Listening />} />
+      <Route path="/matching-game" element={<Matching />} />
+      <Route path="/spelling-game" element={<Spelling />} />
+      <Route path="/word-race" element={<WordRace />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/saved" element={<Saved />} />
       <Route path="/rankings" element={<Rankings />} />

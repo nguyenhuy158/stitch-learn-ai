@@ -53,6 +53,7 @@ export const api = {
   completeDailyChallenge: (score) => request("/api/challenge/complete", { method: "POST", body: JSON.stringify({ score }) }),
 
   wordGameRound: (difficulty) => request(`/api/game/round?difficulty=${difficulty}`),
+  wordPool: (count) => request(`/api/game/words?count=${count}`),
 
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
 
