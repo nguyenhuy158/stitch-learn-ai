@@ -23,7 +23,7 @@
     .card-wrap { perspective: 1000px; height: 260px; margin-bottom: 16px; }
     .card {
       position: relative; width: 100%; height: 100%; cursor: pointer;
-      transform-style: preserve-3d; transition: transform 0.5s; border-radius: 20px;
+      transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); border-radius: 20px;
     }
     .card.flipped { transform: rotateY(180deg); }
     .card-face {
@@ -34,6 +34,7 @@
     .card-front { background: var(--card); }
     .card-back { background: var(--teal-dark); color: #fff; transform: rotateY(180deg); }
     .card-lesson { font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+    .card-emoji { font-size: 48px; margin-bottom: 10px; line-height: 1; }
     .card-term { font-size: 26px; font-weight: 800; color: var(--teal-dark); }
     .card-back .card-meaning { font-size: 22px; font-weight: 700; color: var(--orange); margin-bottom: 10px; }
     .card-back .card-example { font-size: 14px; font-style: italic; color: rgba(255,255,255,0.8); }
@@ -81,7 +82,17 @@
       return div.innerHTML;
     }
 
-    function render() {
+    // Purely decorative — there's no illustration data per word, so pick a
+    // themed emoji deterministically from the term itself (same word always
+    // gets the same emoji, no flicker on re-render).
+    const EMOJI_POOL = ["📘","✨","🌱","🔑","🎯","💡","🧩","🚀","🌟","🍀","🎈","🧭","🌈","🔥","🌻","🎵","🧠","🌊","⭐","🍃"];
+    function emojiFor(term) {
+      let hash = 0;
+      for (let i = 0; i < term.length; i++) hash = (hash * 31 + term.charCodeAt(i)) >>> 0;
+      return EMOJI_POOL[hash % EMOJI_POOL.length];
+    }
+
+    function renderCard() {
       const content = document.getElementById("content");
       if (!cards.length) {
         content.className = "state";
@@ -96,9 +107,10 @@
       content.innerHTML = `
         <div class="progress">${index + 1} / ${cards.length} &mdash; ${escapeHtml(c.lesson_title)}</div>
         <div class="card-wrap">
-          <div class="card ${flipped ? "flipped" : ""}" id="flipCard">
+          <div class="card" id="flipCard">
             <div class="card-face card-front">
               <div class="card-lesson">${escapeHtml(c.lesson_title)}</div>
+              <div class="card-emoji">${emojiFor(c.term)}</div>
               <div class="card-term">${escapeHtml(c.term)}</div>
             </div>
             <div class="card-face card-back">
@@ -116,15 +128,17 @@
         </div>
       `;
 
+      // Toggling the class on the existing node (instead of rebuilding the
+      // DOM) is what lets the CSS transition actually animate the flip.
       document.getElementById("flipCard").addEventListener("click", () => {
         flipped = !flipped;
-        render();
+        document.getElementById("flipCard").classList.toggle("flipped", flipped);
       });
       document.getElementById("prevBtn").addEventListener("click", () => {
-        if (index > 0) { index--; flipped = false; render(); }
+        if (index > 0) { index--; flipped = false; renderCard(); }
       });
       document.getElementById("nextBtn").addEventListener("click", () => {
-        if (index < cards.length - 1) { index++; flipped = false; render(); }
+        if (index < cards.length - 1) { index++; flipped = false; renderCard(); }
       });
       document.getElementById("saveBtn").addEventListener("click", async (e) => {
         e.stopPropagation();
@@ -137,7 +151,7 @@
           });
           if (nowSaved) savedIds.add(c.id);
           else savedIds.delete(c.id);
-          render();
+          renderCard();
         } catch {}
       });
     }
@@ -153,7 +167,7 @@
         cards = await vocabRes.json();
         const saved = await savedRes.json();
         savedIds = new Set((Array.isArray(saved) ? saved : []).map((s) => s.id));
-        render();
+        renderCard();
       } catch (err) {
         content.className = "state";
         content.textContent = "Không tải được flashcards: " + err.message;
