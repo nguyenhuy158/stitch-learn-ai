@@ -16,6 +16,7 @@ const SUGGESTIONS = [
 const TOOLS = [
   { title: "Gia sư AI", to: "/chat", icon: "🎓" },
   { title: "Thẻ ghi nhớ", to: "/flashcards", icon: "🗂️" },
+  { title: "Thử thách hôm nay", to: "/challenge", icon: "🎯" },
   { title: "Đã lưu", to: "/saved", icon: "⭐" },
   { title: "Xếp hạng", to: "/rankings", icon: "🏆" },
 ];

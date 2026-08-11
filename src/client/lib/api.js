@@ -48,6 +48,9 @@ export const api = {
 
   rankings: () => request("/api/rankings"),
 
+  dailyChallenge: () => request("/api/challenge/today"),
+  completeDailyChallenge: (score) => request("/api/challenge/complete", { method: "POST", body: JSON.stringify({ score }) }),
+
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
 
   sendFeedback: (message) => request("/api/feedback", { method: "POST", body: JSON.stringify({ message }) }),

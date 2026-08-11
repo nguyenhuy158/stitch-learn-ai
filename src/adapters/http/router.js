@@ -11,6 +11,8 @@ import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
 import { getFlashcards } from "../../domain/usecases/getFlashcards.js";
 import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
+import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
+import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings } from "../../domain/usecases/getRankings.js";
@@ -111,6 +113,33 @@ export async function handleRequest(request, url, deps) {
     } catch (error) {
       console.error("Toggle saved vocab error:", error);
       return json({ error: "Failed to update saved vocab" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/challenge/today" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      return json(await getDailyChallenge({ userId: id }, deps));
+    } catch (error) {
+      console.error("Daily challenge error:", error);
+      return json({ error: "Failed to load daily challenge" }, { status: 500 });
+    }
+  }
+
+  if (url.pathname === "/api/challenge/complete" && request.method === "POST") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id } = await deps.sessionPort.verify(authToken);
+      const { score } = await request.json();
+      const result = await completeDailyChallenge({ userId: id, score }, deps);
+      return json(result);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Complete daily challenge error:", error);
+      return json({ error: "Failed to complete daily challenge" }, { status: 500 });
     }
   }
 

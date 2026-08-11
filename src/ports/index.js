@@ -62,5 +62,10 @@
  * @property {(userId: string, today: string, limit: number) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string, interval_days: number|null, repetitions: number|null}>>} listDue - cards due today or never reviewed, due-soonest first
  * @property {(userId: string, vocabId: number) => Promise<{ease_factor: number, interval_days: number, repetitions: number, due_date: string}|null>} get
  * @property {(userId: string, vocabId: number, fields: {easeFactor: number, intervalDays: number, repetitions: number, dueDate: string, reviewedAt: string}) => Promise<void>} upsert
+ *
+ * @typedef {Object} DailyChallengeRepository
+ * @property {(userId: string, day: string) => Promise<{xp_awarded: number}|null>} getForDay
+ * @property {(userId: string, day: string, xpAwarded: number, completedAt: string) => Promise<void>} markCompleted
+ * @property {(count: number) => Promise<Array<{id: number, term: string, meaning: string}>>} pickRandomVocab
  */
 export {};
