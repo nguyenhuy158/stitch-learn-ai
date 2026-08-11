@@ -5,6 +5,7 @@ import { createD1FeedbackRepository } from "./adapters/d1/feedbackRepository.js"
 import { createD1SavedVocabRepository } from "./adapters/d1/savedVocabRepository.js";
 import { createD1VocabReviewRepository } from "./adapters/d1/vocabReviewRepository.js";
 import { createD1DailyChallengeRepository } from "./adapters/d1/dailyChallengeRepository.js";
+import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createGeminiTutor } from "./adapters/gemini/tutor.js";
@@ -26,6 +27,7 @@ function buildDeps(env) {
     savedVocabRepository: createD1SavedVocabRepository(env.DB),
     vocabReviewRepository: createD1VocabReviewRepository(env.DB),
     dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),
+    wordGameRepository: createD1WordGameRepository(env.DB),
     sessionPort: createJoseSessionProvider(env.JWT_SECRET),
     ssoPort: env.SSO_ISSUER
       ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })

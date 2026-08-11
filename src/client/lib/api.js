@@ -52,6 +52,8 @@ export const api = {
   dailyChallenge: () => request("/api/challenge/today"),
   completeDailyChallenge: (score) => request("/api/challenge/complete", { method: "POST", body: JSON.stringify({ score }) }),
 
+  wordGameRound: (difficulty) => request(`/api/game/round?difficulty=${difficulty}`),
+
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
 
   sendFeedback: (message) => request("/api/feedback", { method: "POST", body: JSON.stringify({ message }) }),

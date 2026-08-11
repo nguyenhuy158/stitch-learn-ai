@@ -16,7 +16,7 @@ import { completeDailyChallenge } from "../../domain/usecases/completeDailyChall
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
-import { classifyVocabLevels } from "../../domain/usecases/classifyVocabLevels.js";
+import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 
 function json(data, init) {
@@ -168,6 +168,20 @@ export async function handleRequest(request, url, deps) {
     }
   }
 
+  if (url.pathname === "/api/game/round" && request.method === "GET") {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      await deps.sessionPort.verify(authToken);
+      const difficulty = url.searchParams.get("difficulty") || "easy";
+      return json(await getWordGameRound({ difficulty }, deps));
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
+      console.error("Word game round error:", error);
+      return json({ error: "Failed to load game round" }, { status: 500 });
+    }
+  }
+
   if (url.pathname === "/api/writing/review" && request.method === "POST") {
     // Same reasoning as lesson detail: a real Gemini call, so require a
     // session instead of letting it be hit anonymously in a loop.
@@ -286,19 +300,6 @@ export async function handleRequest(request, url, deps) {
       const { id } = await deps.sessionPort.verify(authToken);
       return json(await getChatHistory({ userId: id }, deps));
     } catch (error) {
-      return json({ error: error.message }, { status: 500 });
-    }
-  }
-
-  if (url.pathname === "/api/admin/classify-vocab-levels" && request.method === "POST") {
-    if (request.headers.get("x-admin-key") !== deps.env.ADMIN_TOKEN) {
-      return new Response("Unauthorized", { status: 401 });
-    }
-    try {
-      const result = await classifyVocabLevels(deps);
-      return json(result);
-    } catch (error) {
-      console.error("Classify vocab levels error:", error);
       return json({ error: error.message }, { status: 500 });
     }
   }

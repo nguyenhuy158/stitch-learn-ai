@@ -7,6 +7,7 @@ import Chat from "./pages/Chat";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
 import Flashcards from "./pages/Flashcards";
+import WordGame from "./pages/WordGame";
 import Challenge from "./pages/Challenge";
 import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/history" element={<History />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/flashcards" element={<Flashcards />} />
+      <Route path="/word-game" element={<WordGame />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/saved" element={<Saved />} />
       <Route path="/rankings" element={<Rankings />} />

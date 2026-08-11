@@ -16,6 +16,7 @@ const TOOLS = [
   { title: "Gia sư AI", to: "/chat", icon: "🎓" },
   { title: "Thẻ ghi nhớ", to: "/flashcards", icon: "🗂️" },
   { title: "Thử thách hôm nay", to: "/challenge", icon: "🎯" },
+  { title: "Đoán nghĩa từ", to: "/word-game", icon: "🎮" },
   { title: "Đã lưu", to: "/saved", icon: "⭐" },
   { title: "Xếp hạng", to: "/rankings", icon: "🏆" },
 ];
