@@ -1,0 +1,19 @@
+{
+  "topic": "Transportation",
+  "lesson": "Cars and Trucks",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "transportation/cars-and-trucks/",
+  "items": [
+    { "word": "subcompact", "meaning_vi": "xe cỡ rất nhỏ", "r2_key": "transportation/cars-and-trucks/01-subcompact.png", "level": "B1", "word_form": "noun" },
+    { "word": "compact", "meaning_vi": "xe cỡ nhỏ", "r2_key": "transportation/cars-and-trucks/02-compact.png", "level": "B1", "word_form": "noun" },
+    { "word": "midsize car", "meaning_vi": "xe cỡ trung", "r2_key": "transportation/cars-and-trucks/03-midsize-car.png", "level": "B1", "word_form": "noun" },
+    { "word": "full-size car", "meaning_vi": "xe cỡ lớn", "r2_key": "transportation/cars-and-trucks/04-full-size-car.png", "level": "B1", "word_form": "noun" },
+    { "word": "convertible", "meaning_vi": "xe mui trần", "r2_key": "transportation/cars-and-trucks/05-convertible.png", "level": "B1", "word_form": "noun" },
+    { "word": "sports car", "meaning_vi": "xe thể thao", "r2_key": "transportation/cars-and-trucks/06-sports-car.png", "level": "A2", "word_form": "noun" },
+    { "word": "pickup truck", "meaning_vi": "xe vận tải có thùng", "r2_key": "transportation/cars-and-trucks/07-pickup-truck.png", "level": "A2", "word_form": "noun" },
+    { "word": "station wagon", "meaning_vi": "xe thùng dài", "r2_key": "transportation/cars-and-trucks/08-station-wagon.png", "level": "B1", "word_form": "noun" },
+    { "word": "SUV", "meaning_vi": "xe vận dụng thể thao", "r2_key": "transportation/cars-and-trucks/09-suv.png", "level": "A2", "word_form": "noun" },
+    { "word": "minivan", "meaning_vi": "xe Van nhỏ", "r2_key": "transportation/cars-and-trucks/10-minivan.png", "level": "A2", "word_form": "noun" }
+  ]
+}
