@@ -1,0 +1,13 @@
+{
+  "topic": "Housing",
+  "lesson": "Household Pests",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "housing/household-pests/",
+  "items": [
+    { "word": "termite(s)", "meaning_vi": "mối", "r2_key": "housing/household-pests/22-termite.png", "level": "B1", "word_form": "noun" },
+    { "word": "flea(s)", "meaning_vi": "rận", "r2_key": "housing/household-pests/23-flea.png", "level": "B1", "word_form": "noun" },
+    { "word": "ant(s)", "meaning_vi": "kiến", "r2_key": "housing/household-pests/24-ant.png", "level": "A1", "word_form": "noun" },
+    { "word": "cockroach(es)", "meaning_vi": "gián", "r2_key": "housing/household-pests/25-cockroach.png", "level": "A2", "word_form": "noun" }
+  ]
+}

@@ -17,21 +17,43 @@ import plantsAnimalsFlowers from "./vocab-plants-and-animals-flowers.json";
 import workJobsAH from "./vocab-work-jobs-and-occupations-a-h.json";
 import recreationTheBeach from "./vocab-recreation-the-beach.json";
 import recreationIndividualSports from "./vocab-recreation-individual-sports.json";
+import everydayLanguageWeather from "./vocab-everyday-language-weather.json";
+import everydayLanguageDescribingThings from "./vocab-everyday-language-describing-things.json";
+import foodVegetables from "./vocab-food-vegetables.json";
+import foodMeatAndPoultry from "./vocab-food-meat-and-poultry.json";
+import foodContainersAndPackagedFoods from "./vocab-food-containers-and-packaged-foods.json";
+import clothingShoesAndAccessories from "./vocab-clothing-shoes-and-accessories.json";
+import housingCleaningSupplies from "./vocab-housing-cleaning-supplies.json";
+import housingHouseholdPests from "./vocab-housing-household-pests.json";
+import housingWeightsAndMeasures from "./vocab-housing-weights-and-measures.json";
+import plantsAnimalsDomesticAnimalsAndRodents from "./vocab-plants-and-animals-domestic-animals-and-rodents.json";
+import workToolsAndBuildingSupplies from "./vocab-work-tools-and-building-supplies.json";
 
 // Ordered by the dictionary's own chapter order.
 export const PICTURE_VOCAB_TOPICS = [
   everydayLanguageColors,
   everydayLanguageMoney,
+  everydayLanguageWeather,
+  everydayLanguageDescribingThings,
   peopleAgePhysical,
   housingAHouse,
+  housingCleaningSupplies,
+  housingHouseholdPests,
+  housingWeightsAndMeasures,
   foodFruit,
+  foodVegetables,
+  foodMeatAndPoultry,
+  foodContainersAndPackagedFoods,
   clothingI,
+  clothingShoesAndAccessories,
   healthTheBody,
   communityCityStreets,
   transportationCarsTrucks,
   areasOfStudyGeography,
   plantsAnimalsFlowers,
+  plantsAnimalsDomesticAnimalsAndRodents,
   workJobsAH,
+  workToolsAndBuildingSupplies,
   recreationTheBeach,
   recreationIndividualSports
 ];

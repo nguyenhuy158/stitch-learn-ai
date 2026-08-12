@@ -1,0 +1,19 @@
+{
+  "topic": "Food",
+  "lesson": "Containers and Packaged Foods",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "food/containers-and-packaged-foods/",
+  "items": [
+    { "word": "bottle", "meaning_vi": "chai", "r2_key": "food/containers-and-packaged-foods/01-bottle.png", "level": "A1", "word_form": "noun" },
+    { "word": "jar", "meaning_vi": "lọ", "r2_key": "food/containers-and-packaged-foods/02-jar.png", "level": "A1", "word_form": "noun" },
+    { "word": "can", "meaning_vi": "hộp (đồ hộp)", "r2_key": "food/containers-and-packaged-foods/03-can.png", "level": "A1", "word_form": "noun" },
+    { "word": "carton", "meaning_vi": "hộp giấy/hộp cạc-tông", "r2_key": "food/containers-and-packaged-foods/04-carton.png", "level": "A2", "word_form": "noun" },
+    { "word": "container", "meaning_vi": "hộp đựng", "r2_key": "food/containers-and-packaged-foods/05-container.png", "level": "A2", "word_form": "noun" },
+    { "word": "box", "meaning_vi": "thùng, hộp", "r2_key": "food/containers-and-packaged-foods/06-box.png", "level": "A1", "word_form": "noun" },
+    { "word": "bag", "meaning_vi": "bao/túi", "r2_key": "food/containers-and-packaged-foods/07-bag.png", "level": "A1", "word_form": "noun" },
+    { "word": "package", "meaning_vi": "gói", "r2_key": "food/containers-and-packaged-foods/08-package.png", "level": "A2", "word_form": "noun" },
+    { "word": "six-pack", "meaning_vi": "vỉ/thùng 6 chai lon", "r2_key": "food/containers-and-packaged-foods/09-six-pack.png", "level": "B1", "word_form": "noun" },
+    { "word": "tube", "meaning_vi": "ống (tuýp)", "r2_key": "food/containers-and-packaged-foods/12-tube.png", "level": "A2", "word_form": "noun" }
+  ]
+}

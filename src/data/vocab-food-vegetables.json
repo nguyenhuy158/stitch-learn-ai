@@ -1,0 +1,19 @@
+{
+  "topic": "Food",
+  "lesson": "Vegetables",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "food/vegetables/",
+  "items": [
+    { "word": "lettuce", "meaning_vi": "rau xà lách", "r2_key": "food/vegetables/01-lettuce.png", "level": "A1", "word_form": "noun" },
+    { "word": "cabbage", "meaning_vi": "bắp cải", "r2_key": "food/vegetables/02-cabbage.png", "level": "A1", "word_form": "noun" },
+    { "word": "carrots", "meaning_vi": "cà rốt", "r2_key": "food/vegetables/03-carrots.png", "level": "A1", "word_form": "noun" },
+    { "word": "zucchini", "meaning_vi": "dưa xanh (bí ngòi)", "r2_key": "food/vegetables/04-zucchini.png", "level": "B1", "word_form": "noun" },
+    { "word": "radishes", "meaning_vi": "củ cải đỏ", "r2_key": "food/vegetables/05-radishes.png", "level": "B1", "word_form": "noun" },
+    { "word": "celery", "meaning_vi": "cần tây", "r2_key": "food/vegetables/09-celery.png", "level": "A2", "word_form": "noun" },
+    { "word": "parsley", "meaning_vi": "rau mùi tây", "r2_key": "food/vegetables/10-parsley.png", "level": "B1", "word_form": "noun" },
+    { "word": "scallions", "meaning_vi": "hành lá", "r2_key": "food/vegetables/17-scallions.png", "level": "B1", "word_form": "noun" },
+    { "word": "onions", "meaning_vi": "hành tây", "r2_key": "food/vegetables/28-onions.png", "level": "A1", "word_form": "noun" },
+    { "word": "garlic", "meaning_vi": "tỏi", "r2_key": "food/vegetables/29-garlic.png", "level": "A2", "word_form": "noun" }
+  ]
+}

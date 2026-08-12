@@ -1,0 +1,22 @@
+{
+  "topic": "Clothing",
+  "lesson": "Shoes and Accessories",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "clothing/shoes-and-accessories/",
+  "items": [
+    { "word": "sole", "meaning_vi": "đế giày (phần đáy)", "r2_key": "clothing/shoes-and-accessories/01-sole.png", "level": "B1", "word_form": "noun" },
+    { "word": "heel", "meaning_vi": "gót giày", "r2_key": "clothing/shoes-and-accessories/02-heel.png", "level": "B1", "word_form": "noun" },
+    { "word": "shoelace", "meaning_vi": "dây giày", "r2_key": "clothing/shoes-and-accessories/03-shoelace-toe.png", "level": "A2", "word_form": "noun" },
+    { "word": "toe", "meaning_vi": "mũi giày", "r2_key": "clothing/shoes-and-accessories/03-shoelace-toe.png", "level": "A2", "word_form": "noun" },
+    { "word": "pumps", "meaning_vi": "giày cao gót mũi kín", "r2_key": "clothing/shoes-and-accessories/04-pumps.png", "level": "B1", "word_form": "noun" },
+    { "word": "high heels", "meaning_vi": "giày cao gót", "r2_key": "clothing/shoes-and-accessories/05-high-heels.png", "level": "A2", "word_form": "noun" },
+    { "word": "boots", "meaning_vi": "giày ống", "r2_key": "clothing/shoes-and-accessories/06-boots.png", "level": "A1", "word_form": "noun" },
+    { "word": "loafers", "meaning_vi": "giày lười", "r2_key": "clothing/shoes-and-accessories/07-loafers.png", "level": "B1", "word_form": "noun" },
+    { "word": "oxfords", "meaning_vi": "giày tây buộc dây", "r2_key": "clothing/shoes-and-accessories/08-oxfords.png", "level": "B1", "word_form": "noun" },
+    { "word": "hiking boots", "meaning_vi": "giày đi bộ đường dài", "r2_key": "clothing/shoes-and-accessories/09-hiking-boots.png", "level": "A2", "word_form": "noun" },
+    { "word": "tennis shoes", "meaning_vi": "giày ten-nít", "r2_key": "clothing/shoes-and-accessories/10-tennis-shoes.png", "level": "A1", "word_form": "noun" },
+    { "word": "athletic shoes", "meaning_vi": "giày thể thao", "r2_key": "clothing/shoes-and-accessories/11-athletic-shoes.png", "level": "A1", "word_form": "noun" },
+    { "word": "sandals", "meaning_vi": "xăng-đan, dép quai hậu", "r2_key": "clothing/shoes-and-accessories/12-sandals.png", "level": "A1", "word_form": "noun" }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "topic": "Plants and Animals",
+  "lesson": "Domestic Animals and Rodents",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "plants-and-animals/domestic-animals-and-rodents/",
+  "items": [
+    { "word": "goat", "meaning_vi": "dê", "r2_key": "plants-and-animals/domestic-animals-and-rodents/01-goat.png", "level": "A2", "word_form": "noun" },
+    { "word": "donkey", "meaning_vi": "lừa", "r2_key": "plants-and-animals/domestic-animals-and-rodents/02-donkey.png", "level": "A2", "word_form": "noun" },
+    { "word": "cow", "meaning_vi": "bò", "r2_key": "plants-and-animals/domestic-animals-and-rodents/03-cow.png", "level": "A1", "word_form": "noun" },
+    { "word": "horse", "meaning_vi": "ngựa", "r2_key": "plants-and-animals/domestic-animals-and-rodents/04-horse.png", "level": "A1", "word_form": "noun" },
+    { "word": "hen", "meaning_vi": "gà mái", "r2_key": "plants-and-animals/domestic-animals-and-rodents/05-hen.png", "level": "A2", "word_form": "noun" },
+    { "word": "rooster", "meaning_vi": "gà trống", "r2_key": "plants-and-animals/domestic-animals-and-rodents/06-rooster.png", "level": "A2", "word_form": "noun" },
+    { "word": "sheep", "meaning_vi": "cừu", "r2_key": "plants-and-animals/domestic-animals-and-rodents/07-sheep.png", "level": "A2", "word_form": "noun" },
+    { "word": "pig", "meaning_vi": "heo, lợn", "r2_key": "plants-and-animals/domestic-animals-and-rodents/08-pig.png", "level": "A1", "word_form": "noun" },
+    { "word": "rabbit", "meaning_vi": "thỏ", "r2_key": "plants-and-animals/domestic-animals-and-rodents/09-rabbit.png", "level": "A1", "word_form": "noun" },
+    { "word": "guinea pig", "meaning_vi": "chuột lang", "r2_key": "plants-and-animals/domestic-animals-and-rodents/10-guinea-pig.png", "level": "B1", "word_form": "noun" },
+    { "word": "parakeet", "meaning_vi": "vẹt đuôi dài", "r2_key": "plants-and-animals/domestic-animals-and-rodents/11-parakeet.png", "level": "B1", "word_form": "noun" },
+    { "word": "goldfish", "meaning_vi": "cá vàng", "r2_key": "plants-and-animals/domestic-animals-and-rodents/12-goldfish.png", "level": "A2", "word_form": "noun" },
+    { "word": "mouse", "meaning_vi": "chuột nhắt", "r2_key": "plants-and-animals/domestic-animals-and-rodents/13-mouse.png", "level": "A1", "word_form": "noun" },
+    { "word": "rat", "meaning_vi": "chuột cống", "r2_key": "plants-and-animals/domestic-animals-and-rodents/14-rat.png", "level": "A2", "word_form": "noun" },
+    { "word": "gopher", "meaning_vi": "chuột túi má", "r2_key": "plants-and-animals/domestic-animals-and-rodents/15-gopher.png", "level": "B2", "word_form": "noun" },
+    { "word": "chipmunk", "meaning_vi": "sóc chuột", "r2_key": "plants-and-animals/domestic-animals-and-rodents/16-chipmunk.png", "level": "B1", "word_form": "noun" },
+    { "word": "squirrel", "meaning_vi": "sóc", "r2_key": "plants-and-animals/domestic-animals-and-rodents/17-squirrel.png", "level": "A2", "word_form": "noun" },
+    { "word": "prairie dog", "meaning_vi": "sóc chó thảo nguyên", "r2_key": "plants-and-animals/domestic-animals-and-rodents/18-prairie-dog.png", "level": "B2", "word_form": "noun" }
+  ]
+}

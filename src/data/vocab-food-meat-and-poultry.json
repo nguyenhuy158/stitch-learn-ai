@@ -1,0 +1,19 @@
+{
+  "topic": "Food",
+  "lesson": "Meat and Poultry",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "food/meat-and-poultry/",
+  "items": [
+    { "word": "roast beef", "meaning_vi": "thịt bò nướng", "r2_key": "food/meat-and-poultry/01-roast-beef.png", "level": "B1", "word_form": "noun" },
+    { "word": "steak", "meaning_vi": "thịt bò bít tết", "r2_key": "food/meat-and-poultry/02-steak.png", "level": "A2", "word_form": "noun" },
+    { "word": "ground beef", "meaning_vi": "bò xay/bò nghiền", "r2_key": "food/meat-and-poultry/04-ground-beef.png", "level": "B1", "word_form": "noun" },
+    { "word": "ham", "meaning_vi": "thịt heo nguội (đùi)", "r2_key": "food/meat-and-poultry/09-ham.png", "level": "A2", "word_form": "noun" },
+    { "word": "bacon", "meaning_vi": "thịt ba rọi xông khói", "r2_key": "food/meat-and-poultry/11-bacon.png", "level": "A1", "word_form": "noun" },
+    { "word": "sausage", "meaning_vi": "xúc xích", "r2_key": "food/meat-and-poultry/12-sausage.png", "level": "A1", "word_form": "noun" },
+    { "word": "chicken", "meaning_vi": "gà", "r2_key": "food/meat-and-poultry/16-chicken.png", "level": "A1", "word_form": "noun" },
+    { "word": "turkey", "meaning_vi": "gà tây", "r2_key": "food/meat-and-poultry/17-turkey.png", "level": "A1", "word_form": "noun" },
+    { "word": "duck", "meaning_vi": "vịt", "r2_key": "food/meat-and-poultry/18-duck.png", "level": "A1", "word_form": "noun" },
+    { "word": "wings", "meaning_vi": "cánh gà", "r2_key": "food/meat-and-poultry/20-wings.png", "level": "A2", "word_form": "noun" }
+  ]
+}

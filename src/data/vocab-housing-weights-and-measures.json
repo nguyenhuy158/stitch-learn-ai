@@ -1,0 +1,19 @@
+{
+  "topic": "Housing",
+  "lesson": "Weights and Measures",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "housing/weights-and-measures/",
+  "items": [
+    { "word": "fluid ounce", "meaning_vi": "một fluid ounce nước", "r2_key": "housing/weights-and-measures/01-fluid-ounce.png", "level": "B1", "word_form": "noun" },
+    { "word": "cup", "meaning_vi": "một tách/cup", "r2_key": "housing/weights-and-measures/02-cup.png", "level": "A2", "word_form": "noun" },
+    { "word": "pint", "meaning_vi": "một pint", "r2_key": "housing/weights-and-measures/03-pint.png", "level": "B1", "word_form": "noun" },
+    { "word": "quart", "meaning_vi": "một quart", "r2_key": "housing/weights-and-measures/04-quart.png", "level": "B1", "word_form": "noun" },
+    { "word": "gallon", "meaning_vi": "một gallon", "r2_key": "housing/weights-and-measures/05-gallon.png", "level": "A2", "word_form": "noun" },
+    { "word": "teaspoon", "meaning_vi": "một muỗng cà phê", "r2_key": "housing/weights-and-measures/06-teaspoon.png", "level": "A2", "word_form": "noun" },
+    { "word": "tablespoon", "meaning_vi": "một muỗng canh", "r2_key": "housing/weights-and-measures/07-tablespoon.png", "level": "A2", "word_form": "noun" },
+    { "word": "quarter cup", "meaning_vi": "một phần tư cup", "r2_key": "housing/weights-and-measures/08-quarter-cup.png", "level": "B1", "word_form": "noun" },
+    { "word": "ounce", "meaning_vi": "một ounce", "r2_key": "housing/weights-and-measures/11-ounce.png", "level": "A2", "word_form": "noun" },
+    { "word": "pound", "meaning_vi": "một pound (cân Anh)", "r2_key": "housing/weights-and-measures/12-pound.png", "level": "A2", "word_form": "noun" }
+  ]
+}

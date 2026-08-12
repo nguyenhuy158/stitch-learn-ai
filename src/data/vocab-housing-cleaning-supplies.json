@@ -1,0 +1,19 @@
+{
+  "topic": "Housing",
+  "lesson": "Cleaning Supplies",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "housing/cleaning-supplies/",
+  "items": [
+    { "word": "feather duster", "meaning_vi": "chổi lông", "r2_key": "housing/cleaning-supplies/01-feather-duster.png", "level": "B1", "word_form": "noun" },
+    { "word": "recycling bin", "meaning_vi": "thùng đựng đồ tái chế", "r2_key": "housing/cleaning-supplies/02-recycling-bin.png", "level": "A2", "word_form": "noun" },
+    { "word": "rubber gloves", "meaning_vi": "găng cao su", "r2_key": "housing/cleaning-supplies/04-rubber-gloves.png", "level": "A2", "word_form": "noun" },
+    { "word": "rags", "meaning_vi": "giẻ lau chùi", "r2_key": "housing/cleaning-supplies/06-rags.png", "level": "B1", "word_form": "noun" },
+    { "word": "stepladder", "meaning_vi": "thang", "r2_key": "housing/cleaning-supplies/07-stepladder.png", "level": "B1", "word_form": "noun" },
+    { "word": "broom", "meaning_vi": "chổi", "r2_key": "housing/cleaning-supplies/10-broom.png", "level": "A1", "word_form": "noun" },
+    { "word": "dustpan", "meaning_vi": "đồ hốt rác", "r2_key": "housing/cleaning-supplies/11-dustpan.png", "level": "A2", "word_form": "noun" },
+    { "word": "trash bags", "meaning_vi": "bao rác/túi đựng rác", "r2_key": "housing/cleaning-supplies/12-trash-bags.png", "level": "A1", "word_form": "noun" },
+    { "word": "bucket/pail", "meaning_vi": "thùng", "r2_key": "housing/cleaning-supplies/20-bucket-pail.png", "level": "A1", "word_form": "noun" },
+    { "word": "sponge", "meaning_vi": "miếng xốp", "r2_key": "housing/cleaning-supplies/24-sponge.png", "level": "A1", "word_form": "noun" }
+  ]
+}

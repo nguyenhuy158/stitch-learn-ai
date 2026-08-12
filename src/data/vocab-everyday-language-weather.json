@@ -1,0 +1,21 @@
+{
+  "topic": "Everyday Language",
+  "lesson": "Weather",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "everyday-language/weather/",
+  "items": [
+    { "word": "windy", "meaning_vi": "có gió", "r2_key": "everyday-language/weather/01-windy.png", "level": "A1", "word_form": "adjective" },
+    { "word": "foggy", "meaning_vi": "có sương mù", "r2_key": "everyday-language/weather/02-foggy.png", "level": "A2", "word_form": "adjective" },
+    { "word": "humid", "meaning_vi": "ẩm ướt", "r2_key": "everyday-language/weather/03-humid.png", "level": "B1", "word_form": "adjective" },
+    { "word": "icy", "meaning_vi": "đóng đá, trơn", "r2_key": "everyday-language/weather/04-icy.png", "level": "A2", "word_form": "adjective" },
+    { "word": "smoggy", "meaning_vi": "nhiều khói mù", "r2_key": "everyday-language/weather/05-smoggy.png", "level": "B2", "word_form": "adjective" },
+    { "word": "heat wave", "meaning_vi": "đợt nắng nóng", "r2_key": "everyday-language/weather/06-heat-wave.png", "level": "B1", "word_form": "noun" },
+    { "word": "thunderstorm", "meaning_vi": "giông bão", "r2_key": "everyday-language/weather/07-thunderstorm.png", "level": "A2", "word_form": "noun" },
+    { "word": "lightning", "meaning_vi": "chớp, sét", "r2_key": "everyday-language/weather/07-thunderstorm.png", "level": "A2", "word_form": "noun" },
+    { "word": "hailstorm", "meaning_vi": "bão mưa đá", "r2_key": "everyday-language/weather/08-hailstorm.png", "level": "B2", "word_form": "noun" },
+    { "word": "hail", "meaning_vi": "mưa đá", "r2_key": "everyday-language/weather/08-hailstorm.png", "level": "B1", "word_form": "noun" },
+    { "word": "snowstorm", "meaning_vi": "bão tuyết", "r2_key": "everyday-language/weather/09-snowstorm.png", "level": "A2", "word_form": "noun" },
+    { "word": "dust storm", "meaning_vi": "bão cát bụi", "r2_key": "everyday-language/weather/10-dust-storm.png", "level": "B2", "word_form": "noun" }
+  ]
+}

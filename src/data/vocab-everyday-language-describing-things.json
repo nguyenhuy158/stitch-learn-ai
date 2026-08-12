@@ -1,0 +1,33 @@
+{
+  "topic": "Everyday Language",
+  "lesson": "Describing Things",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "everyday-language/describing-things/",
+  "items": [
+    { "word": "little", "meaning_vi": "nhỏ", "r2_key": "everyday-language/describing-things/01-little.png", "level": "A1", "word_form": "adjective" },
+    { "word": "big", "meaning_vi": "lớn", "r2_key": "everyday-language/describing-things/02-big.png", "level": "A1", "word_form": "adjective" },
+    { "word": "heavy", "meaning_vi": "nặng", "r2_key": "everyday-language/describing-things/03-heavy.png", "level": "A1", "word_form": "adjective" },
+    { "word": "light", "meaning_vi": "nhẹ", "r2_key": "everyday-language/describing-things/04-light.png", "level": "A1", "word_form": "adjective" },
+    { "word": "fast", "meaning_vi": "nhanh", "r2_key": "everyday-language/describing-things/05-fast.png", "level": "A1", "word_form": "adjective" },
+    { "word": "slow", "meaning_vi": "chậm", "r2_key": "everyday-language/describing-things/06-slow.png", "level": "A1", "word_form": "adjective" },
+    { "word": "neat", "meaning_vi": "gọn gàng", "r2_key": "everyday-language/describing-things/07-neat.png", "level": "A2", "word_form": "adjective" },
+    { "word": "messy", "meaning_vi": "bừa bãi", "r2_key": "everyday-language/describing-things/08-messy.png", "level": "A2", "word_form": "adjective" },
+    { "word": "hard", "meaning_vi": "cứng", "r2_key": "everyday-language/describing-things/09-hard.png", "level": "A1", "word_form": "adjective" },
+    { "word": "soft", "meaning_vi": "mềm", "r2_key": "everyday-language/describing-things/10-soft.png", "level": "A1", "word_form": "adjective" },
+    { "word": "good", "meaning_vi": "ngoan, tốt", "r2_key": "everyday-language/describing-things/11-good.png", "level": "A1", "word_form": "adjective" },
+    { "word": "bad", "meaning_vi": "hư, xấu", "r2_key": "everyday-language/describing-things/12-bad.png", "level": "A1", "word_form": "adjective" },
+    { "word": "thick", "meaning_vi": "dày", "r2_key": "everyday-language/describing-things/13-thick.png", "level": "A2", "word_form": "adjective" },
+    { "word": "thin", "meaning_vi": "mỏng", "r2_key": "everyday-language/describing-things/14-thin.png", "level": "A2", "word_form": "adjective" },
+    { "word": "expensive", "meaning_vi": "đắt tiền", "r2_key": "everyday-language/describing-things/15-expensive.png", "level": "A2", "word_form": "adjective" },
+    { "word": "cheap", "meaning_vi": "rẻ tiền", "r2_key": "everyday-language/describing-things/16-cheap.png", "level": "A2", "word_form": "adjective" },
+    { "word": "full", "meaning_vi": "đầy", "r2_key": "everyday-language/describing-things/17-full.png", "level": "A1", "word_form": "adjective" },
+    { "word": "empty", "meaning_vi": "trống, rỗng", "r2_key": "everyday-language/describing-things/18-empty.png", "level": "A1", "word_form": "adjective" },
+    { "word": "beautiful", "meaning_vi": "đẹp", "r2_key": "everyday-language/describing-things/19-beautiful.png", "level": "A1", "word_form": "adjective" },
+    { "word": "ugly", "meaning_vi": "xấu", "r2_key": "everyday-language/describing-things/20-ugly.png", "level": "A2", "word_form": "adjective" },
+    { "word": "noisy", "meaning_vi": "ồn ào", "r2_key": "everyday-language/describing-things/21-noisy.png", "level": "A2", "word_form": "adjective" },
+    { "word": "quiet", "meaning_vi": "yên lặng", "r2_key": "everyday-language/describing-things/22-quiet.png", "level": "A1", "word_form": "adjective" },
+    { "word": "easy", "meaning_vi": "dễ", "r2_key": "everyday-language/describing-things/23-easy.png", "level": "A1", "word_form": "adjective" },
+    { "word": "difficult", "meaning_vi": "khó", "r2_key": "everyday-language/describing-things/24-difficult.png", "level": "A2", "word_form": "adjective" }
+  ]
+}
