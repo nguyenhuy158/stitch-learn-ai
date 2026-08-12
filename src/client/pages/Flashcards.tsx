@@ -157,33 +157,33 @@ export default function Flashcards() {
               {t("flashcards.remaining", { n: cards!.length })} — {current.lesson_title}
             </div>
             <div className="relative mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
-              {flipped && (
-                <>
-                  <div
-                    className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-danger px-3 py-1 text-xs font-bold text-white transition-opacity"
-                    style={{ opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)) }}
-                  >
-                    ✕ {t("flashcards.swipeForgot")}
-                  </div>
-                  <div
-                    className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white transition-opacity"
-                    style={{ opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)) }}
-                  >
-                    ✓ {t("flashcards.swipeRemembered")}
-                  </div>
-                </>
-              )}
               <div
                 onPointerDown={onDragStart}
                 onPointerMove={onDragMove}
                 onPointerUp={onDragEnd}
                 onPointerCancel={onDragEnd}
-                className="h-full w-full touch-pan-y select-none"
+                className="relative h-full w-full touch-pan-y select-none"
                 style={{
                   transform: `translateX(${dragX}px) rotate(${dragX / 16}deg)`,
                   transition: dragging ? "none" : "transform 250ms ease",
                 }}
               >
+                {flipped && (
+                  <>
+                    <div
+                      className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-danger px-3 py-1 text-xs font-bold text-white transition-opacity"
+                      style={{ opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)) }}
+                    >
+                      ✕ {t("flashcards.swipeForgot")}
+                    </div>
+                    <div
+                      className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white transition-opacity"
+                      style={{ opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)) }}
+                    >
+                      ✓ {t("flashcards.swipeRemembered")}
+                    </div>
+                  </>
+                )}
                 <div
                   className="relative h-full w-full cursor-pointer rounded-3xl transition-transform duration-500"
                   style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : undefined }}
