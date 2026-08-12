@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { Card } from "../ui/Card";
 import { Tabs } from "../ui/Tabs";
 import { cn } from "../ui/cn";
@@ -50,11 +50,7 @@ export default function GamesLeaderboard() {
         />
 
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && current === undefined && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && current === undefined && <LoadingState />}
         {!error && current && (
           <>
             <Card tone="primary" className="mb-5 text-center font-bold">

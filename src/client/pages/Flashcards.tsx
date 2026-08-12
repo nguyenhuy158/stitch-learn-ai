@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
 import { transcribeToIpa } from "../lib/ipa";
@@ -148,11 +148,7 @@ export default function Flashcards() {
       <PageHeader backTo="/" title={t("flashcards.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && cards === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && cards === null && <LoadingState />}
         {!error && cards && cards.length === 0 && <PageState>{t("flashcards.empty")}</PageState>}
         {!error && current && (
           <>

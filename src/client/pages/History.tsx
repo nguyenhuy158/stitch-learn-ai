@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { Card } from "../ui/Card";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
@@ -107,11 +107,7 @@ export default function History() {
       <PageHeader backTo="/" title={t("history.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && !pairs && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && !pairs && <LoadingState />}
         {!error && user && pairs && (
           <>
             <div className="mb-5 grid grid-cols-3 gap-2.5">

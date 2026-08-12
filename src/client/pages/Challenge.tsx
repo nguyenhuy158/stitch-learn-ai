@@ -4,7 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -56,11 +56,7 @@ export default function Challenge() {
       <PageHeader backTo="/" title={t("challenge.title")} subtitle={t("challenge.subtitle")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && state === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && state === null && <LoadingState />}
         {!error && state?.completed && !result && (
           <PageState>
             {t("challenge.doneToday", { n: state.xpAwarded })}
