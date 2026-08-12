@@ -75,9 +75,11 @@ export default function Flashcards() {
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const dragStartX = useRef<number | null>(null);
+  const [badgeTop, setBadgeTop] = useState(50);
 
   useEffect(() => {
     setDragX(0);
+    setBadgeTop(20 + Math.random() * 60);
   }, [current?.id]);
 
   function onDragStart(e: React.PointerEvent) {
@@ -85,6 +87,7 @@ export default function Flashcards() {
     e.currentTarget.setPointerCapture(e.pointerId);
     dragStartX.current = e.clientX;
     setDragging(true);
+    setBadgeTop(20 + Math.random() * 60);
   }
 
   function onDragMove(e: React.PointerEvent) {
@@ -159,19 +162,23 @@ export default function Flashcards() {
             {flipped && (
               <>
                 <div
-                  className="pointer-events-none fixed inset-y-0 left-0 z-20 flex w-16 items-center justify-center bg-danger text-center text-xs font-bold text-white"
+                  className="pointer-events-none fixed left-3 z-20 rounded-full bg-danger px-3 py-1 text-xs font-bold text-white"
                   style={{
+                    top: `${badgeTop}%`,
                     opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)),
-                    transition: dragging ? "none" : "opacity 250ms ease",
+                    transform: "translateY(-50%)",
+                    transition: dragging ? "none" : "top 250ms ease, opacity 250ms ease",
                   }}
                 >
                   ✕ {t("flashcards.swipeForgot")}
                 </div>
                 <div
-                  className="pointer-events-none fixed inset-y-0 right-0 z-20 flex w-16 items-center justify-center bg-accent text-center text-xs font-bold text-white"
+                  className="pointer-events-none fixed right-3 z-20 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white"
                   style={{
+                    top: `${badgeTop}%`,
                     opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)),
-                    transition: dragging ? "none" : "opacity 250ms ease",
+                    transform: "translateY(-50%)",
+                    transition: dragging ? "none" : "top 250ms ease, opacity 250ms ease",
                   }}
                 >
                   ✓ {t("flashcards.swipeRemembered")}
