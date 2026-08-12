@@ -42,9 +42,6 @@ export function CheckIcon(props: IconProps) {
 export function LockIcon(props: IconProps) {
   return base({ ...props, children: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></> });
 }
-export function StarIcon(props: IconProps) {
-  return base({ ...props, children: <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21 7.5 13.5 2 9h7z" /> });
-}
 export function SendIcon(props: IconProps) {
   return base({ ...props, children: <><path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4 20-7Z" /></> });
 }

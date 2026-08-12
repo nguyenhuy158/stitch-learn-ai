@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Button } from "../ui/Button";
 import { LoadingState } from "../ui/states";
+import { useToast } from "../ui/Toast";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
 import { transcribeToIpa } from "../lib/ipa";
@@ -27,6 +28,7 @@ export default function Flashcards() {
   const [grading, setGrading] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
   const { t } = useLanguage();
+  const toast = useToast();
 
   useEffect(() => {
     (async () => {
@@ -123,7 +125,7 @@ export default function Flashcards() {
         return next;
       });
     } catch {
-      /* best-effort, matches old inline catch{} */
+      toast.error(t("common.error"));
     }
   }
 
