@@ -4,6 +4,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
+import { Textarea } from "../ui/Input";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Correction = { original: string; suggestion: string; explanation: string };
@@ -43,19 +44,22 @@ export default function Writing() {
       <PageHeader backTo="/lessons" backLabel={t("lessonDetail.backToList")} title={t("writing.title")} subtitle={t("writing.subtitle")} />
       <main className="grid gap-8 p-5 sm:p-9 lg:grid-cols-2">
         <div>
-          <textarea
+          <Textarea
             value={text}
             maxLength={2000}
             onChange={(e) => setText(e.target.value)}
             placeholder={t("writing.placeholder")}
-            className="min-h-[140px] w-full resize-y rounded-2xl border border-border bg-surface p-4 text-base text-fg focus:outline-2 focus:outline-primary"
+            className="min-h-[140px] w-full"
           />
           <div className="mt-1.5 text-right text-[13px] text-fg-muted">{text.length}/2000</div>
           <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting}>
             {t("writing.submit")}
           </Button>
           {state && (
-            <div className={"mt-3 text-center text-sm " + (state.tone === "error" ? "text-danger" : "text-fg-muted")}>
+            <div
+              role={state.tone === "error" ? "alert" : "status"}
+              className={"mt-3 text-center text-sm " + (state.tone === "error" ? "text-danger" : "text-fg-muted")}
+            >
               {state.text}
             </div>
           )}

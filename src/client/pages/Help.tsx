@@ -3,6 +3,7 @@ import { api } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
+import { Textarea } from "../ui/Input";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 const FAQ_KEYS = ["streak", "chat", "login", "writing"] as const;
@@ -51,20 +52,21 @@ export default function Help() {
         <div className="mb-3 mt-6 text-sm font-bold text-primary-hover">
           {t("help.sendFeedback")}
         </div>
-        <textarea
+        <Textarea
           value={message}
           maxLength={1000}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t("help.placeholder")}
-          className="min-h-[100px] w-full resize-y rounded-ui border border-border bg-surface p-3.5 text-base text-fg focus:outline-2 focus:outline-primary"
+          className="min-h-[100px] w-full"
         />
         <Button block className="mt-3" onClick={submit} loading={submitting} disabled={submitting}>
           {t("help.sendFeedback")}
         </Button>
         {state && (
           <div
+            role={state.tone === "error" ? "alert" : "status"}
             className={
-              "mt-2.5 text-center text-[13px] " +
+              "mt-2.5 text-center text-xs " +
               (state.tone === "ok" ? "text-primary" : state.tone === "error" ? "text-danger" : "text-fg-muted")
             }
           >
