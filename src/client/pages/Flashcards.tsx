@@ -70,11 +70,11 @@ export default function Flashcards() {
     }
   }, [current]);
 
+  const TAP_THRESHOLD = 8;
   const SWIPE_THRESHOLD = 90;
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const dragStartX = useRef<number | null>(null);
-  const didDrag = useRef(false);
 
   useEffect(() => {
     setDragX(0);
@@ -84,15 +84,12 @@ export default function Flashcards() {
     if (grading) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     dragStartX.current = e.clientX;
-    didDrag.current = false;
     setDragging(true);
   }
 
   function onDragMove(e: React.PointerEvent) {
     if (dragStartX.current === null) return;
-    const dx = e.clientX - dragStartX.current;
-    if (Math.abs(dx) > 6) didDrag.current = true;
-    setDragX(dx);
+    setDragX(e.clientX - dragStartX.current);
   }
 
   function onDragEnd() {
@@ -100,19 +97,16 @@ export default function Flashcards() {
     const dx = dragX;
     dragStartX.current = null;
     setDragging(false);
+    if (Math.abs(dx) < TAP_THRESHOLD) {
+      setDragX(0);
+      setFlipped((f) => !f);
+      return;
+    }
     if (flipped && Math.abs(dx) > SWIPE_THRESHOLD) {
       grade(dx > 0 ? 4 : 2);
       return;
     }
     setDragX(0);
-  }
-
-  function onCardClick() {
-    if (didDrag.current) {
-      didDrag.current = false;
-      return;
-    }
-    setFlipped((f) => !f);
   }
 
   async function toggleSave() {
@@ -191,7 +185,6 @@ export default function Flashcards() {
                 }}
               >
                 <div
-                  onClick={onCardClick}
                   className="relative h-full w-full cursor-pointer rounded-3xl transition-transform duration-500"
                   style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : undefined }}
                 >
