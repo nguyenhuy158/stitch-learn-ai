@@ -161,6 +161,9 @@ export const translations: Record<string, TranslationEntry> = {
   "home.viewAll": { vi: "Xem tất cả", en: "View all" },
   "home.suggestionsTitle": { vi: "Gemini Gợi ý", en: "Gemini Suggests" },
   "home.toolsTitle": { vi: "Công cụ học tập", en: "Learning Tools" },
+  "home.toolTab.core": { vi: "Học & Luyện", en: "Learn & Practice" },
+  "home.toolTab.games": { vi: "Trò chơi", en: "Games" },
+  "home.toolTab.vocab": { vi: "Từ vựng & Phát âm", en: "Vocab & Pronunciation" },
 
   "home.suggestion.pronunciation.title": { vi: "Sửa lỗi phát âm", en: "Fix Pronunciation" },
   "home.suggestion.pronunciation.desc": { vi: "Luyện phát âm cùng Gemini", en: "Practice pronunciation with Gemini" },

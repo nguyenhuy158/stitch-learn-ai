@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
 import { Card } from "../ui/Card";
+import { Tabs } from "../ui/Tabs";
 import { BookIcon, ChatIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -14,21 +15,23 @@ const SUGGESTION_KEYS = [
   { key: "coffee", to: "/chat" },
 ] as const;
 
+const TOOL_TABS = ["core", "games", "vocab"] as const;
+
 const TOOL_KEYS = [
-  { key: "tutor", to: "/chat", icon: "🎓" },
-  { key: "flashcards", to: "/flashcards", icon: "🗂️" },
-  { key: "challenge", to: "/challenge", icon: "🎯" },
-  { key: "wordGame", to: "/word-game", icon: "🎮" },
-  { key: "listeningGame", to: "/listening-game", icon: "🔊" },
-  { key: "matchingGame", to: "/matching-game", icon: "🧩" },
-  { key: "spellingGame", to: "/spelling-game", icon: "⌨️" },
-  { key: "wordRace", to: "/word-race", icon: "🌧️" },
-  { key: "gamesLeaderboard", to: "/games-leaderboard", icon: "🏅" },
-  { key: "pictureVocab", to: "/picture-vocab", icon: "🖼️" },
-  { key: "ipaChart", to: "/ipa-chart", icon: "🔤" },
-  { key: "ipaTranscribe", to: "/ipa-transcribe", icon: "🔎" },
-  { key: "saved", to: "/saved", icon: "⭐" },
-  { key: "rankings", to: "/rankings", icon: "🏆" },
+  { key: "tutor", to: "/chat", icon: "🎓", tab: "core" },
+  { key: "flashcards", to: "/flashcards", icon: "🗂️", tab: "core" },
+  { key: "challenge", to: "/challenge", icon: "🎯", tab: "core" },
+  { key: "wordGame", to: "/word-game", icon: "🎮", tab: "games" },
+  { key: "listeningGame", to: "/listening-game", icon: "🔊", tab: "games" },
+  { key: "matchingGame", to: "/matching-game", icon: "🧩", tab: "games" },
+  { key: "spellingGame", to: "/spelling-game", icon: "⌨️", tab: "games" },
+  { key: "wordRace", to: "/word-race", icon: "🌧️", tab: "games" },
+  { key: "gamesLeaderboard", to: "/games-leaderboard", icon: "🏅", tab: "games" },
+  { key: "rankings", to: "/rankings", icon: "🏆", tab: "games" },
+  { key: "pictureVocab", to: "/picture-vocab", icon: "🖼️", tab: "vocab" },
+  { key: "ipaChart", to: "/ipa-chart", icon: "🔤", tab: "vocab" },
+  { key: "ipaTranscribe", to: "/ipa-transcribe", icon: "🔎", tab: "vocab" },
+  { key: "saved", to: "/saved", icon: "⭐", tab: "vocab" },
 ] as const;
 
 export default function Home() {
@@ -36,6 +39,7 @@ export default function Home() {
   const { t } = useLanguage();
   const [user, setUser] = useState<any>(null);
   const [lessons, setLessons] = useState<Lesson[] | null>(null);
+  const [toolTab, setToolTab] = useState<(typeof TOOL_TABS)[number]>("core");
 
   useEffect(() => {
     api.me().then((data) => {
@@ -91,7 +95,7 @@ export default function Home() {
           <Link
             key={l.id}
             to={`/lesson?id=${l.id}`}
-            className="w-40 shrink-0 rounded-2xl bg-surface p-3.5 shadow-sm no-underline"
+            className="w-40 shrink-0 rounded-ui bg-surface p-4 shadow-sm no-underline"
           >
             <BookIcon size={18} />
             <div className="mt-2 truncate text-sm font-semibold text-fg">{l.title}</div>
@@ -102,7 +106,7 @@ export default function Home() {
       <h2 className="mb-3 text-base font-bold">{t("home.suggestionsTitle")}</h2>
       <div className="mb-7 flex gap-3 overflow-x-auto pb-2">
         {SUGGESTION_KEYS.map((s) => (
-          <Link key={s.key} to={s.to} className="w-56 shrink-0 rounded-2xl bg-surface p-4 shadow-sm no-underline">
+          <Link key={s.key} to={s.to} className="w-56 shrink-0 rounded-ui bg-surface p-4 shadow-sm no-underline">
             <ChatIcon size={20} />
             <div className="mt-2 text-sm font-bold text-fg">{t(`home.suggestion.${s.key}.title`)}</div>
             <div className="mt-1 text-xs text-fg-muted">{t(`home.suggestion.${s.key}.desc`)}</div>
@@ -111,9 +115,15 @@ export default function Home() {
       </div>
 
       <h2 className="mb-3 text-base font-bold">{t("home.toolsTitle")}</h2>
+      <Tabs<(typeof TOOL_TABS)[number]>
+        className="mb-3"
+        items={TOOL_TABS.map((id) => ({ id, label: t(`home.toolTab.${id}`) }))}
+        active={toolTab}
+        onChange={setToolTab}
+      />
       <div className="grid grid-cols-2 gap-3">
-        {TOOL_KEYS.map((tool) => (
-          <Link key={tool.key} to={tool.to} className="rounded-2xl bg-surface p-4 text-center shadow-sm no-underline">
+        {TOOL_KEYS.filter((tool) => tool.tab === toolTab).map((tool) => (
+          <Link key={tool.key} to={tool.to} className="rounded-ui bg-surface p-4 text-center shadow-sm no-underline">
             <div className="text-2xl">{tool.icon}</div>
             <div className="mt-1.5 text-sm font-semibold text-fg">{t(`home.tool.${tool.key}`)}</div>
           </Link>
