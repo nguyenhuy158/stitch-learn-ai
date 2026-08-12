@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
 import { Spinner } from "../ui/Spinner";
+import { LoadingState, ErrorState } from "../ui/states";
 import { SendIcon } from "../components/icons";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
@@ -18,7 +20,8 @@ export default function Chat() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
 
-  useEffect(() => {
+  function loadHistory() {
+    setError("");
     api
       .chatHistory()
       .then((data) => setMessages(Array.isArray(data) ? data : []))
@@ -26,6 +29,11 @@ export default function Chat() {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
       });
+  }
+
+  useEffect(() => {
+    loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   useEffect(() => {
@@ -57,12 +65,8 @@ export default function Chat() {
       </header>
 
       <div className="flex-1 overflow-y-auto p-5">
-        {error && <div className="text-center text-sm text-danger">{error}</div>}
-        {!error && messages === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {error && <ErrorState retry={loadHistory}>{error}</ErrorState>}
+        {!error && messages === null && <LoadingState />}
         {!error && messages && messages.length === 0 && (
           <div className="py-16 text-center text-sm text-fg-muted">{t("chat.empty")}</div>
         )}
@@ -90,12 +94,12 @@ export default function Chat() {
       </div>
 
       <div className="flex gap-2 border-t border-border p-4">
-        <input
+        <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder={t("chat.placeholder")}
-          className="min-h-11 flex-1 rounded-ui border border-border bg-surface px-3.5 text-base text-fg focus:outline-2 focus:outline-primary"
+          className="flex-1"
         />
         <Button size="icon" onClick={send} disabled={sending || !input.trim()} aria-label={t("chat.send")}>
           <SendIcon size={18} />
