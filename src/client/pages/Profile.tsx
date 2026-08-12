@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Avatar } from "../ui/Avatar";
 import { Card } from "../ui/Card";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { Switch } from "../ui/Switch";
+import { ConfirmDialog } from "../ui/Modal";
+import { useToast } from "../ui/Toast";
 import { useTheme } from "../theme/ThemeProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -12,9 +14,11 @@ export default function Profile() {
   const navigate = useNavigate();
   const { theme, mode, themes } = useTheme();
   const { t, lang, setLang } = useLanguage();
+  const toast = useToast();
   const currentThemeLabel = t(`appearance.accent.${themes.find((th) => th.id === theme)?.id ?? theme}`);
   const [user, setUser] = useState<any>(null);
   const [loaded, setLoaded] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   useEffect(() => {
     api
@@ -27,11 +31,7 @@ export default function Profile() {
   }, [navigate]);
 
   if (!loaded) {
-    return (
-      <div className="flex justify-center py-16">
-        <Spinner />
-      </div>
-    );
+    return <LoadingState />;
   }
   if (!user) return null;
 
@@ -111,7 +111,7 @@ export default function Profile() {
             onChange={(checked) => {
               const value = checked ? 1 : 0;
               setUser((u: any) => ({ ...u, flashcard_audio: value }));
-              api.updateProfile({ flashcard_audio: value }).catch(() => {});
+              api.updateProfile({ flashcard_audio: value }).catch(() => toast.error(t("common.error")));
             }}
           />
         </div>
@@ -127,7 +127,7 @@ export default function Profile() {
                 type="button"
                 onClick={() => {
                   setUser((u: any) => ({ ...u, flashcard_session_size: n }));
-                  api.updateProfile({ flashcard_session_size: n }).catch(() => {});
+                  api.updateProfile({ flashcard_session_size: n }).catch(() => toast.error(t("common.error")));
                 }}
                 aria-pressed={(user.flashcard_session_size || 10) === n}
                 className={
@@ -151,13 +151,24 @@ export default function Profile() {
 
       <button
         type="button"
-        onClick={() => api.logout()}
+        onClick={() => setConfirmLogout(true)}
         className="w-full rounded-ui border border-danger py-3 text-sm font-semibold text-danger"
       >
         {t("profile.logout")}
       </button>
 
       <p className="mt-6 text-center text-xs text-fg-muted">{t("profile.version")}</p>
+
+      <ConfirmDialog
+        open={confirmLogout}
+        onClose={() => setConfirmLogout(false)}
+        onConfirm={() => api.logout()}
+        title={t("profile.logoutConfirmTitle")}
+        description={t("profile.logoutConfirmDesc")}
+        confirmLabel={t("profile.logout")}
+        cancelLabel={t("common.cancel")}
+        destructive
+      />
     </div>
   );
 }
