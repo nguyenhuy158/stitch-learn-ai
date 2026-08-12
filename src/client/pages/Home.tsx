@@ -4,16 +4,10 @@ import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
 import { Card } from "../ui/Card";
 import { Tabs } from "../ui/Tabs";
-import { BookIcon, ChatIcon } from "../components/icons";
+import { BookIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Lesson = { id: number; title: string; sub_title?: string; status?: string };
-
-const SUGGESTION_KEYS = [
-  { key: "pronunciation", to: "/chat" },
-  { key: "mistakes", to: "/mistakes" },
-  { key: "coffee", to: "/chat" },
-] as const;
 
 const TOOL_TABS = ["core", "games", "vocab"] as const;
 
@@ -21,6 +15,7 @@ const TOOL_KEYS = [
   { key: "tutor", to: "/chat", icon: "🎓", tab: "core" },
   { key: "flashcards", to: "/flashcards", icon: "🗂️", tab: "core" },
   { key: "challenge", to: "/challenge", icon: "🎯", tab: "core" },
+  { key: "mistakes", to: "/mistakes", icon: "📝", tab: "core" },
   { key: "wordGame", to: "/word-game", icon: "🎮", tab: "games" },
   { key: "listeningGame", to: "/listening-game", icon: "🔊", tab: "games" },
   { key: "matchingGame", to: "/matching-game", icon: "🧩", tab: "games" },
@@ -99,17 +94,6 @@ export default function Home() {
           >
             <BookIcon size={18} />
             <div className="mt-2 truncate text-sm font-semibold text-fg">{l.title}</div>
-          </Link>
-        ))}
-      </div>
-
-      <h2 className="mb-3 text-base font-bold">{t("home.suggestionsTitle")}</h2>
-      <div className="mb-7 flex gap-3 overflow-x-auto pb-2">
-        {SUGGESTION_KEYS.map((s) => (
-          <Link key={s.key} to={s.to} className="w-56 shrink-0 rounded-ui bg-surface p-4 shadow-sm no-underline">
-            <ChatIcon size={20} />
-            <div className="mt-2 text-sm font-bold text-fg">{t(`home.suggestion.${s.key}.title`)}</div>
-            <div className="mt-1 text-xs text-fg-muted">{t(`home.suggestion.${s.key}.desc`)}</div>
           </Link>
         ))}
       </div>
