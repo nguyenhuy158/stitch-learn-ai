@@ -15,6 +15,8 @@ import WordRace from "./pages/WordRace";
 import GamesLeaderboard from "./pages/GamesLeaderboard";
 import Challenge from "./pages/Challenge";
 import PictureVocab from "./pages/PictureVocab";
+import IpaChart from "./pages/IpaChart";
+import IpaTranscribe from "./pages/IpaTranscribe";
 import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
 import Mistakes from "./pages/Mistakes";
@@ -48,6 +50,8 @@ export default function App() {
       <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/picture-vocab" element={<PictureVocab />} />
+      <Route path="/ipa-chart" element={<IpaChart />} />
+      <Route path="/ipa-transcribe" element={<IpaTranscribe />} />
       <Route path="/saved" element={<Saved />} />
       <Route path="/rankings" element={<Rankings />} />
       <Route path="/mistakes" element={<Mistakes />} />

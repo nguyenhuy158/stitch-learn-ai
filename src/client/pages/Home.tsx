@@ -24,6 +24,8 @@ const TOOL_KEYS = [
   { key: "wordRace", to: "/word-race", icon: "🌧️" },
   { key: "gamesLeaderboard", to: "/games-leaderboard", icon: "🏅" },
   { key: "pictureVocab", to: "/picture-vocab", icon: "🖼️" },
+  { key: "ipaChart", to: "/ipa-chart", icon: "🔤" },
+  { key: "ipaTranscribe", to: "/ipa-transcribe", icon: "🔎" },
   { key: "saved", to: "/saved", icon: "⭐" },
   { key: "rankings", to: "/rankings", icon: "🏆" },
 ] as const;

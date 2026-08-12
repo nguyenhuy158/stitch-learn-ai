@@ -175,6 +175,8 @@ export const translations: Record<string, TranslationEntry> = {
   "home.tool.pictureVocab": { vi: "Từ vựng qua hình", en: "Picture Vocabulary" },
   "home.tool.saved": { vi: "Đã lưu", en: "Saved" },
   "home.tool.rankings": { vi: "Xếp hạng", en: "Rankings" },
+  "home.tool.ipaChart": { vi: "Bảng phiên âm IPA", en: "IPA Chart" },
+  "home.tool.ipaTranscribe": { vi: "Tra phiên âm IPA", en: "IPA Lookup" },
 
   "pictureVocab.title": { vi: "Từ vựng qua hình", en: "Picture Vocabulary" },
   "pictureVocab.subtitle": {
@@ -182,6 +184,26 @@ export const translations: Record<string, TranslationEntry> = {
     en: "Each word comes with an illustration, Vietnamese meaning and CEFR level"
   },
   "pictureVocab.loadError": { vi: "Không tải được từ vựng: ", en: "Couldn't load vocabulary: " },
+
+  "ipaChart.title": { vi: "Bảng phiên âm quốc tế (IPA)", en: "International Phonetic Alphabet (IPA)" },
+  "ipaChart.subtitle": {
+    vi: "Các âm tiếng Anh thường gặp, kèm từ ví dụ và nút nghe phát âm",
+    en: "Common English sounds, each with an example word and a play button"
+  },
+  "ipaChart.vowels": { vi: "Nguyên âm", en: "Vowels" },
+  "ipaChart.consonants": { vi: "Phụ âm", en: "Consonants" },
+  "ipaChart.monophthongs": { vi: "Nguyên âm đơn", en: "Monophthongs" },
+  "ipaChart.diphthongs": { vi: "Nguyên âm đôi", en: "Diphthongs" },
+
+  "ipaTranscribe.title": { vi: "Tra phiên âm IPA", en: "Text → IPA Transcription" },
+  "ipaTranscribe.subtitle": {
+    vi: "Nhập một từ hoặc cụm từ tiếng Anh để xem phiên âm IPA",
+    en: "Type an English word or short phrase to see its IPA transcription"
+  },
+  "ipaTranscribe.placeholder": { vi: "Nhập từ hoặc cụm từ tiếng Anh...", en: "Type an English word or phrase..." },
+  "ipaTranscribe.button": { vi: "Tra phiên âm", en: "Transcribe" },
+  "ipaTranscribe.empty": { vi: "Nhập một từ để bắt đầu.", en: "Type a word to get started." },
+  "ipaTranscribe.notFound": { vi: "Không có trong từ điển", en: "Not found in dictionary" },
 
   "flashcards.title": { vi: "Thẻ ghi nhớ", en: "Flashcards" },
   "flashcards.loadError": { vi: "Không tải được flashcards: ", en: "Couldn't load flashcards: " },
