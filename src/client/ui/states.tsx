@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "./cn";
 import { Spinner } from "./Spinner";
+import { Button } from "./Button";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 /** Khoi xam nhap nho, dung lam khung cho trong khi cho du lieu. */
@@ -58,6 +59,20 @@ export function LoadingState({ label }: { label?: string }) {
     <div className="flex items-center justify-center gap-2 py-10 text-sm text-fg-muted">
       <Spinner size={16} label={resolvedLabel} />
       {resolvedLabel}
+    </div>
+  );
+}
+
+export function ErrorState({ children, retry }: { children?: ReactNode; retry?: () => void }) {
+  const { t } = useLanguage();
+  return (
+    <div role="alert" className="flex flex-col items-center gap-3 px-5 py-16 text-center text-sm text-danger">
+      <p>{children ?? t("common.error")}</p>
+      {retry && (
+        <Button variant="outline" size="sm" onClick={retry}>
+          {t("common.retry")}
+        </Button>
+      )}
     </div>
   );
 }

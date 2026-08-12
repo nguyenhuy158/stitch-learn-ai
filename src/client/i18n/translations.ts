@@ -6,6 +6,8 @@ export const translations: Record<string, TranslationEntry> = {
   "common.loadingShort": { vi: "Đang tải", en: "Loading" },
   "common.confirm": { vi: "Xác nhận", en: "Confirm" },
   "common.cancel": { vi: "Huỷ", en: "Cancel" },
+  "common.retry": { vi: "Thử lại", en: "Retry" },
+  "common.error": { vi: "Có lỗi xảy ra. Thử lại nhé.", en: "Something went wrong. Please try again." },
 
   "audio.speak": { vi: "Nghe phát âm", en: "Hear pronunciation" },
 
@@ -133,6 +135,8 @@ export const translations: Record<string, TranslationEntry> = {
   "profile.helpTitle": { vi: "Trợ giúp & Phản hồi", en: "Help & Feedback" },
   "profile.helpLink": { vi: "Trợ giúp & Phản hồi →", en: "Help & Feedback →" },
   "profile.logout": { vi: "Đăng xuất", en: "Log out" },
+  "profile.logoutConfirmTitle": { vi: "Đăng xuất?", en: "Log out?" },
+  "profile.logoutConfirmDesc": { vi: "Bạn cần đăng nhập lại để tiếp tục học.", en: "You'll need to sign in again to keep learning." },
   "profile.version": { vi: "Phiên bản 2.4.0 (Bản dựng 2026)", en: "Version 2.4.0 (2026 build)" },
 
   "history.title": { vi: "Lịch sử học tập", en: "Learning History" },
