@@ -33,7 +33,7 @@
   --ui-primary-fg: oklch(100% 0 0);
   --ui-primary-soft: oklch(96% 0.03 165);
 
-  --ui-ring: oklch(from var(--teal) l c h / 35%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 :root[data-theme="teal"].dark,
@@ -60,7 +60,7 @@
   --ui-primary-fg: oklch(18% 0.02 165);
   --ui-primary-soft: oklch(30% 0.06 165);
 
-  --ui-ring: oklch(from var(--teal) l c h / 45%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 /* ---------- Ocean ---------- */
@@ -85,7 +85,7 @@
   --ui-primary-fg: oklch(100% 0 0);
   --ui-primary-soft: oklch(95% 0.03 230);
 
-  --ui-ring: oklch(from var(--teal) l c h / 35%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 :root[data-theme="ocean"].dark {
@@ -111,7 +111,7 @@
   --ui-primary-fg: oklch(16% 0.02 230);
   --ui-primary-soft: oklch(30% 0.06 230);
 
-  --ui-ring: oklch(from var(--teal) l c h / 45%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 /* ---------- Sunset ---------- */
@@ -136,7 +136,7 @@
   --ui-primary-fg: oklch(100% 0 0);
   --ui-primary-soft: oklch(95% 0.03 40);
 
-  --ui-ring: oklch(from var(--teal) l c h / 35%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 :root[data-theme="sunset"].dark {
@@ -162,7 +162,7 @@
   --ui-primary-fg: oklch(18% 0.02 40);
   --ui-primary-soft: oklch(31% 0.06 40);
 
-  --ui-ring: oklch(from var(--teal) l c h / 45%);
+  --ui-ring: oklch(from var(--teal) l c h / 70%);
 }
 
 /* App-only accent that ui-kit has no direct token for (old --orange highlight,
