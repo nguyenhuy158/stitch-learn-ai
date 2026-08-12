@@ -46,6 +46,9 @@ export function createD1LessonRepository(db) {
         )
         .all();
       return results;
+    },
+    async saveContent(lessonId, content) {
+      await db.prepare("UPDATE lessons SET content = ? WHERE id = ?").bind(content, lessonId).run();
     }
   };
 }

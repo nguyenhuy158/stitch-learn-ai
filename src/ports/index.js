@@ -29,9 +29,13 @@
  * @property {(lessonId: number) => Promise<Array<{id: number, term: string, type: string|null, pronounce: string|null, meaning: string, example: string|null, word_family: string|null}>>} listVocab
  * @property {(lessonId: number, items: Array<{term: string, meaning: string, example?: string}>) => Promise<void>} saveVocab
  * @property {() => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listAllVocab
+ * @property {(lessonId: number, content: string) => Promise<void>} saveContent
  *
  * @typedef {Object} VocabGeneratorPort
  * @property {(input: {title: string, subTitle: string, count?: number}) => Promise<Array<{term: string, meaning: string, example: string}>>} generate
+ *
+ * @typedef {Object} GrammarContentGeneratorPort
+ * @property {(input: {title: string, subTitle: string}) => Promise<{summary: string, sections: Array<{heading: string, explanation: string, examples: string[]}>}>} generate
  *
  * @typedef {Object} SessionPort
  * @property {(claims: object) => Promise<string>} sign

@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { Tabs } from "../ui/Tabs";
-import { Spinner } from "../ui/Spinner";
-import { EmptyState } from "../ui/states";
+import { EmptyState, LoadingState } from "../ui/states";
 import { LockIcon, CheckIcon, BookIcon } from "../components/icons";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 
-type Lesson = { id: number; title: string; sub_title?: string; status?: "locked" | "active" | "completed" };
+type Lesson = { id: number; title: string; sub_title?: string; status?: "locked" | "active" | "completed"; type?: string };
 
-// The old bundle only ever populated "Tất cả" / "Từ vựng" with the same full list — there is no
-// per-lesson category data in the backend, so "Ngữ pháp" and "Luyện tập AI" faithfully show empty.
-const TABS_WITH_DATA = new Set(["all", "vocab"]);
+function matchesTab(lesson: Lesson, tab: string) {
+  if (tab === "all") return true;
+  if (tab === "vocab") return (lesson.type || "vocab") === "vocab";
+  if (tab === "grammar") return lesson.type === "grammar";
+  return false; // "ai" tab has no lesson data yet
+}
 
 export default function Lessons() {
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ export default function Lessons() {
       });
   }, [navigate]);
 
-  const showLessons = TABS_WITH_DATA.has(tab) ? lessons : [];
+  const showLessons = lessons ? lessons.filter((lesson) => matchesTab(lesson, tab)) : null;
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -50,9 +52,7 @@ export default function Lessons() {
       <main className="p-5 sm:p-9">
         {error && <div className="py-10 text-center text-sm text-danger">{error}</div>}
         {!error && lessons === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
+          <LoadingState />
         )}
         {!error && lessons && showLessons && showLessons.length === 0 && (
           <EmptyState title={t("lessons.emptyTitle")} description={t("lessons.emptyDesc")} icon={<BookIcon size={28} />} />

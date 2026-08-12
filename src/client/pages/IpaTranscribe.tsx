@@ -2,7 +2,8 @@ import { useState } from "react";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
+import { Input } from "../ui/Input";
+import { LoadingState } from "../ui/states";
 import { speak } from "../lib/speak";
 import { cleanIpaToken, lookupIpa } from "../lib/ipa";
 import { useLanguage } from "../i18n/LanguageProvider";
@@ -32,12 +33,12 @@ export default function IpaTranscribe() {
       <PageHeader backTo="/" title={t("ipaTranscribe.title")} subtitle={t("ipaTranscribe.subtitle")} />
       <main className="p-5 sm:p-9">
         <form onSubmit={transcribe} className="mb-5 flex gap-2">
-          <input
+          <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("ipaTranscribe.placeholder")}
             autoComplete="off"
-            className="min-h-11 flex-1 rounded-ui border border-border bg-surface px-3.5 text-base text-fg focus:outline-2 focus:outline-primary"
+            className="flex-1"
           />
           <Button type="submit" disabled={!query.trim() || loading}>
             {t("ipaTranscribe.button")}
@@ -46,7 +47,7 @@ export default function IpaTranscribe() {
 
         {loading && (
           <div className="flex justify-center py-8">
-            <Spinner />
+            <LoadingState />
           </div>
         )}
 
