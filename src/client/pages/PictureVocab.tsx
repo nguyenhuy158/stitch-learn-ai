@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Item = { word: string; meaning_vi: string; level: string; word_form: string; image_url: string };
@@ -35,11 +35,7 @@ export default function PictureVocab() {
       />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && topics === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && topics === null && <LoadingState />}
 
         {topics && (
           <div className="mb-5 flex flex-wrap gap-2">

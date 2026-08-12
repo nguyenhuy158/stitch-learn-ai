@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type VocabItem = { id: number; term: string; meaning: string; example?: string; lesson_title: string };
@@ -38,11 +38,7 @@ export default function Saved() {
       <PageHeader backTo="/" title={t("saved.title")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && items === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && items === null && <LoadingState />}
         {!error && items && items.length === 0 && (
           <PageState>{t("saved.empty")}</PageState>
         )}

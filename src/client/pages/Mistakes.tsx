@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
-import { Spinner } from "../ui/Spinner";
+import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Correction = { original?: string; suggestion?: string; explanation?: string } | string;
@@ -48,11 +48,7 @@ export default function Mistakes() {
       <PageHeader backTo="/" title={t("mistakes.title")} subtitle={t("mistakes.subtitle")} />
       <main className="p-5 sm:p-9">
         {error && <PageState tone="error">{error}</PageState>}
-        {!error && mistakes === null && (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        )}
+        {!error && mistakes === null && <LoadingState />}
         {!error && mistakes && mistakes.length === 0 && (
           <PageState>{t("mistakes.empty")}</PageState>
         )}
