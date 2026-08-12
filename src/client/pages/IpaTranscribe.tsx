@@ -1,32 +1,10 @@
 import { useState } from "react";
-import ipaDictionaryData from "../../data/ipa-dictionary.json";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { speak } from "../lib/speak";
+import { cleanIpaToken, lookupIpa } from "../lib/ipa";
 import { useLanguage } from "../i18n/LanguageProvider";
-
-type DictEntry = { word: string; ipa: string };
-
-// Built once from the bundled static dictionary — lookup is a simple, static word match
-// (no grapheme-to-phoneme fallback for words that aren't in the list).
-const DICTIONARY: Record<string, string> = Object.fromEntries(
-  (ipaDictionaryData.items as DictEntry[]).map((entry) => [entry.word, entry.ipa])
-);
-
-// A few function words whose dictionary-listed citation form (e.g. "a" -> the letter
-// name /eɪ/) isn't the pronunciation learners actually want; prefer the common/weak form.
-const WEAK_FORM_OVERRIDES: Record<string, string> = {
-  a: "ə",
-  an: "ən",
-};
-for (const [word, ipa] of Object.entries(WEAK_FORM_OVERRIDES)) {
-  if (DICTIONARY[word]) DICTIONARY[word] = ipa;
-}
-
-function cleanToken(token: string) {
-  return token.toLowerCase().replace(/^[^a-z']+|[^a-z']+$/gi, "");
-}
 
 type Result = { original: string; ipa: string | null };
 
@@ -37,13 +15,8 @@ export default function IpaTranscribe() {
 
   function transcribe(e: React.FormEvent) {
     e.preventDefault();
-    const tokens = query.trim().split(/\s+/).filter((token) => cleanToken(token).length > 0);
-    setResults(
-      tokens.map((original) => {
-        const key = cleanToken(original);
-        return { original, ipa: DICTIONARY[key] ?? null };
-      })
-    );
+    const tokens = query.trim().split(/\s+/).filter((token) => cleanIpaToken(token).length > 0);
+    setResults(tokens.map((original) => ({ original, ipa: lookupIpa(original) })));
   }
 
   return (

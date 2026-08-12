@@ -6,6 +6,7 @@ import { Button } from "../ui/Button";
 import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
+import { transcribeToIpa } from "../lib/ipa";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
@@ -47,6 +48,7 @@ export default function Flashcards() {
     if (current && audioOn) speak(current.term);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current?.id, audioOn]);
+  const ipa = useMemo(() => (current ? transcribeToIpa(current.term) : null), [current]);
   const family = useMemo(() => {
     if (!current?.word_family) return [];
     try {
@@ -116,6 +118,7 @@ export default function Flashcards() {
                   <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
                   <div className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
                   <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
+                  {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
                 </div>
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-primary-hover p-6 text-center text-white shadow-lg"
