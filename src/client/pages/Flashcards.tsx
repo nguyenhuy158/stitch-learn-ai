@@ -156,31 +156,29 @@ export default function Flashcards() {
             <div className="mb-3 text-center text-[13px] text-fg-muted">
               {t("flashcards.remaining", { n: cards!.length })} — {current.lesson_title}
             </div>
+            {flipped && (
+              <>
+                <div
+                  className="pointer-events-none fixed inset-y-0 left-0 z-20 flex w-16 items-center justify-center bg-danger text-center text-xs font-bold text-white"
+                  style={{
+                    opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)),
+                    transition: dragging ? "none" : "opacity 250ms ease",
+                  }}
+                >
+                  ✕ {t("flashcards.swipeForgot")}
+                </div>
+                <div
+                  className="pointer-events-none fixed inset-y-0 right-0 z-20 flex w-16 items-center justify-center bg-accent text-center text-xs font-bold text-white"
+                  style={{
+                    opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)),
+                    transition: dragging ? "none" : "opacity 250ms ease",
+                  }}
+                >
+                  ✓ {t("flashcards.swipeRemembered")}
+                </div>
+              </>
+            )}
             <div className="relative mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
-              {flipped && (
-                <>
-                  <div
-                    className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-danger px-3 py-1 text-xs font-bold text-white"
-                    style={{
-                      opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)),
-                      transform: `translateX(${dragX}px)`,
-                      transition: dragging ? "none" : "transform 250ms ease, opacity 250ms ease",
-                    }}
-                  >
-                    ✕ {t("flashcards.swipeForgot")}
-                  </div>
-                  <div
-                    className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white"
-                    style={{
-                      opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)),
-                      transform: `translateX(${dragX}px)`,
-                      transition: dragging ? "none" : "transform 250ms ease, opacity 250ms ease",
-                    }}
-                  >
-                    ✓ {t("flashcards.swipeRemembered")}
-                  </div>
-                </>
-              )}
               <div
                 onPointerDown={onDragStart}
                 onPointerMove={onDragMove}
