@@ -179,7 +179,7 @@ export default function Matching() {
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
-                className={cn("h-full rounded-full transition-all", timeLeft <= 8 ? "bg-red-500" : "bg-primary")}
+                className={cn("h-full rounded-full transition-all", timeLeft <= 8 ? "bg-danger" : "bg-primary")}
                 style={{ width: `${(timeLeft / difficulty.totalSeconds) * 100}%` }}
               />
             </div>
@@ -196,8 +196,8 @@ export default function Matching() {
                     onClick={() => pick(tile)}
                     className={cn(
                       "flex min-h-20 items-center justify-center rounded-ui border p-2.5 text-center text-sm",
-                      isMatched && "border-green-500 bg-green-500/10 opacity-40",
-                      !isMatched && isWrong && "border-red-500 bg-red-500/10",
+                      isMatched && "border-success bg-success-soft opacity-40",
+                      !isMatched && isWrong && "border-danger bg-danger-soft",
                       !isMatched && !isWrong && isSelected && "border-primary bg-primary-soft",
                       !isMatched && !isWrong && !isSelected && "border-border bg-surface"
                     )}

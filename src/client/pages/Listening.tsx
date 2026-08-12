@@ -171,7 +171,7 @@ export default function Listening() {
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
-                className={cn("h-full rounded-full transition-all", timeLeft <= 2 ? "bg-red-500" : "bg-primary")}
+                className={cn("h-full rounded-full transition-all", timeLeft <= 2 ? "bg-danger" : "bg-primary")}
                 style={{ width: `${(timeLeft / difficulty.secondsPerQuestion) * 100}%` }}
               />
             </div>
@@ -198,8 +198,8 @@ export default function Listening() {
                     onClick={() => answer(choice)}
                     className={cn(
                       "rounded-ui border px-3.5 py-3 text-left text-sm",
-                      isCorrect && "border-green-500 bg-green-500/10",
-                      isPicked && !isCorrect && "border-red-500 bg-red-500/10",
+                      isCorrect && "border-success bg-success-soft",
+                      isPicked && !isCorrect && "border-danger bg-danger-soft",
                       !isPicked && !isCorrect && "border-border bg-surface"
                     )}
                   >

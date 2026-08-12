@@ -1,19 +1,23 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "./cn";
 
+const TONE = {
+  surface: "border border-border bg-surface text-fg",
+  primary: "bg-primary-hover text-white",
+  muted: "border border-border bg-surface-muted text-fg",
+} as const;
+
 export type CardProps = HTMLAttributes<HTMLDivElement> & {
   /** Bo dem san ben trong. Tat khi con la danh sach tu ke vien. */
   padded?: boolean;
+  /** Mau nen: surface (mac dinh), primary (panel noi bat), muted (nen mo). */
+  tone?: keyof typeof TONE;
 };
 
-export function Card({ padded = true, className, children, ...rest }: CardProps) {
+export function Card({ padded = true, tone = "surface", className, children, ...rest }: CardProps) {
   return (
     <div
-      className={cn(
-        "rounded-ui border border-border bg-surface shadow-sm",
-        padded && "p-4",
-        className,
-      )}
+      className={cn("rounded-ui shadow-sm", TONE[tone], padded && "p-4", className)}
       {...rest}
     >
       {children}

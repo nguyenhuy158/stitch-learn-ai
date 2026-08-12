@@ -29,7 +29,10 @@ export function PageHeader({
 
 export function PageState({ children, tone = "muted" }: { children: ReactNode; tone?: "muted" | "error" }) {
   return (
-    <div className={"px-5 py-16 text-center text-sm " + (tone === "error" ? "text-danger" : "text-fg-muted")}>
+    <div
+      role={tone === "error" ? "alert" : undefined}
+      className={"px-5 py-16 text-center text-sm " + (tone === "error" ? "text-danger" : "text-fg-muted")}
+    >
       {children}
     </div>
   );

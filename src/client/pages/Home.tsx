@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
+import { Card } from "../ui/Card";
 import { BookIcon, ChatIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -53,9 +54,7 @@ export default function Home() {
         <p className="mt-1 text-sm text-fg-muted">{t("home.subtitle")}</p>
       </header>
 
-      {/* Khong dung <Card>: class bg-surface cua no thang bg-primary-hover theo thu tu CSS
-          (cn() khong merge nhu tailwind-merge), lam the streak trang tren trang, chu trang mat hut. */}
-      <div className="mb-5 rounded-ui border border-border bg-primary-hover p-4 text-white shadow-sm">
+      <Card tone="primary" className="mb-5">
         <div className="flex items-center justify-between text-sm text-white/80">
           <span>🔥 {t("home.streakDays", { n: user?.streak ?? 0 })}</span>
           <span>⭐ {user?.xp ?? 0} XP</span>
@@ -78,7 +77,7 @@ export default function Home() {
             </div>
           )
         )}
-      </div>
+      </Card>
 
       <div className="mb-3 flex items-center justify-between">
         <h2 className="m-0 text-base font-bold">{t("home.lessonsTitle")}</h2>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Spinner } from "../ui/Spinner";
+import { Card } from "../ui/Card";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -134,16 +135,16 @@ export default function History() {
               </div>
             </div>
 
-            <div className="mb-6 rounded-2xl bg-primary-hover p-4 text-white">
-              <div className="flex justify-between text-[13px] text-white/70">
+            <Card tone="primary" className="mb-6">
+              <div className="flex justify-between text-xs text-white/70">
                 <span>{t("history.currentLevel")}</span>
                 <span>{user.level_progress || 0}%</span>
               </div>
-              <div className="my-0.5 mb-2.5 text-lg font-bold">{user.level || "B1"}</div>
+              <div className="my-0.5 mb-3 text-lg font-bold">{user.level || "B1"}</div>
               <div className="h-2 overflow-hidden rounded-md bg-white/20">
                 <div className="h-full bg-white" style={{ width: `${user.level_progress || 0}%` }} />
               </div>
-            </div>
+            </Card>
 
             {groups && groups.size === 0 && <PageState>{t("history.empty")}</PageState>}
 

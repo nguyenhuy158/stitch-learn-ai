@@ -73,7 +73,7 @@ export default function PictureVocab() {
                 />
                 <div className="p-3">
                   <div className="text-sm font-bold text-primary-hover">{item.word}</div>
-                  <div className="mt-0.5 text-[13px] font-semibold text-accent">{item.meaning_vi}</div>
+                  <div className="mt-0.5 text-[13px] font-semibold text-fg">{item.meaning_vi}</div>
                   <div className="mt-1.5 text-[11px] uppercase text-fg-muted">
                     {item.level} · {item.word_form}
                   </div>

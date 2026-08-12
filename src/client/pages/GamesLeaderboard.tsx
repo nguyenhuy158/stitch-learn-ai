@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Spinner } from "../ui/Spinner";
+import { Card } from "../ui/Card";
 import { Tabs } from "../ui/Tabs";
 import { cn } from "../ui/cn";
 import { GAMES, type GameKey } from "../lib/games";
@@ -56,10 +57,10 @@ export default function GamesLeaderboard() {
         )}
         {!error && current && (
           <>
-            <div className="mb-5 rounded-ui bg-primary-hover p-3.5 text-center font-bold text-white">
+            <Card tone="primary" className="mb-5 text-center font-bold">
               {t("gamesLeaderboard.yourBest")}: {current.myBest}
               {current.myRank ? ` — ${t("gamesLeaderboard.rank")} #${current.myRank}` : ""}
-            </div>
+            </Card>
             {current.top.length === 0 && (
               <PageState>{t("gamesLeaderboard.empty")}</PageState>
             )}

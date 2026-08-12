@@ -191,7 +191,7 @@ export default function WordRace() {
               >
                 {current.term}
               </div>
-              <div className="absolute bottom-0 h-1.5 w-full bg-red-500/30" />
+              <div className="absolute bottom-0 h-1.5 w-full bg-danger/30" />
             </div>
             <form onSubmit={submit} className="flex flex-col gap-3">
               <input
@@ -203,8 +203,8 @@ export default function WordRace() {
                 placeholder={t("wordRace.placeholder")}
                 className={cn(
                   "rounded-ui border px-3.5 py-3 text-center text-lg",
-                  feedback === "correct" && "border-green-500 bg-green-500/10",
-                  feedback === "wrong" && "border-red-500 bg-red-500/10",
+                  feedback === "correct" && "border-success bg-success-soft",
+                  feedback === "wrong" && "border-danger bg-danger-soft",
                   !feedback && "border-border bg-surface"
                 )}
               />

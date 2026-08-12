@@ -179,7 +179,7 @@ export default function Spelling() {
             </div>
             <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-border">
               <div
-                className={cn("h-full rounded-full transition-all", timeLeft <= 3 ? "bg-red-500" : "bg-primary")}
+                className={cn("h-full rounded-full transition-all", timeLeft <= 3 ? "bg-danger" : "bg-primary")}
                 style={{ width: `${(timeLeft / difficulty.secondsPerWord) * 100}%` }}
               />
             </div>
@@ -197,8 +197,8 @@ export default function Spelling() {
                 autoCapitalize="off"
                 className={cn(
                   "rounded-ui border px-3.5 py-3 text-center text-lg",
-                  status === "correct" && "border-green-500 bg-green-500/10",
-                  status === "wrong" && "border-red-500 bg-red-500/10",
+                  status === "correct" && "border-success bg-success-soft",
+                  status === "wrong" && "border-danger bg-danger-soft",
                   status === "idle" && "border-border bg-surface"
                 )}
               />
