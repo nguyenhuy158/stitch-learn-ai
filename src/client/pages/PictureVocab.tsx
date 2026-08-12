@@ -45,7 +45,7 @@ export default function PictureVocab() {
                 type="button"
                 onClick={() => setActive(topic.slug)}
                 className={
-                  "rounded-full border px-3 py-1.5 text-[13px] font-semibold " +
+                  "rounded-full border px-3 py-1.5 text-xs font-semibold " +
                   (topic.slug === active
                     ? "border-primary bg-primary text-white"
                     : "border-border bg-surface text-fg-muted")
@@ -69,8 +69,8 @@ export default function PictureVocab() {
                 />
                 <div className="p-3">
                   <div className="text-sm font-bold text-primary-hover">{item.word}</div>
-                  <div className="mt-0.5 text-[13px] font-semibold text-fg">{item.meaning_vi}</div>
-                  <div className="mt-1.5 text-[11px] uppercase text-fg-muted">
+                  <div className="mt-0.5 text-xs font-semibold text-fg">{item.meaning_vi}</div>
+                  <div className="mt-1.5 text-xs uppercase text-fg-muted">
                     {item.level} · {item.word_form}
                   </div>
                 </div>

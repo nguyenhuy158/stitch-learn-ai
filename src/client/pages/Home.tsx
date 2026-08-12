@@ -115,11 +115,11 @@ export default function Home() {
       </div>
 
       <h2 className="mb-3 text-base font-bold">{t("home.toolsTitle")}</h2>
-      <Tabs<(typeof TOOL_TABS)[number]>
+      <Tabs
         className="mb-3"
         items={TOOL_TABS.map((id) => ({ id, label: t(`home.toolTab.${id}`) }))}
         active={toolTab}
-        onChange={setToolTab}
+        onChange={(id) => setToolTab(id as (typeof TOOL_TABS)[number])}
       />
       <div className="grid grid-cols-2 gap-3">
         {TOOL_KEYS.filter((tool) => tool.tab === toolTab).map((tool) => (

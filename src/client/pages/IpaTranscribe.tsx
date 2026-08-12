@@ -54,7 +54,7 @@ export default function IpaTranscribe() {
         {!loading && results === null && <PageState>{t("ipaTranscribe.empty")}</PageState>}
 
         {!loading && results !== null && (
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-3">
             {results.map((r, i) => (
               <Card key={`${r.original}-${i}`} className="flex items-center justify-between gap-2">
                 <div className="min-w-0">

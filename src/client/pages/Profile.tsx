@@ -45,18 +45,18 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-3 gap-2.5 text-center">
+      <div className="mb-6 grid grid-cols-3 gap-3 text-center">
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.streak || 0}</div>
-          <div className="text-[11px] text-fg-muted">{t("profile.streak")}</div>
+          <div className="text-xs text-fg-muted">{t("profile.streak")}</div>
         </Card>
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.xp || 0}</div>
-          <div className="text-[11px] text-fg-muted">XP</div>
+          <div className="text-xs text-fg-muted">XP</div>
         </Card>
         <Card className="p-3">
           <div className="text-lg font-extrabold text-primary">{user.level || "B1"}</div>
-          <div className="text-[11px] text-fg-muted">{t("profile.level")}</div>
+          <div className="text-xs text-fg-muted">{t("profile.level")}</div>
         </Card>
       </div>
 

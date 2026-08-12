@@ -56,19 +56,19 @@ function Entry({ pair, t, locale }: { pair: Pair; t: (key: string, params?: Reco
   const correctionCount = metadata && Array.isArray(metadata.corrections) ? metadata.corrections.length : 0;
 
   return (
-    <div className="mb-2 flex items-start gap-3 rounded-2xl bg-surface p-3.5 shadow-sm">
+    <div className="mb-2 flex items-start gap-3 rounded-ui bg-surface p-4 shadow-sm">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-primary-soft text-lg text-primary">
         💬
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-bold">{t("history.entry.speaking")}</div>
-        <div className="mt-0.5 overflow-hidden truncate text-[13px] text-fg-muted">{pair.user.content}</div>
+        <div className="mt-0.5 overflow-hidden truncate text-xs text-fg-muted">{pair.user.content}</div>
         <div className="mt-1 text-xs text-fg-muted">{formatTime(pair.user.created_at, locale)}</div>
       </div>
       {pair.reply && (
         <span
           className={cn(
-            "whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-bold",
+            "whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-bold",
             correctionCount === 0 ? "bg-success-soft text-success" : "bg-warning-soft text-accent"
           )}
         >
@@ -110,24 +110,24 @@ export default function History() {
         {!error && !pairs && <LoadingState />}
         {!error && user && pairs && (
           <>
-            <div className="mb-5 grid grid-cols-3 gap-2.5">
-              <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
+            <div className="mb-5 grid grid-cols-3 gap-3">
+              <div className="rounded-ui bg-surface p-4 text-center shadow-sm">
                 <div className="text-xl font-extrabold text-primary-hover">
                   {user.streak || 0}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.streak")}</div>
+                <div className="mt-0.5 text-xs uppercase text-fg-muted">{t("history.streak")}</div>
               </div>
-              <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
+              <div className="rounded-ui bg-surface p-4 text-center shadow-sm">
                 <div className="text-xl font-extrabold text-primary-hover">
                   {user.xp || 0}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.xp")}</div>
+                <div className="mt-0.5 text-xs uppercase text-fg-muted">{t("history.xp")}</div>
               </div>
-              <div className="rounded-2xl bg-surface p-3.5 text-center shadow-sm">
+              <div className="rounded-ui bg-surface p-4 text-center shadow-sm">
                 <div className="text-xl font-extrabold text-primary-hover">
                   {pairs.length}
                 </div>
-                <div className="mt-0.5 text-[11px] uppercase text-fg-muted">{t("history.conversations")}</div>
+                <div className="mt-0.5 text-xs uppercase text-fg-muted">{t("history.conversations")}</div>
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function History() {
                 .reverse()
                 .map(([day, dayPairs]) => (
                   <div key={day} className="mb-5">
-                    <div className="mb-2 text-[13px] font-bold text-primary-hover">
+                    <div className="mb-2 text-xs font-bold text-primary-hover">
                       {day}
                     </div>
                     {[...dayPairs].reverse().map((p, i) => (

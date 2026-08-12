@@ -183,7 +183,7 @@ export default function Matching() {
                 style={{ width: `${(timeLeft / difficulty.totalSeconds) * 100}%` }}
               />
             </div>
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {tiles.map((tile) => {
                 const isMatched = matched.has(tile.wordId);
                 const isSelected = selected.some((s) => s.key === tile.key);
@@ -195,7 +195,7 @@ export default function Matching() {
                     disabled={isMatched}
                     onClick={() => pick(tile)}
                     className={cn(
-                      "flex min-h-20 items-center justify-center rounded-ui border p-2.5 text-center text-sm",
+                      "flex min-h-20 items-center justify-center rounded-ui border p-3 text-center text-sm",
                       isMatched && "border-success bg-success-soft opacity-40",
                       !isMatched && isWrong && "border-danger bg-danger-soft",
                       !isMatched && !isWrong && isSelected && "border-primary bg-primary-soft",
@@ -226,7 +226,7 @@ export default function Matching() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <div className="mt-4 flex gap-2.5">
+            <div className="mt-4 flex gap-3">
               <Button
                 block
                 variant="outline"

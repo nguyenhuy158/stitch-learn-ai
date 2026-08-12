@@ -65,7 +65,7 @@ export default function Lessons() {
               const row = (
                 <div
                   className={cn(
-                    "flex items-center gap-3 rounded-2xl bg-surface p-4 shadow-sm transition",
+                    "flex items-center gap-3 rounded-ui bg-surface p-4 shadow-sm transition",
                     locked ? "opacity-60" : "hover:shadow-md"
                   )}
                 >

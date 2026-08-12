@@ -223,7 +223,7 @@ export default function Listening() {
                 {submitResult.xpAwarded > 0 ? ` · +${submitResult.xpAwarded} XP` : ""}
               </div>
             )}
-            <div className="mt-4 flex gap-2.5">
+            <div className="mt-4 flex gap-3">
               <Button
                 block
                 variant="outline"

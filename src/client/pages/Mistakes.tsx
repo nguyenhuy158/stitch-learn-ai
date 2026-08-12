@@ -53,20 +53,20 @@ export default function Mistakes() {
           <PageState>{t("mistakes.empty")}</PageState>
         )}
         {!error && mistakes && mistakes.length > 0 && (
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-3">
             {mistakes.slice(0, 30).map((c, i) =>
               typeof c === "string" ? (
                 <Card key={i} className="p-4">
-                  <div className="text-[15px]">{c}</div>
+                  <div className="text-sm">{c}</div>
                 </Card>
               ) : (
                 <Card key={i} className="p-4">
-                  <div className="flex flex-wrap items-baseline gap-2 text-[15px]">
+                  <div className="flex flex-wrap items-baseline gap-2 text-sm">
                     {c.original && <span className="text-danger line-through">{c.original}</span>}
                     {c.original && c.suggestion && <span>→</span>}
                     {c.suggestion && <span className="font-bold text-primary">{c.suggestion}</span>}
                   </div>
-                  {c.explanation && <div className="text-[13px] text-fg-muted">{c.explanation}</div>}
+                  {c.explanation && <div className="text-xs text-fg-muted">{c.explanation}</div>}
                 </Card>
               )
             )}

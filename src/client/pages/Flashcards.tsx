@@ -154,7 +154,7 @@ export default function Flashcards() {
         {!error && cards && cards.length === 0 && <PageState>{t("flashcards.empty")}</PageState>}
         {!error && current && (
           <>
-            <div className="mb-3 text-center text-[13px] text-fg-muted">
+            <div className="mb-3 text-center text-xs text-fg-muted">
               {t("flashcards.remaining", { n: cards!.length })} — {current.lesson_title}
             </div>
             {flipped && (
@@ -215,7 +215,7 @@ export default function Flashcards() {
                     <div className="mb-2.5 text-xl font-bold text-accent">{current.meaning}</div>
                     {current.example && <div className="text-sm italic text-white/80">"{current.example}"</div>}
                     {family.length > 0 && (
-                      <div className="mt-2.5 text-[13px] text-white/85">
+                      <div className="mt-2.5 text-xs text-white/85">
                         {family.map((f: string) => (
                           <span key={f} className="mx-0.5 my-0.5 inline-block rounded-md bg-white/15 px-2 py-0.5">
                             {f}
@@ -227,7 +227,7 @@ export default function Flashcards() {
                 </div>
               </div>
             </div>
-            <div className="mb-3 flex items-center justify-center gap-2.5">
+            <div className="mb-3 flex items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={() => speak(current.term)}
@@ -253,7 +253,7 @@ export default function Flashcards() {
               <div className="text-center text-xs text-fg-muted">{t("flashcards.tapHint")}</div>
             )}
             {flipped && (
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3">
                 <Button variant="outline" block disabled={grading} onClick={() => grade(2)}>
                   {t("flashcards.forgot")}
                 </Button>

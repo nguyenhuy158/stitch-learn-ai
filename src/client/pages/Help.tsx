@@ -40,11 +40,11 @@ export default function Help() {
         <div className="mb-3 mt-1 text-sm font-bold text-primary-hover">
           {t("help.faqTitle")}
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-3">
           {FAQ_KEYS.map((key) => (
-            <Card key={key} className="p-3.5">
+            <Card key={key} className="p-4">
               <div className="mb-1 text-sm font-bold">{t(`help.faq.${key}.q`)}</div>
-              <div className="text-[13px] leading-relaxed text-fg-muted">{t(`help.faq.${key}.a`)}</div>
+              <div className="text-xs leading-relaxed text-fg-muted">{t(`help.faq.${key}.a`)}</div>
             </Card>
           ))}
         </div>

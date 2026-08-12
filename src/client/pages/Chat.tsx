@@ -76,7 +76,7 @@ export default function Chat() {
               <div
                 key={i}
                 className={cn(
-                  "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
+                  "max-w-[85%] rounded-ui px-4 py-2.5 text-sm leading-relaxed",
                   m.role === "user" ? "ml-auto bg-primary text-primary-fg" : "bg-surface-muted text-fg"
                 )}
               >
@@ -84,7 +84,7 @@ export default function Chat() {
               </div>
             ))}
             {sending && (
-              <div className="w-fit rounded-2xl bg-surface-muted px-4 py-2.5">
+              <div className="w-fit rounded-ui bg-surface-muted px-4 py-2.5">
                 <Spinner size={16} />
               </div>
             )}

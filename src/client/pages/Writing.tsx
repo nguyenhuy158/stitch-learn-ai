@@ -51,7 +51,7 @@ export default function Writing() {
             placeholder={t("writing.placeholder")}
             className="min-h-[140px] w-full"
           />
-          <div className="mt-1.5 text-right text-[13px] text-fg-muted">{text.length}/2000</div>
+          <div className="mt-1.5 text-right text-xs text-fg-muted">{text.length}/2000</div>
           <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting}>
             {t("writing.submit")}
           </Button>
@@ -67,19 +67,19 @@ export default function Writing() {
 
         {result && (
           <div>
-            <div className="mb-2 text-[13px] font-bold uppercase text-primary-hover">
+            <div className="mb-2 text-xs font-bold uppercase text-primary-hover">
               {t("writing.correctedTitle")}
             </div>
-            <Card className="p-4 text-[15px] leading-relaxed">{result.corrected}</Card>
+            <Card className="p-4 text-sm leading-relaxed">{result.corrected}</Card>
 
-            <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
+            <div className="mb-2 mt-5 text-xs font-bold uppercase text-primary-hover">
               {t("writing.feedbackTitle")}
             </div>
             <div className="rounded-xl border-l-3 border-accent bg-warning-soft p-3 text-sm">
               {result.overallFeedback}
             </div>
 
-            <div className="mb-2 mt-5 text-[13px] font-bold uppercase text-primary-hover">
+            <div className="mb-2 mt-5 text-xs font-bold uppercase text-primary-hover">
               {t("writing.detailsTitle")}
             </div>
             {result.corrections.length === 0 ? (
@@ -87,9 +87,9 @@ export default function Writing() {
                 {t("writing.noErrors")}
               </div>
             ) : (
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3">
                 {result.corrections.map((c, i) => (
-                  <Card key={i} className="p-3.5">
+                  <Card key={i} className="p-4">
                     <div className="flex flex-wrap items-baseline gap-2 text-sm">
                       <span className="text-danger line-through">{c.original}</span>
                       <span>→</span>
@@ -97,7 +97,7 @@ export default function Writing() {
                         {c.suggestion}
                       </span>
                     </div>
-                    <div className="text-[13px] text-fg-muted">{c.explanation}</div>
+                    <div className="text-xs text-fg-muted">{c.explanation}</div>
                   </Card>
                 ))}
               </div>
