@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
@@ -32,7 +32,8 @@ export default function Flashcards() {
     (async () => {
       try {
         const [vocab, saved, me] = await Promise.all([api.vocab(), api.savedVocab(), api.me()]);
-        setCards(Array.isArray(vocab) ? vocab : []);
+        const sessionSize = me.user?.flashcard_session_size || 10;
+        setCards(Array.isArray(vocab) ? vocab.slice(0, sessionSize) : []);
         setSavedIds(new Set((Array.isArray(saved) ? saved : []).map((s: any) => s.id)));
         setAudioOn(me.user?.flashcard_audio !== 0);
       } catch (err: any) {
@@ -68,6 +69,51 @@ export default function Flashcards() {
       return [];
     }
   }, [current]);
+
+  const SWIPE_THRESHOLD = 90;
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const dragStartX = useRef<number | null>(null);
+  const didDrag = useRef(false);
+
+  useEffect(() => {
+    setDragX(0);
+  }, [current?.id]);
+
+  function onDragStart(e: React.PointerEvent) {
+    if (grading) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragStartX.current = e.clientX;
+    didDrag.current = false;
+    setDragging(true);
+  }
+
+  function onDragMove(e: React.PointerEvent) {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    if (Math.abs(dx) > 6) didDrag.current = true;
+    setDragX(dx);
+  }
+
+  function onDragEnd() {
+    if (dragStartX.current === null) return;
+    const dx = dragX;
+    dragStartX.current = null;
+    setDragging(false);
+    if (flipped && Math.abs(dx) > SWIPE_THRESHOLD) {
+      grade(dx > 0 ? 4 : 2);
+      return;
+    }
+    setDragX(0);
+  }
+
+  function onCardClick() {
+    if (didDrag.current) {
+      didDrag.current = false;
+      return;
+    }
+    setFlipped((f) => !f);
+  }
 
   async function toggleSave() {
     if (!current) return;
@@ -116,36 +162,64 @@ export default function Flashcards() {
             <div className="mb-3 text-center text-[13px] text-fg-muted">
               {t("flashcards.remaining", { n: cards!.length })} — {current.lesson_title}
             </div>
-            <div className="mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
+            <div className="relative mb-4 h-64 sm:h-80" style={{ perspective: "1000px" }}>
+              {flipped && (
+                <>
+                  <div
+                    className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-danger px-3 py-1 text-xs font-bold text-white transition-opacity"
+                    style={{ opacity: Math.min(1, Math.max(0, -dragX / SWIPE_THRESHOLD)) }}
+                  >
+                    ✕ {t("flashcards.swipeForgot")}
+                  </div>
+                  <div
+                    className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white transition-opacity"
+                    style={{ opacity: Math.min(1, Math.max(0, dragX / SWIPE_THRESHOLD)) }}
+                  >
+                    ✓ {t("flashcards.swipeRemembered")}
+                  </div>
+                </>
+              )}
               <div
-                onClick={() => setFlipped((f) => !f)}
-                className="relative h-full w-full cursor-pointer rounded-3xl transition-transform duration-500"
-                style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : undefined }}
+                onPointerDown={onDragStart}
+                onPointerMove={onDragMove}
+                onPointerUp={onDragEnd}
+                onPointerCancel={onDragEnd}
+                className="h-full w-full touch-pan-y select-none"
+                style={{
+                  transform: `translateX(${dragX}px) rotate(${dragX / 16}deg)`,
+                  transition: dragging ? "none" : "transform 250ms ease",
+                }}
               >
                 <div
-                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-surface p-6 text-center shadow-lg"
-                  style={{ backfaceVisibility: "hidden" }}
+                  onClick={onCardClick}
+                  className="relative h-full w-full cursor-pointer rounded-3xl transition-transform duration-500"
+                  style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : undefined }}
                 >
-                  <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
-                  <div className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
-                  <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
-                  {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
-                </div>
-                <div
-                  className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-primary-hover p-6 text-center text-white shadow-lg"
-                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-                >
-                  <div className="mb-2.5 text-xl font-bold text-accent">{current.meaning}</div>
-                  {current.example && <div className="text-sm italic text-white/80">"{current.example}"</div>}
-                  {family.length > 0 && (
-                    <div className="mt-2.5 text-[13px] text-white/85">
-                      {family.map((f: string) => (
-                        <span key={f} className="mx-0.5 my-0.5 inline-block rounded-md bg-white/15 px-2 py-0.5">
-                          {f}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <div
+                    className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-surface p-6 text-center shadow-lg"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
+                    <div className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
+                    <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
+                    {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
+                  </div>
+                  <div
+                    className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-primary-hover p-6 text-center text-white shadow-lg"
+                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+                  >
+                    <div className="mb-2.5 text-xl font-bold text-accent">{current.meaning}</div>
+                    {current.example && <div className="text-sm italic text-white/80">"{current.example}"</div>}
+                    {family.length > 0 && (
+                      <div className="mt-2.5 text-[13px] text-white/85">
+                        {family.map((f: string) => (
+                          <span key={f} className="mx-0.5 my-0.5 inline-block rounded-md bg-white/15 px-2 py-0.5">
+                            {f}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

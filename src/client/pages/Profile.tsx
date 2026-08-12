@@ -115,6 +115,31 @@ export default function Profile() {
             }}
           />
         </div>
+        <div className="flex items-center justify-between gap-3 p-4">
+          <div>
+            <div className="text-sm">{t("profile.flashcardSessionLabel")}</div>
+            <div className="mt-0.5 text-xs text-fg-muted">{t("profile.flashcardSessionDesc")}</div>
+          </div>
+          <div className="inline-flex shrink-0 overflow-hidden rounded-full border border-border text-xs font-semibold">
+            {[5, 10, 15, 20].map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => {
+                  setUser((u: any) => ({ ...u, flashcard_session_size: n }));
+                  api.updateProfile({ flashcard_session_size: n }).catch(() => {});
+                }}
+                aria-pressed={(user.flashcard_session_size || 10) === n}
+                className={
+                  "px-3 py-1.5 transition " +
+                  ((user.flashcard_session_size || 10) === n ? "bg-primary text-primary-fg" : "bg-surface text-fg-muted")
+                }
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
       </Card>
 
       <div className="mb-2 text-sm font-bold text-fg-muted">{t("profile.helpTitle")}</div>

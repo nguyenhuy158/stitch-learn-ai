@@ -1,6 +1,6 @@
 import { ValidationError } from "../errors.js";
 
-const ALLOWED_FIELDS = ["name", "language", "tts_provider", "gemini_config", "flashcard_audio"];
+const ALLOWED_FIELDS = ["name", "language", "tts_provider", "gemini_config", "flashcard_audio", "flashcard_session_size"];
 
 export async function updateProfile({ userId, fields }, { userRepository }) {
   const updates = {};
