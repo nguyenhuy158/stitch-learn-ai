@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
+import { Spinner } from "../ui/Spinner";
 import { speak } from "../lib/speak";
 import { cleanIpaToken, lookupIpa } from "../lib/ipa";
 import { useLanguage } from "../i18n/LanguageProvider";
@@ -12,11 +13,18 @@ export default function IpaTranscribe() {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  function transcribe(e: React.FormEvent) {
+  async function transcribe(e: React.FormEvent) {
     e.preventDefault();
     const tokens = query.trim().split(/\s+/).filter((token) => cleanIpaToken(token).length > 0);
-    setResults(tokens.map((original) => ({ original, ipa: lookupIpa(original) })));
+    setLoading(true);
+    try {
+      const looked = await Promise.all(tokens.map((original) => lookupIpa(original)));
+      setResults(tokens.map((original, i) => ({ original, ipa: looked[i] })));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -31,14 +39,20 @@ export default function IpaTranscribe() {
             autoComplete="off"
             className="min-h-11 flex-1 rounded-ui border border-border bg-surface px-3.5 text-base text-fg focus:outline-2 focus:outline-primary"
           />
-          <Button type="submit" disabled={!query.trim()}>
+          <Button type="submit" disabled={!query.trim() || loading}>
             {t("ipaTranscribe.button")}
           </Button>
         </form>
 
-        {results === null && <PageState>{t("ipaTranscribe.empty")}</PageState>}
+        {loading && (
+          <div className="flex justify-center py-8">
+            <Spinner />
+          </div>
+        )}
 
-        {results !== null && (
+        {!loading && results === null && <PageState>{t("ipaTranscribe.empty")}</PageState>}
+
+        {!loading && results !== null && (
           <div className="flex flex-col gap-2.5">
             {results.map((r, i) => (
               <Card key={`${r.original}-${i}`} className="flex items-center justify-between gap-2">

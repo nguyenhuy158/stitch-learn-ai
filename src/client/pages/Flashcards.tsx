@@ -48,7 +48,18 @@ export default function Flashcards() {
     if (current && audioOn) speak(current.term);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current?.id, audioOn]);
-  const ipa = useMemo(() => (current ? transcribeToIpa(current.term) : null), [current]);
+  const [ipa, setIpa] = useState<string | null>(null);
+  useEffect(() => {
+    setIpa(null);
+    if (!current) return;
+    let cancelled = false;
+    transcribeToIpa(current.term).then((result) => {
+      if (!cancelled) setIpa(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [current?.id]);
   const family = useMemo(() => {
     if (!current?.word_family) return [];
     try {
