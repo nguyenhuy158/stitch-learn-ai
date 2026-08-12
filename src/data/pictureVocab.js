@@ -16,6 +16,7 @@ import areasOfStudyGeography from "./vocab-areas-of-study-geography.json";
 import plantsAnimalsFlowers from "./vocab-plants-and-animals-flowers.json";
 import workJobsAH from "./vocab-work-jobs-and-occupations-a-h.json";
 import recreationTheBeach from "./vocab-recreation-the-beach.json";
+import recreationIndividualSports from "./vocab-recreation-individual-sports.json";
 
 // Ordered by the dictionary's own chapter order.
 export const PICTURE_VOCAB_TOPICS = [
@@ -31,7 +32,8 @@ export const PICTURE_VOCAB_TOPICS = [
   areasOfStudyGeography,
   plantsAnimalsFlowers,
   workJobsAH,
-  recreationTheBeach
+  recreationTheBeach,
+  recreationIndividualSports
 ];
 
 /** All image keys we're willing to serve, so the image route can't be used to read arbitrary R2 objects. */

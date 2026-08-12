@@ -1,0 +1,19 @@
+{
+  "topic": "Recreation",
+  "lesson": "Individual Sports",
+  "source": "Oxford Picture Dictionary",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "recreation/individual-sports/",
+  "items": [
+    { "word": "archery", "meaning_vi": "bắn cung", "r2_key": "recreation/individual-sports/01-archery.png", "level": "B1", "word_form": "noun" },
+    { "word": "billiards/pool", "meaning_vi": "bi-a", "r2_key": "recreation/individual-sports/02-billiards-pool.png", "level": "B1", "word_form": "noun" },
+    { "word": "bowling", "meaning_vi": "bowling", "r2_key": "recreation/individual-sports/03-bowling.png", "level": "A2", "word_form": "noun" },
+    { "word": "cycling/biking", "meaning_vi": "đi xe đạp", "r2_key": "recreation/individual-sports/04-cycling-biking.png", "level": "A1", "word_form": "noun" },
+    { "word": "fencing", "meaning_vi": "đấu kiếm", "r2_key": "recreation/individual-sports/05-fencing.png", "level": "B2", "word_form": "noun" },
+    { "word": "flying disc", "meaning_vi": "ném đĩa bay", "r2_key": "recreation/individual-sports/06-flying-disc.png", "level": "B1", "word_form": "noun" },
+    { "word": "golf", "meaning_vi": "gôn", "r2_key": "recreation/individual-sports/07-golf.png", "level": "A1", "word_form": "noun" },
+    { "word": "gymnastics", "meaning_vi": "thể dục dụng cụ", "r2_key": "recreation/individual-sports/08-gymnastics.png", "level": "A2", "word_form": "noun" },
+    { "word": "inline skating", "meaning_vi": "trượt patin", "r2_key": "recreation/individual-sports/09-inline-skating.png", "level": "B1", "word_form": "noun" },
+    { "word": "martial arts", "meaning_vi": "võ thuật", "r2_key": "recreation/individual-sports/10-martial-arts.png", "level": "A2", "word_form": "noun" }
+  ]
+}
