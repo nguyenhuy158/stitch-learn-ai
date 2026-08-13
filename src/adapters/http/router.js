@@ -1,9 +1,8 @@
-import { ValidationError, AuthError } from "../../domain/errors.js";
+import { ValidationError } from "../../domain/errors.js";
 import { listLessons } from "../../domain/usecases/listLessons.js";
 import { startSsoLogin } from "../../domain/usecases/startSsoLogin.js";
 import { getCurrentUser } from "../../domain/usecases/getCurrentUser.js";
 import { updateProfile } from "../../domain/usecases/updateProfile.js";
-import { loginWithPassword } from "../../domain/usecases/loginWithPassword.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
@@ -343,18 +342,6 @@ export async function handleRequest(request, url, deps) {
       status: 302,
       headers: { Location: location, "Set-Cookie": buildLogoutCookie(isSecure) }
     });
-  }
-
-  if (url.pathname === "/api/auth/login" && request.method === "POST") {
-    try {
-      const { email, password } = await request.json();
-      const { token, user } = await loginWithPassword({ email, password }, deps);
-      return json({ success: true, user: sanitizeUser(user) }, { headers: { "Set-Cookie": buildAuthCookie(token, { secure: isSecure }) } });
-    } catch (error) {
-      if (error instanceof ValidationError) return new Response(error.message, { status: 400 });
-      if (error instanceof AuthError) return new Response(error.message, { status: 401 });
-      return new Response(error.message, { status: 500 });
-    }
   }
 
   if (url.pathname === "/api/user/password" && request.method === "POST") {

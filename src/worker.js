@@ -15,7 +15,6 @@ import { createGeminiGrammarContentGenerator } from "./adapters/gemini/grammarCo
 import { createGeminiWritingReviewer } from "./adapters/gemini/writingReviewer.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
-import { passwordHasher } from "./domain/services/passwordHasher.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
 import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
@@ -42,8 +41,7 @@ function buildDeps(env) {
     writingReviewerPort: createGeminiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
-    mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY),
-    passwordHasher
+    mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)
   };
 }
 
