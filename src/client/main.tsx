@@ -7,6 +7,12 @@ import { LanguageProvider } from "./i18n/LanguageProvider";
 import { ToastProvider } from "./ui/Toast";
 import "./main.css";
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <LanguageProvider>
