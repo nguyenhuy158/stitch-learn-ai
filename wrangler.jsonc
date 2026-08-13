@@ -8,6 +8,9 @@
     "binding": "ASSETS",
     "directory": "./public"
   },
+  "build": {
+    "command": "node scripts/build-info.mjs"
+  },
   "d1_databases": [
     {
       "binding": "DB",

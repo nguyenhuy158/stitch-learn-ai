@@ -23,6 +23,7 @@ import { getGameLeaderboard } from "../../domain/usecases/getGameLeaderboard.js"
 import { getPictureVocab } from "../../domain/usecases/getPictureVocab.js";
 import { KNOWN_IMAGE_KEYS } from "../../data/pictureVocab.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
+import { BUILD_INFO } from "../../shared/build-info.generated.js";
 
 function json(data, init) {
   return new Response(JSON.stringify(data), {
@@ -41,6 +42,10 @@ function sanitizeUser(user) {
 /** Returns a Response for known API routes, or null if the request should fall through to static assets. */
 export async function handleRequest(request, url, deps) {
   const isSecure = url.protocol === "https:";
+
+  if (url.pathname === "/api/version") {
+    return json(BUILD_INFO);
+  }
 
   if (url.pathname === "/api/picture-vocab") {
     const topic = url.searchParams.get("topic");

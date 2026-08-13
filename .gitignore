@@ -1,2 +1,5 @@
 node_modules/
 .wrangler/
+
+# Dau vet build sinh tu git moi lan build (scripts/build-info.mjs)
+src/shared/build-info.generated.js
