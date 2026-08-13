@@ -100,6 +100,8 @@ export const translations: Record<string, TranslationEntry> = {
   "chat.empty": { vi: "Chưa có hội thoại nào. Gõ gì đó bằng tiếng Anh để bắt đầu!", en: "No conversation yet. Type something in English to get started!" },
   "chat.placeholder": { vi: "Nhập tiếng Anh...", en: "Type in English..." },
   "chat.send": { vi: "Gửi", en: "Send" },
+  "chat.newChat": { vi: "Cuộc trò chuyện mới", en: "New chat" },
+  "chat.confirmClear": { vi: "Xoá toàn bộ lịch sử chat và bắt đầu cuộc trò chuyện mới?", en: "Clear all chat history and start a new conversation?" },
 
   "writing.title": { vi: "Sửa lỗi viết", en: "Writing Correction" },
   "writing.subtitle": { vi: "Viết đoạn văn tiếng Anh, Gemini sẽ sửa lỗi và giải thích.", en: "Write an English passage and Gemini will correct it with explanations." },

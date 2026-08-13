@@ -21,6 +21,9 @@ export function createD1ChatRepository(db) {
         "SELECT * FROM chat_messages WHERE user_id = ? ORDER BY created_at ASC LIMIT ?"
       ).bind(userId, limit).all();
       return results;
+    },
+    async clearAll(userId) {
+      await db.prepare("DELETE FROM chat_messages WHERE user_id = ?").bind(userId).run();
     }
   };
 }

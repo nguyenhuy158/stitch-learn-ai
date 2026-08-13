@@ -22,6 +22,7 @@
  * @property {(userId: string, limit: number) => Promise<Array<{role: string, parts: Array<{text: string}>}>>} listRecent
  * @property {(userId: string, userMessage: string, modelMessage: string, metadata: object) => Promise<void>} appendExchange
  * @property {(userId: string, limit: number) => Promise<object[]>} listAll
+ * @property {(userId: string) => Promise<void>} clearAll
  *
  * @typedef {Object} LessonRepository
  * @property {() => Promise<object[]>} listAll

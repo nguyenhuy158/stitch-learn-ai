@@ -5,6 +5,7 @@ import { getCurrentUser } from "../../domain/usecases/getCurrentUser.js";
 import { updateProfile } from "../../domain/usecases/updateProfile.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
 import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
+import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
@@ -290,6 +291,13 @@ export async function handleRequest(request, url, deps) {
     return requireAuth(async (userId) => json(await getChatHistory({ userId }, deps)), {
       passthroughMessage: true
     })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/chat/clear" && request.method === "POST") {
+    return requireAuth(async (userId) => {
+      await clearChatHistory({ userId }, deps);
+      return json({ success: true });
+    }, { label: "Clear chat history error:", fallbackMessage: "Failed to clear chat history" })(request, url, deps);
   }
 
   return null;

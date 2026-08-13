@@ -45,3 +45,6 @@ export function LockIcon(props: IconProps) {
 export function SendIcon(props: IconProps) {
   return base({ ...props, children: <><path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4 20-7Z" /></> });
 }
+export function PlusIcon(props: IconProps) {
+  return base({ ...props, children: <><path d="M12 5v14" /><path d="M5 12h14" /></> });
+}

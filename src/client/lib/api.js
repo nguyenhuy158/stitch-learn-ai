@@ -67,4 +67,5 @@ export const api = {
 
   chatHistory: () => request("/api/chat/history"),
   sendChat: (message) => request("/api/chat", { method: "POST", body: JSON.stringify({ message }) }),
+  clearChat: () => request("/api/chat/clear", { method: "POST" }),
 };
