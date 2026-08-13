@@ -21,6 +21,7 @@ import Saved from "./pages/Saved";
 import Rankings from "./pages/Rankings";
 import Mistakes from "./pages/Mistakes";
 import Writing from "./pages/Writing";
+import Translation from "./pages/Translation";
 import Help from "./pages/Help";
 import Appearance from "./pages/Appearance";
 import Login from "./pages/Login";
@@ -56,6 +57,7 @@ export default function App() {
       <Route path="/rankings" element={<Rankings />} />
       <Route path="/mistakes" element={<Mistakes />} />
       <Route path="/writing" element={<Writing />} />
+      <Route path="/translation" element={<Translation />} />
       <Route path="/help" element={<Help />} />
       <Route path="/theme" element={<Appearance />} />
       <Route path="/login" element={<Login />} />

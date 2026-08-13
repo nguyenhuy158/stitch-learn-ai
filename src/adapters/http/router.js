@@ -8,6 +8,8 @@ import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
+import { getTranslationExercise } from "../../domain/usecases/getTranslationExercise.js";
+import { reviewTranslation } from "../../domain/usecases/reviewTranslation.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
 import { getFlashcards } from "../../domain/usecases/getFlashcards.js";
 import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
@@ -216,6 +218,21 @@ export async function handleRequest(request, url, deps) {
       const result = await reviewWriting({ userId, text }, deps);
       return json(result);
     }, { label: "Writing review error:", fallbackMessage: "Failed to review writing" })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/translation/today" && request.method === "GET") {
+    return requireAuth(async (userId) => {
+      const result = await getTranslationExercise({ userId }, deps);
+      return json(result);
+    }, { label: "Translation exercise error:", fallbackMessage: "Failed to load translation exercise" })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/translation/review" && request.method === "POST") {
+    return requireAuth(async (userId) => {
+      const { vietnamese, translation } = await request.json();
+      const result = await reviewTranslation({ userId, vietnamese, translation }, deps);
+      return json(result);
+    }, { label: "Translation review error:", fallbackMessage: "Failed to review translation" })(request, url, deps);
   }
 
   if (url.pathname === "/api/feedback" && request.method === "POST") {

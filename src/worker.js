@@ -13,6 +13,7 @@ import { createGeminiTutor } from "./adapters/gemini/tutor.js";
 import { createGeminiVocabGenerator } from "./adapters/gemini/vocabGenerator.js";
 import { createGeminiGrammarContentGenerator } from "./adapters/gemini/grammarContentGenerator.js";
 import { createGeminiWritingReviewer } from "./adapters/gemini/writingReviewer.js";
+import { createGeminiTranslationExercise } from "./adapters/gemini/translationExercise.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
@@ -39,6 +40,7 @@ function buildDeps(env) {
     vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
     grammarContentGeneratorPort: createGeminiGrammarContentGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
     writingReviewerPort: createGeminiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    translationExercisePort: createGeminiTranslationExercise({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
     mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)

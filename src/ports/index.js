@@ -57,6 +57,10 @@
  * @typedef {Object} WritingReviewerPort
  * @property {(input: {text: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
  *
+ * @typedef {Object} TranslationExercisePort
+ * @property {(input: {term: string, meaning: string, example: string|null}) => Promise<{vietnamese: string}>} generate
+ * @property {(input: {vietnamese: string, translation: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
+ *
  * @typedef {Object} FeedbackRepository
  * @property {(userId: string, message: string) => Promise<void>} create
  *

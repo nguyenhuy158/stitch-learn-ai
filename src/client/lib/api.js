@@ -62,6 +62,9 @@ export const api = {
   pictureVocab: (topic) => request(`/api/picture-vocab${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
 
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
+  translationExercise: () => request("/api/translation/today"),
+  reviewTranslation: (vietnamese, translation) =>
+    request("/api/translation/review", { method: "POST", body: JSON.stringify({ vietnamese, translation }) }),
 
   sendFeedback: (message) => request("/api/feedback", { method: "POST", body: JSON.stringify({ message }) }),
 

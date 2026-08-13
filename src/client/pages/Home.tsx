@@ -16,6 +16,7 @@ const TOOL_KEYS = [
   { key: "flashcards", to: "/flashcards", icon: "🗂️", tab: "core" },
   { key: "challenge", to: "/challenge", icon: "🎯", tab: "core" },
   { key: "mistakes", to: "/mistakes", icon: "📝", tab: "core" },
+  { key: "translation", to: "/translation", icon: "🌐", tab: "core" },
   { key: "wordGame", to: "/word-game", icon: "🎮", tab: "games" },
   { key: "listeningGame", to: "/listening-game", icon: "🔊", tab: "games" },
   { key: "matchingGame", to: "/matching-game", icon: "🧩", tab: "games" },
