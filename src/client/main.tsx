@@ -5,6 +5,7 @@ import App from "./App";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import { ToastProvider } from "./ui/Toast";
+import { Toaster } from "sonner";
 import "./main.css";
 
 if ("serviceWorker" in navigator) {
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")!).render(
     <LanguageProvider>
       <ThemeProvider>
         <ToastProvider>
+          <Toaster position="bottom-center" richColors />
           <BrowserRouter>
             <App />
           </BrowserRouter>

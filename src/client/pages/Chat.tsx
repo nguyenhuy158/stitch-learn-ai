@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { api, isUnauthorized } from "../lib/api";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -58,19 +59,28 @@ export default function Chat() {
     }
   }
 
-  async function clearChat() {
-    if (clearing || !window.confirm(t("chat.confirmClear"))) return;
+  async function doClearChat() {
     setClearing(true);
-    setError("");
     try {
       await api.clearChat();
       setMessages([]);
+      toast.success(t("chat.cleared"));
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setClearing(false);
     }
+  }
+
+  function clearChat() {
+    if (clearing) return;
+    // Xac nhan qua toast action/cancel thay window.confirm — dialog native chan
+    // toan bo event loop cua trang (vd. browser automation timeout khi test).
+    toast(t("chat.confirmClear"), {
+      action: { label: t("common.confirm"), onClick: doClearChat },
+      cancel: { label: t("common.cancel"), onClick: () => {} }
+    });
   }
 
   return (
