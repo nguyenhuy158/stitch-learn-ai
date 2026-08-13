@@ -38,6 +38,26 @@ function sanitizeUser(user) {
   return safe;
 }
 
+/**
+ * Goi chung pattern lap lai o gan het route can login: doc cookie auth_token,
+ * verify session, roi bat loi chung. `handler` nhan (userId, request, url, deps)
+ * va tra ve Response. Moi route van giu duoc status/message rieng qua opts.
+ */
+function requireAuth(handler, { label, fallbackMessage = "Request failed", validationStatus = 400, passthroughMessage = false } = {}) {
+  return async (request, url, deps) => {
+    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
+    if (!authToken) return new Response("Unauthorized", { status: 401 });
+    try {
+      const { id: userId } = await deps.sessionPort.verify(authToken);
+      return await handler(userId, request, url, deps);
+    } catch (error) {
+      if (error instanceof ValidationError) return json({ error: error.message }, { status: validationStatus });
+      if (label) console.error(label, error);
+      return json({ error: passthroughMessage ? error.message : fallbackMessage }, { status: 500 });
+    }
+  };
+}
+
 /** Returns a Response for known API routes, or null if the request should fall through to static assets. */
 export async function handleRequest(request, url, deps) {
   const isSecure = url.protocol === "https:";
@@ -82,144 +102,82 @@ export async function handleRequest(request, url, deps) {
   if (lessonMatch) {
     // Generating vocab costs a real Gemini call — require a session so this
     // can't be hit anonymously in a loop to run up the API bill.
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]), userId: id }, deps);
+    return requireAuth(async (userId) => {
+      const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]), userId }, deps);
       return json(detail);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 404 });
-      console.error("Lesson detail error:", error);
-      return json({ error: "Failed to load lesson" }, { status: 500 });
-    }
+    }, { label: "Lesson detail error:", fallbackMessage: "Failed to load lesson", validationStatus: 404 })(request, url, deps);
   }
 
   if (url.pathname === "/api/vocab" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getFlashcards({ userId: id }, deps));
-    } catch (error) {
-      console.error("Flashcards error:", error);
-      return json({ error: "Failed to load flashcards" }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getFlashcards({ userId }, deps)), {
+      label: "Flashcards error:",
+      fallbackMessage: "Failed to load flashcards"
+    })(request, url, deps);
   }
 
   const reviewVocabMatch = url.pathname.match(/^\/api\/vocab\/(\d+)\/review$/);
   if (reviewVocabMatch && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { quality } = await request.json();
-      const result = await reviewVocab({ userId: id, vocabId: Number(reviewVocabMatch[1]), quality }, deps);
+      const result = await reviewVocab({ userId, vocabId: Number(reviewVocabMatch[1]), quality }, deps);
       return json(result);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Review vocab error:", error);
-      return json({ error: "Failed to record review" }, { status: 500 });
-    }
+    }, { label: "Review vocab error:", fallbackMessage: "Failed to record review" })(request, url, deps);
   }
 
   if (url.pathname === "/api/vocab/saved" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getSavedVocab({ userId: id }, deps));
-    } catch (error) {
-      console.error("Saved vocab error:", error);
-      return json({ error: "Failed to load saved vocab" }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getSavedVocab({ userId }, deps)), {
+      label: "Saved vocab error:",
+      fallbackMessage: "Failed to load saved vocab"
+    })(request, url, deps);
   }
 
   const saveVocabMatch = url.pathname.match(/^\/api\/vocab\/(\d+)\/save$/);
   if (saveVocabMatch && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const body = await request.json().catch(() => ({}));
-      await toggleSavedVocab({ userId: id, vocabId: Number(saveVocabMatch[1]), save: body.save !== false }, deps);
+      await toggleSavedVocab({ userId, vocabId: Number(saveVocabMatch[1]), save: body.save !== false }, deps);
       return json({ success: true });
-    } catch (error) {
-      console.error("Toggle saved vocab error:", error);
-      return json({ error: "Failed to update saved vocab" }, { status: 500 });
-    }
+    }, { label: "Toggle saved vocab error:", fallbackMessage: "Failed to update saved vocab" })(request, url, deps);
   }
 
   if (url.pathname === "/api/challenge/today" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getDailyChallenge({ userId: id }, deps));
-    } catch (error) {
-      console.error("Daily challenge error:", error);
-      return json({ error: "Failed to load daily challenge" }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getDailyChallenge({ userId }, deps)), {
+      label: "Daily challenge error:",
+      fallbackMessage: "Failed to load daily challenge"
+    })(request, url, deps);
   }
 
   if (url.pathname === "/api/challenge/complete" && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { score } = await request.json();
-      const result = await completeDailyChallenge({ userId: id, score }, deps);
+      const result = await completeDailyChallenge({ userId, score }, deps);
       return json(result);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Complete daily challenge error:", error);
-      return json({ error: "Failed to complete daily challenge" }, { status: 500 });
-    }
+    }, { label: "Complete daily challenge error:", fallbackMessage: "Failed to complete daily challenge" })(request, url, deps);
   }
 
   if (url.pathname === "/api/rankings" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getRankings({ userId: id }, deps));
-    } catch (error) {
-      console.error("Rankings error:", error);
-      return json({ error: "Failed to load rankings" }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getRankings({ userId }, deps)), {
+      label: "Rankings error:",
+      fallbackMessage: "Failed to load rankings"
+    })(request, url, deps);
   }
 
   if (url.pathname === "/api/rankings/weekly" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getWeeklyRankings({ userId: id }, deps));
-    } catch (error) {
-      console.error("Weekly rankings error:", error);
-      return json({ error: "Failed to load weekly rankings" }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getWeeklyRankings({ userId }, deps)), {
+      label: "Weekly rankings error:",
+      fallbackMessage: "Failed to load weekly rankings"
+    })(request, url, deps);
   }
 
   if (url.pathname === "/api/game/round" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      await deps.sessionPort.verify(authToken);
+    return requireAuth(async () => {
       const difficulty = url.searchParams.get("difficulty") || "easy";
       return json(await getWordGameRound({ difficulty }, deps));
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Word game round error:", error);
-      return json({ error: "Failed to load game round" }, { status: 500 });
-    }
+    }, { label: "Word game round error:", fallbackMessage: "Failed to load game round" })(request, url, deps);
   }
 
   if (url.pathname === "/api/game/words" && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      await deps.sessionPort.verify(authToken);
+    return requireAuth(async () => {
       const count = url.searchParams.get("count");
       const levelsParam = url.searchParams.get("levels");
       const difficultyParam = url.searchParams.get("difficulty");
@@ -229,74 +187,42 @@ export async function handleRequest(request, url, deps) {
           ? DIFFICULTY_LEVELS[difficultyParam]
           : undefined;
       return json(await getWordPool({ count, levels }, deps));
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Word pool error:", error);
-      return json({ error: "Failed to load words" }, { status: 500 });
-    }
+    }, { label: "Word pool error:", fallbackMessage: "Failed to load words" })(request, url, deps);
   }
 
   const gameScoreMatch = url.pathname.match(/^\/api\/games\/([\w-]+)\/score$/);
   if (gameScoreMatch && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { score, correct } = await request.json();
-      const result = await submitGameScore({ userId: id, game: gameScoreMatch[1], score, correct }, deps);
+      const result = await submitGameScore({ userId, game: gameScoreMatch[1], score, correct }, deps);
       return json(result);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Submit game score error:", error);
-      return json({ error: "Failed to submit score" }, { status: 500 });
-    }
+    }, { label: "Submit game score error:", fallbackMessage: "Failed to submit score" })(request, url, deps);
   }
 
   const gameLeaderboardMatch = url.pathname.match(/^\/api\/games\/([\w-]+)\/leaderboard$/);
   if (gameLeaderboardMatch && request.method === "GET") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      const result = await getGameLeaderboard({ userId: id, game: gameLeaderboardMatch[1] }, deps);
+    return requireAuth(async (userId) => {
+      const result = await getGameLeaderboard({ userId, game: gameLeaderboardMatch[1] }, deps);
       return json(result);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Game leaderboard error:", error);
-      return json({ error: "Failed to load leaderboard" }, { status: 500 });
-    }
+    }, { label: "Game leaderboard error:", fallbackMessage: "Failed to load leaderboard" })(request, url, deps);
   }
 
   if (url.pathname === "/api/writing/review" && request.method === "POST") {
     // Same reasoning as lesson detail: a real Gemini call, so require a
     // session instead of letting it be hit anonymously in a loop.
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { text } = await request.json();
-      const result = await reviewWriting({ userId: id, text }, deps);
+      const result = await reviewWriting({ userId, text }, deps);
       return json(result);
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Writing review error:", error);
-      return json({ error: "Failed to review writing" }, { status: 500 });
-    }
+    }, { label: "Writing review error:", fallbackMessage: "Failed to review writing" })(request, url, deps);
   }
 
   if (url.pathname === "/api/feedback" && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { message } = await request.json();
-      await submitFeedback({ userId: id, message }, deps);
+      await submitFeedback({ userId, message }, deps);
       return json({ success: true });
-    } catch (error) {
-      if (error instanceof ValidationError) return json({ error: error.message }, { status: 400 });
-      console.error("Feedback submit error:", error);
-      return json({ error: "Failed to submit feedback" }, { status: 500 });
-    }
+    }, { label: "Feedback submit error:", fallbackMessage: "Failed to submit feedback" })(request, url, deps);
   }
 
   if (url.pathname === "/api/auth/google") {
@@ -353,28 +279,17 @@ export async function handleRequest(request, url, deps) {
   }
 
   if (url.pathname === "/api/chat" && request.method === "POST") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
+    return requireAuth(async (userId) => {
       const { message } = await request.json();
-      const reply = await sendChatMessage({ userId: id, message }, deps);
+      const reply = await sendChatMessage({ userId, message }, deps);
       return json(reply);
-    } catch (error) {
-      console.error("Chat API Error:", error);
-      return json({ error: error.message }, { status: 500 });
-    }
+    }, { label: "Chat API Error:", passthroughMessage: true })(request, url, deps);
   }
 
   if (url.pathname === "/api/chat/history") {
-    const authToken = parseCookie(request.headers.get("Cookie"), "auth_token");
-    if (!authToken) return new Response("Unauthorized", { status: 401 });
-    try {
-      const { id } = await deps.sessionPort.verify(authToken);
-      return json(await getChatHistory({ userId: id }, deps));
-    } catch (error) {
-      return json({ error: error.message }, { status: 500 });
-    }
+    return requireAuth(async (userId) => json(await getChatHistory({ userId }, deps)), {
+      passthroughMessage: true
+    })(request, url, deps);
   }
 
   return null;
