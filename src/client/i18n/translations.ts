@@ -119,6 +119,9 @@ export const translations: Record<string, TranslationEntry> = {
   "challenge.correctSuffix": { vi: "câu đúng — +{n} XP", en: "correct — +{n} XP" },
   "challenge.questionN": { vi: "Câu {n}", en: "Question {n}" },
   "challenge.submit": { vi: "Nộp bài", en: "Submit" },
+  "challenge.yourAnswer": { vi: "Bạn chọn", en: "Your answer" },
+  "challenge.correctAnswer": { vi: "Đáp án đúng", en: "Correct answer" },
+  "challenge.reviewTitle": { vi: "Xem lại", en: "Review" },
 
   "profile.unnamed": { vi: "Chưa đặt tên", en: "No name set" },
   "profile.streak": { vi: "Chuỗi ngày", en: "Streak" },

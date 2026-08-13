@@ -16,7 +16,11 @@ export default function Challenge() {
   const [error, setError] = useState("");
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{ xpAwarded: number; score: number } | null>(null);
+  const [result, setResult] = useState<{
+    xpAwarded: number;
+    score: number;
+    details: { vocabId: number; term: string; chosen: string | undefined; correctMeaning: string; isCorrect: boolean }[];
+  } | null>(null);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -36,11 +40,18 @@ export default function Challenge() {
 
   async function submit() {
     if (!state || submitting) return;
-    const score = state.questions.filter((q) => answers[q.vocabId] === q.correctMeaning).length;
+    const details = state.questions.map((q) => ({
+      vocabId: q.vocabId,
+      term: q.term,
+      chosen: answers[q.vocabId],
+      correctMeaning: q.correctMeaning,
+      isCorrect: answers[q.vocabId] === q.correctMeaning,
+    }));
+    const score = details.filter((d) => d.isCorrect).length;
     setSubmitting(true);
     try {
       const res = await api.completeDailyChallenge(score);
-      setResult({ xpAwarded: res.xpAwarded, score });
+      setResult({ xpAwarded: res.xpAwarded, score, details });
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
       setError(err.message);
@@ -73,6 +84,30 @@ export default function Challenge() {
             </div>
             <div className="mt-1 text-sm text-fg-muted">{t("challenge.correctSuffix", { n: result.xpAwarded })}</div>
           </Card>
+        )}
+
+        {!error && result && (
+          <div className="flex flex-col gap-4">
+            {result.details.map((d, i) => (
+              <Card
+                key={d.vocabId}
+                className={cn("p-4 border", d.isCorrect ? "border-green-500/50" : "border-red-500/50")}
+              >
+                <div className="mb-2.5 text-sm text-fg-muted">{t("challenge.questionN", { n: i + 1 })}</div>
+                <div className="mb-3 text-lg font-bold text-primary-hover">{d.term}</div>
+                <div className="text-sm">
+                  <span className="text-fg-muted">{t("challenge.yourAnswer")}: </span>
+                  <span className={d.isCorrect ? "text-green-600" : "text-red-600"}>{d.chosen ?? "—"}</span>
+                </div>
+                {!d.isCorrect && (
+                  <div className="mt-1 text-sm">
+                    <span className="text-fg-muted">{t("challenge.correctAnswer")}: </span>
+                    <span className="text-green-600">{d.correctMeaning}</span>
+                  </div>
+                )}
+              </Card>
+            ))}
+          </div>
         )}
 
         {!error && state && !state.completed && state.questions.length > 0 && !result && (
