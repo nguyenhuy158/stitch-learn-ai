@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f766e" />
+      <stop offset="1" stop-color="#14b8a6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1080" cy="80" r="120" fill="#ffffff" opacity="0.06" />
+  <circle cx="120" cy="560" r="160" fill="#ffffff" opacity="0.06" />
+
+  <g transform="translate(90 95) scale(1.75)">
+    <ellipse cx="120" cy="216" rx="58" ry="10" fill="#0f766e" opacity="0.12" />
+    <path fill="#0f9488" d="M76 150 Q60 172 78 190 Q92 178 92 158 Z" />
+    <path fill="#0f9488" d="M164 150 Q180 172 162 190 Q148 178 148 158 Z" />
+    <ellipse fill="#14b8a6" cx="120" cy="132" rx="72" ry="66" />
+    <ellipse fill="#0f9488" cx="62" cy="140" rx="16" ry="30" transform="rotate(-18 62 140)" />
+    <ellipse fill="#0f9488" cx="178" cy="140" rx="16" ry="30" transform="rotate(18 178 140)" />
+    <ellipse fill="#f0fdfa" cx="120" cy="146" rx="46" ry="42" />
+    <rect fill="#14213d" x="86" y="52" width="68" height="12" rx="4" transform="rotate(-4 120 58)" />
+    <polygon fill="#14213d" points="70,58 170,58 120,36 20,58" transform="translate(0,4)" />
+    <polygon fill="#14213d" points="66,60 174,60 120,40" />
+    <circle fill="#fbbf24" cx="120" cy="40" r="5" />
+    <line x1="120" y1="40" x2="150" y2="70" stroke="#fbbf24" stroke-width="2" />
+    <rect fill="#fbbf24" x="145" y="68" width="10" height="10" rx="2" transform="rotate(20 150 73)" />
+    <circle fill="#fda4af" opacity="0.7" cx="76" cy="128" r="10" />
+    <circle fill="#fda4af" opacity="0.7" cx="164" cy="128" r="10" />
+    <ellipse fill="#ffffff" cx="98" cy="112" rx="19" ry="22" />
+    <ellipse fill="#ffffff" cx="142" cy="112" rx="19" ry="22" />
+    <circle fill="#14213d" cx="101" cy="116" r="10" />
+    <circle fill="#14213d" cx="145" cy="116" r="10" />
+    <circle fill="#ffffff" cx="97" cy="111" r="3.2" />
+    <circle fill="#ffffff" cx="141" cy="111" r="3.2" />
+    <path fill="#fbbf24" d="M112 128 Q120 140 128 128 Q120 134 112 128 Z" />
+    <path fill="#fbbf24" d="M114 126 Q120 118 126 126 Q120 132 114 126 Z" />
+    <g transform="translate(0 4)">
+      <rect fill="#fffbeb" x="94" y="170" width="30" height="24" rx="2" />
+      <rect fill="#fffbeb" x="116" y="170" width="30" height="24" rx="2" />
+      <rect fill="#f59e0b" x="116" y="170" width="8" height="24" />
+      <line stroke="#d97706" stroke-width="2" stroke-linecap="round" x1="100" y1="178" x2="116" y2="178" />
+      <line stroke="#d97706" stroke-width="2" stroke-linecap="round" x1="100" y1="186" x2="116" y2="186" />
+      <line stroke="#d97706" stroke-width="2" stroke-linecap="round" x1="124" y1="178" x2="140" y2="178" />
+      <line stroke="#d97706" stroke-width="2" stroke-linecap="round" x1="124" y1="186" x2="140" y2="186" />
+    </g>
+    <path fill="#fbbf24" d="M102 196 q4 8 -2 10 q-6 -2 -4 -10 Z" />
+    <path fill="#fbbf24" d="M138 196 q4 8 -2 10 q-6 -2 -4 -10 Z" />
+    <path fill="#fde047" d="M46 84 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 Z" />
+    <path fill="#fde047" d="M196 100 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z" />
+  </g>
+
+  <text x="530" y="290" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="76" fill="#ffffff">AI English</text>
+  <text x="530" y="345" font-family="DejaVu Sans, sans-serif" font-weight="normal" font-size="28" fill="#f0fdfa" opacity="0.9">Học từ vựng &amp; ngữ pháp tiếng Anh cùng AI</text>
+</svg>
