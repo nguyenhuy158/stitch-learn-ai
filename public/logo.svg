@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <style>
+      .body { fill: #14b8a6; }
+      .bodyShade { fill: #0f766e; }
+      .belly { fill: #f0fdfa; }
+      .wing { fill: #0f9488; }
+      .beak { fill: #fbbf24; }
+      .cheek { fill: #fda4af; opacity: 0.7; }
+      .eyeWhite { fill: #ffffff; }
+      .eyeBlack { fill: #14213d; }
+      .shine { fill: #ffffff; }
+      .book { fill: #fffbeb; }
+      .bookSpine { fill: #f59e0b; }
+      .bookLine { stroke: #d97706; stroke-width: 2; stroke-linecap: round; }
+      .cap { fill: #14213d; }
+      .capBtn { fill: #fbbf24; }
+      .sparkle { fill: #fde047; }
+    </style>
+  </defs>
+
+  <!-- soft ground shadow -->
+  <ellipse cx="120" cy="216" rx="58" ry="10" fill="#0f766e" opacity="0.12" />
+
+  <!-- tail -->
+  <path class="bodyShade" d="M76 150 Q60 172 78 190 Q92 178 92 158 Z" />
+  <path class="bodyShade" d="M164 150 Q180 172 162 190 Q148 178 148 158 Z" />
+
+  <!-- body -->
+  <ellipse class="body" cx="120" cy="132" rx="72" ry="66" />
+
+  <!-- wings -->
+  <ellipse class="wing" cx="62" cy="140" rx="16" ry="30" transform="rotate(-18 62 140)" />
+  <ellipse class="wing" cx="178" cy="140" rx="16" ry="30" transform="rotate(18 178 140)" />
+
+  <!-- belly -->
+  <ellipse class="belly" cx="120" cy="146" rx="46" ry="42" />
+
+  <!-- graduation cap -->
+  <g>
+    <rect class="cap" x="86" y="52" width="68" height="12" rx="4" transform="rotate(-4 120 58)" />
+    <polygon class="cap" points="70,58 170,58 120,36 20,58" transform="translate(0,4)" />
+    <polygon class="cap" points="66,60 174,60 120,40" />
+    <circle class="capBtn" cx="120" cy="40" r="5" />
+    <line x1="120" y1="40" x2="150" y2="70" stroke="#fbbf24" stroke-width="2" />
+    <rect class="capBtn" x="145" y="68" width="10" height="10" rx="2" transform="rotate(20 150 73)" />
+  </g>
+
+  <!-- cheeks -->
+  <circle class="cheek" cx="76" cy="128" r="10" />
+  <circle class="cheek" cx="164" cy="128" r="10" />
+
+  <!-- eyes -->
+  <g>
+    <ellipse class="eyeWhite" cx="98" cy="112" rx="19" ry="22" />
+    <ellipse class="eyeWhite" cx="142" cy="112" rx="19" ry="22" />
+    <circle class="eyeBlack" cx="101" cy="116" r="10" />
+    <circle class="eyeBlack" cx="145" cy="116" r="10" />
+    <circle class="shine" cx="97" cy="111" r="3.2" />
+    <circle class="shine" cx="141" cy="111" r="3.2" />
+  </g>
+
+  <!-- beak -->
+  <path class="beak" d="M112 128 Q120 140 128 128 Q120 134 112 128 Z" />
+  <path class="beak" d="M114 126 Q120 118 126 126 Q120 132 114 126 Z" />
+
+  <!-- book held in front -->
+  <g transform="translate(0 4)">
+    <rect class="book" x="94" y="170" width="30" height="24" rx="2" />
+    <rect class="book" x="116" y="170" width="30" height="24" rx="2" />
+    <rect class="bookSpine" x="116" y="170" width="8" height="24" />
+    <line class="bookLine" x1="100" y1="178" x2="116" y2="178" />
+    <line class="bookLine" x1="100" y1="186" x2="116" y2="186" />
+    <line class="bookLine" x1="124" y1="178" x2="140" y2="178" />
+    <line class="bookLine" x1="124" y1="186" x2="140" y2="186" />
+  </g>
+
+  <!-- little feet -->
+  <path class="beak" d="M102 196 q4 8 -2 10 q-6 -2 -4 -10 Z" />
+  <path class="beak" d="M138 196 q4 8 -2 10 q-6 -2 -4 -10 Z" />
+
+  <!-- sparkles -->
+  <path class="sparkle" d="M46 84 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 Z" />
+  <path class="sparkle" d="M196 100 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 Z" />
+</svg>
