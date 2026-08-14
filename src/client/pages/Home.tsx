@@ -4,7 +4,7 @@ import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
 import { Card } from "../ui/Card";
 import { Tabs } from "../ui/Tabs";
-import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, SearchIcon, StarIcon } from "../components/icons";
+import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, SearchIcon, StarIcon, TranslateIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Lesson = { id: number; title: string; sub_title?: string; status?: string };
