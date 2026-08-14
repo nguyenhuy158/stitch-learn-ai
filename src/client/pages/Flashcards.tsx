@@ -8,6 +8,7 @@ import { useToast } from "../ui/Toast";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
 import { transcribeToIpa } from "../lib/ipa";
+import { StarIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
@@ -246,7 +247,7 @@ export default function Flashcards() {
                   savedIds.has(current.id) ? "bg-accent text-white" : "bg-surface"
                 )}
               >
-                {savedIds.has(current.id) ? "★" : "☆"}
+                <StarIcon fill={savedIds.has(current.id) ? "currentColor" : "none"} />
               </button>
             </div>
             {!flipped && (

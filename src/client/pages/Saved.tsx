@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
+import { StarIcon } from "../components/icons";
 import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -58,7 +59,7 @@ export default function Saved() {
                   title={t("saved.unsave")}
                   className="shrink-0 border-none bg-transparent text-xl text-fg-muted"
                 >
-                  ★
+                  <StarIcon fill="currentColor" />
                 </button>
               </Card>
             ))}

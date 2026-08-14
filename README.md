@@ -2,7 +2,7 @@
 
 Cloudflare Worker (full-stack): serves static frontend assets + backend API.
 
-Backend được lấy lại từ bản đã deploy trên Cloudflare (bundled bằng esbuild) qua Cloudflare API, sau đó dịch ngược + tách lại thành hexagonal architecture (xem `## Cấu trúc` dưới) — **không phải source gốc 1:1** (source gốc là 1 file `src/worker.ts` duy nhất). Không có React/Vite source cho frontend, không có D1 migration SQL.
+Backend ban đầu được lấy lại từ bản đã deploy trên Cloudflare (bundled bằng esbuild) qua Cloudflare API, sau đó dịch ngược + tách lại thành hexagonal architecture (xem `## Cấu trúc` dưới). Frontend là React app thật trong `src/client` (Vite + Tailwind), build ra `public/` qua `pnpm build`. D1 schema có migration SQL đầy đủ trong `data/migrations/`.
 
 ## Cấu trúc (hexagonal)
 ```
@@ -85,15 +85,10 @@ Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:
 - Yêu cầu: worker này phải chạy dưới subdomain `*.huyab.click` (đang là `en.huyab.click`) để cookie share được
 - Không cần quản lý `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` ở repo này nữa — SSO giữ luôn
 
-## Cần bù lại để deploy được từ repo này
-- `wrangler.jsonc`: `database_id` đã điền đúng D1 thật (`stitch-db`)
-- Secrets (không lấy được từ Cloudflare API, cần set lại bằng `wrangler secret put`):
-  - `JWT_SECRET`
-  - `GEMINI_API_KEY`
-- D1 schema (`users`, `chat_messages`, bảng lessons...) chưa có migration file — cần dump từ D1 thật hoặc viết lại
-- `public/` hiện chỉ có file placeholder — frontend build output gốc không lấy lại được, cần build lại và bỏ vào đây
+## Secrets cần set (không lưu trong repo)
+Set bằng `wrangler secret put <tên>`:
+- `JWT_SECRET`
+- `GEMINI_API_KEY`
 
 ## Deploy
-```
-wrangler deploy
-```
+Không chạy `wrangler deploy` local. Push lên `origin/main` là Cloudflare tự build & deploy (Workers Builds CI/CD).
