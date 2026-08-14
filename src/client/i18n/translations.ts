@@ -43,6 +43,7 @@ export const translations: Record<string, TranslationEntry> = {
   "appearance.dark": { vi: "Tối", en: "Dark" },
   "appearance.darkDesc": { vi: "Nền tối, đỡ chói mắt ban đêm.", en: "Dark background, easier on the eyes at night." },
   "appearance.accentLabel": { vi: "Màu chủ đạo", en: "Accent color" },
+  "appearance.accent.lavender": { vi: "Lavender (AI-Native)", en: "Lavender (AI-Native)" },
   "appearance.accent.teal": { vi: "Teal (mặc định)", en: "Teal (default)" },
   "appearance.accent.ocean": { vi: "Ocean", en: "Ocean" },
   "appearance.accent.sunset": { vi: "Sunset", en: "Sunset" },

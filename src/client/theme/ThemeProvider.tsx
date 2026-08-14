@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 /** Mau nhan dien (accent). Moi accent co ca ban sang va ban toi, xem ThemeMode. */
-export type AppTheme = "teal" | "ocean" | "sunset";
+export type AppTheme = "teal" | "ocean" | "sunset" | "lavender";
 /** Sang/toi, doc lap voi accent — chon "ocean" van co the xem ban dark. */
 export type ThemeMode = "light" | "dark";
 
 const THEMES: { id: AppTheme; label: string; swatch: string }[] = [
+  { id: "lavender", label: "Lavender (AI-Native)", swatch: "#7c3aed" },
   { id: "teal", label: "Teal (mặc định)", swatch: "#0f766e" },
   { id: "ocean", label: "Ocean", swatch: "#216d94" },
   { id: "sunset", label: "Sunset", swatch: "#a64f36" },
@@ -25,10 +26,10 @@ type ThemeCtx = {
 const Ctx = createContext<ThemeCtx | null>(null);
 
 function readInitialTheme(): AppTheme {
-  if (typeof window === "undefined") return "teal";
+  if (typeof window === "undefined") return "lavender";
   const stored = window.localStorage.getItem(THEME_KEY);
   if (stored && THEMES.some((t) => t.id === stored)) return stored as AppTheme;
-  return "teal";
+  return "lavender";
 }
 
 function readInitialMode(): ThemeMode {
