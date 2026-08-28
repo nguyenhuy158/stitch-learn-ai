@@ -118,6 +118,19 @@ export default function WordGame() {
   const over = finished || stopped;
   const q = round && !over ? round.questions[index] : null;
 
+  // Ban phim 1-4 de chon nhanh tren may tinh.
+  useEffect(() => {
+    if (!q || picked !== null || stopped) return;
+    function onKey(e: KeyboardEvent) {
+      const n = Number(e.key);
+      if (n >= 1 && n <= q!.choices.length) answer(q!.choices[n - 1]);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, picked, stopped]);
+
+
   useEffect(() => {
     if (!over || !round || submittedRef.current) return;
     submittedRef.current = true;
@@ -165,7 +178,7 @@ export default function WordGame() {
               <SpeakButton text={q.term} size="md" />
             </Card>
             <div className="flex flex-col gap-2">
-              {q.choices.map((choice) => {
+              {q.choices.map((choice, i) => {
                 const isPicked = picked !== null && choice === picked;
                 const isCorrect = picked !== null && choice === q.correctMeaning;
                 return (
@@ -175,13 +188,16 @@ export default function WordGame() {
                     disabled={picked !== null}
                     onClick={() => answer(choice)}
                     className={cn(
-                      "min-h-11 rounded-ui border px-3.5 py-3 text-left text-sm transition active:scale-[0.99]",
+                      "flex min-h-11 items-center gap-2.5 rounded-ui border px-3.5 py-3 text-left text-sm transition active:scale-[0.99]",
                       isCorrect && "border-success bg-success-soft",
                       isPicked && !isCorrect && "border-danger bg-danger-soft",
                       !isPicked && !isCorrect && "border-border bg-surface"
                     )}
                   >
-                    {choice}
+                    <kbd className="hidden h-5 w-5 shrink-0 items-center justify-center rounded border border-border text-xs text-fg-muted sm:flex">
+                      {i + 1}
+                    </kbd>
+                    <span>{choice}</span>
                   </button>
                 );
               })}
