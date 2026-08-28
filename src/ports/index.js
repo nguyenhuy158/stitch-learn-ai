@@ -19,7 +19,7 @@
  * @property {(day: string) => Promise<Array<{id: string, email: string, name: string|null, streak: number}>>} listInactiveToday
  *
  * @typedef {Object} ChatRepository
- * @property {(userId: string, limit: number) => Promise<Array<{role: string, parts: Array<{text: string}>}>>} listRecent
+ * @property {(userId: string, limit: number) => Promise<Array<{role: string, content: string}>>} listRecent
  * @property {(userId: string, userMessage: string, modelMessage: string, metadata: object) => Promise<void>} appendExchange
  * @property {(userId: string, limit: number) => Promise<object[]>} listAll
  * @property {(userId: string) => Promise<void>} clearAll

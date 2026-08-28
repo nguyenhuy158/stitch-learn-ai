@@ -6,8 +6,8 @@ export function createD1ChatRepository(db) {
         "SELECT role, content FROM chat_messages WHERE user_id = ? ORDER BY created_at DESC LIMIT ?"
       ).bind(userId, limit).all();
       return results.reverse().map((msg) => ({
-        role: msg.role === "user" ? "user" : "model",
-        parts: [{ text: msg.content }]
+        role: msg.role === "user" ? "user" : "assistant",
+        content: msg.content
       }));
     },
     async appendExchange(userId, userMessage, modelMessage, metadata) {

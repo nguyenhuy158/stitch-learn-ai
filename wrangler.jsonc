@@ -18,6 +18,7 @@
       "database_id": "90b7f345-12cd-45de-b975-6836a0177e12"
     }
   ],
+  "ai": { "binding": "AI" },
   "services": [{ "binding": "MAILER", "service": "mailer" }],
   "r2_buckets": [
     { "binding": "VOCAB_IMAGES", "bucket_name": "ai-english-vocab" }
@@ -27,7 +28,12 @@
     "crons": ["30 13 * * *"]
   },
   "vars": {
-    "GEMINI_MODEL": "gemini-2.5-flash",
+    // Model Workers AI cho Mochi. Doi sang "@cf/meta/llama-3.1-8b-instruct"
+    // neu can re hon (free tier 10k neurons/ngay).
+    "MOCHI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    // Ten AI Gateway (phai tao truoc trong dashboard, cung account). Bo trong
+    // = goi Workers AI thang, khong co log/cache cua gateway.
+    "AI_GATEWAY": "",
     "SSO_ISSUER": "https://auth.huyab.click",
     "SSO_AUDIENCE": "huyab.click"
   }

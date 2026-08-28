@@ -10,6 +10,7 @@ import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js"
 import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
+import { createMochiClient } from "./adapters/mochi/client.js";
 import { createMochiTutor } from "./adapters/mochi/tutor.js";
 import { createMochiVocabGenerator } from "./adapters/mochi/vocabGenerator.js";
 import { createMochiGrammarContentGenerator } from "./adapters/mochi/grammarContentGenerator.js";
@@ -22,6 +23,11 @@ import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
 
 function buildDeps(env) {
+  const mochi = createMochiClient({
+    ai: env.AI,
+    model: env.MOCHI_MODEL || "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    gateway: env.AI_GATEWAY
+  });
   return {
     env,
     userRepository: createD1UserRepository(env.DB),
@@ -38,11 +44,11 @@ function buildDeps(env) {
     ssoPort: env.SSO_ISSUER
       ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
       : null,
-    aiTutorPort: createMochiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    vocabGeneratorPort: createMochiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    grammarContentGeneratorPort: createMochiGrammarContentGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    writingReviewerPort: createMochiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    translationExercisePort: createMochiTranslationExercise({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    aiTutorPort: createMochiTutor(mochi),
+    vocabGeneratorPort: createMochiVocabGenerator(mochi),
+    grammarContentGeneratorPort: createMochiGrammarContentGenerator(mochi),
+    writingReviewerPort: createMochiWritingReviewer(mochi),
+    translationExercisePort: createMochiTranslationExercise(mochi),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
     mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)

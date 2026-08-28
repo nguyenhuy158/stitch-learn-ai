@@ -7,7 +7,10 @@ import { StarIcon } from "../components/icons";
 import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
-type VocabItem = { id: number; term: string; meaning: string; example?: string; lesson_title: string };
+type VocabItem = { id: number; term: string; meaning: string; example?: string; lesson_title: string; tags?: string | null };
+
+/** Tag ma Mochi gan cho tu no tu chon them o trang Dich cau (khop AI_WORD_TAG ben server). */
+const AI_WORD_TAG = "ai-translation";
 
 export default function Saved() {
   const navigate = useNavigate();
@@ -51,7 +54,14 @@ export default function Saved() {
                   <div className="text-base font-bold text-primary-hover">{item.term}</div>
                   <div className="mt-0.5 text-xs font-semibold text-fg">{item.meaning}</div>
                   {item.example && <div className="mt-1.5 text-xs italic text-fg-muted">"{item.example}"</div>}
-                  <div className="mt-1.5 text-xs uppercase text-fg-muted">{item.lesson_title}</div>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs uppercase text-fg-muted">
+                    {item.tags?.split(",").includes(AI_WORD_TAG) && (
+                      <span className="rounded-full bg-primary-soft px-2 py-0.5 font-semibold normal-case text-primary">
+                        {t("saved.aiTag")}
+                      </span>
+                    )}
+                    {item.lesson_title}
+                  </div>
                 </div>
                 <button
                   type="button"

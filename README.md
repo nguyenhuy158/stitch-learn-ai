@@ -15,7 +15,7 @@ src/
   adapters/          implement ports, chứa mọi I/O thật
     d1/              D1 queries (user/chat/lesson repository)
     jose/            ký/verify JWT nội bộ + verify JWKS remote của SSO
-    mochi/           gọi Gemini API (persona "Mochi"), build prompt
+    mochi/           gọi Workers AI qua binding `env.AI` (persona "Mochi"), build prompt
     http/            router.js (map route -> usecase) + cookies.js
   worker.js          composition root: wire adapters vào usecases, export fetch handler
 ```
@@ -26,7 +26,7 @@ src/
 - Streak học tập
 - `/api/lessons` — danh sách bài học (D1)
 - `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Mochi lần đầu rồi cache vào D1 (`lesson_vocab`)
-- `/api/chat` — chat luyện ngôn ngữ, gọi Gemini API (model mặc định `gemini-2.5-flash`), lưu lịch sử D1
+- `/api/chat` — chat luyện ngôn ngữ, gọi Workers AI (model mặc định `@cf/meta/llama-3.3-70b-instruct-fp8-fast`), lưu lịch sử D1
 - `/api/chat/history`
 - `/api/user/update`
 - `/api/writing/review` — sửa lỗi văn viết tiếng Anh qua Mochi (câu đã sửa + chi tiết từng lỗi + nhận xét chung), không lưu D1
@@ -88,7 +88,10 @@ Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:
 ## Secrets cần set (không lưu trong repo)
 Set bằng `wrangler secret put <tên>`:
 - `JWT_SECRET`
-- `GEMINI_API_KEY`
+
+Không cần API key cho AI: Mochi chạy trên Workers AI qua binding `env.AI`.
+Vars trong `wrangler.jsonc`: `MOCHI_MODEL` (đổi model), `AI_GATEWAY` (tên AI
+Gateway đã tạo sẵn, để trống thì gọi thẳng).
 
 ## Deploy
 Không chạy `wrangler deploy` local. Push lên `origin/main` là Cloudflare tự build & deploy (Workers Builds CI/CD).

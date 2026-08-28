@@ -1,5 +1,25 @@
 /** Generates an original grammar explanation for a lesson topic via Mochi, as structured JSON. */
-export function createMochiGrammarContentGenerator({ apiKey, model }) {
+const SCHEMA = {
+  type: "object",
+  properties: {
+    summary: { type: "string" },
+    sections: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          heading: { type: "string" },
+          explanation: { type: "string" },
+          examples: { type: "array", items: { type: "string" } }
+        },
+        required: ["heading", "explanation", "examples"]
+      }
+    }
+  },
+  required: ["summary", "sections"]
+};
+
+export function createMochiGrammarContentGenerator({ askJson }) {
   return {
     async generate({ title, subTitle }) {
       const prompt = `You are writing an English grammar lesson for Vietnamese learners, for the grammar point titled "${title}" (category: ${subTitle || ""}).
@@ -13,24 +33,7 @@ Return JSON only, in this exact shape:
   ]
 }
 Include 2 to 4 sections, each with 2 to 4 examples.`;
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { response_mime_type: "application/json" }
-        })
-      });
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Mochi grammar content generation error:", errorText);
-        throw new Error("Failed to generate lesson content");
-      }
-      const data = await res.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("Empty response from AI");
-      const parsed = JSON.parse(text);
+      const parsed = await askJson(prompt, SCHEMA, { label: "Mochi grammar content generation error:" });
       if (!Array.isArray(parsed.sections)) throw new Error("Malformed grammar content response");
       return parsed;
     }

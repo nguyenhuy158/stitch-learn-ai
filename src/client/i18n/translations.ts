@@ -57,6 +57,7 @@ export const translations: Record<string, TranslationEntry> = {
   "saved.title": { vi: "Từ vựng đã lưu", en: "Saved Vocabulary" },
   "saved.loadError": { vi: "Không tải được: ", en: "Couldn't load: " },
   "saved.empty": { vi: "Chưa lưu từ vựng nào. Vào Thẻ ghi nhớ và bấm ★ để lưu.", en: "No saved words yet. Go to Flashcards and tap ★ to save one." },
+  "saved.aiTag": { vi: "Mochi gợi ý", en: "Mochi pick" },
   "saved.unsave": { vi: "Bỏ lưu", en: "Remove from saved" },
 
   "mistakes.title": { vi: "Ôn lỗi sai", en: "Review Mistakes" },
@@ -139,6 +140,7 @@ export const translations: Record<string, TranslationEntry> = {
   "translation.historyEmpty": { vi: "Chưa có câu nào. Dịch câu đầu tiên đi!", en: "Nothing yet. Try your first sentence!" },
   "translation.historyPerfect": { vi: "Không lỗi", en: "No mistakes" },
   "translation.historyErrors": { vi: "{n} lỗi", en: "{n} mistakes" },
+  "translation.newWordTitle": { vi: "Từ mới đã thêm vào bộ sưu tập", en: "New word added to your collection" },
   "translation.waitingResult": { vi: "Kết quả chấm sẽ hiện ở đây.", en: "Your graded result will appear here." },
   "translation.noErrors": { vi: "Bản dịch rất chính xác. Làm tốt lắm!", en: "Great translation. Well done!" },
 

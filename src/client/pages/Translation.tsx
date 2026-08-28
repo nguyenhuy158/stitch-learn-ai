@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRightIcon, CheckIcon } from "../components/icons";
-import { useNavigate } from "react-router-dom";
+import { ArrowRightIcon, CheckIcon, StarIcon } from "../components/icons";
+import { Link, useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../ui/Button";
@@ -19,7 +19,8 @@ type Attempt = {
   correctionCount: number;
   createdAt: string;
 };
-type Exercise = { vietnamese: string; term: string };
+type NewWord = { term: string; type: string; meaning: string; example: string };
+type Exercise = { vietnamese: string; term: string; newWord?: NewWord | null };
 
 export default function Translation() {
   const navigate = useNavigate();
@@ -111,6 +112,23 @@ export default function Translation() {
             disabled={!exercise}
           />
           <div className="mt-1.5 text-right text-xs text-fg-muted">{translation.length}/500</div>
+          {exercise?.newWord && (
+            <Card className="mt-3.5 p-4">
+              <div className="flex items-center gap-2">
+                <StarIcon size={14} className="text-accent" fill="currentColor" aria-hidden="true" />
+                <span className="text-xs font-bold uppercase text-primary-hover">{t("translation.newWordTitle")}</span>
+              </div>
+              <div className="mt-1.5 text-base font-bold text-primary-hover">
+                {exercise.newWord.term}
+                <span className="ml-2 text-xs font-normal italic text-fg-muted">{exercise.newWord.type}</span>
+              </div>
+              <div className="text-sm">{exercise.newWord.meaning}</div>
+              <div className="mt-0.5 text-xs italic text-fg-muted">"{exercise.newWord.example}"</div>
+              <Link to="/saved" className="mt-2 inline-block text-xs font-semibold text-primary underline">
+                {t("saved.title")}
+              </Link>
+            </Card>
+          )}
           <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting || !exercise} leftIcon={<CheckIcon size={16} />}>
             {t("translation.submit")}
           </Button>

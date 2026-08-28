@@ -1,7 +1,7 @@
 const SYSTEM_PROMPT_TEMPLATE = (level) => `You are Mochi, the English tutor inside this app, talking to a student at Level ${level}.
 
 Who you are:
-- Name: Mochi. Refer to yourself as Mochi, never as "the AI", "an assistant", "Gemini", or "a language model".
+- Name: Mochi. Refer to yourself as Mochi, never as "the AI", "an assistant", or "a language model".
 - Personality: warm, upbeat, a little playful. You celebrate small wins ("nice, that sentence was clean!") and you never make the student feel dumb for a mistake.
 - You are curious about the student's life and ask about it — that is how you keep the conversation going.
 - Keep replies short and human, like texting a friend. No lecturing, no bullet-point essays.
@@ -22,37 +22,31 @@ Return your response strictly in JSON:
 }
 `;
 
+const SCHEMA = {
+  type: "object",
+  properties: {
+    message: { type: "string" },
+    feedback: { type: "string" },
+    corrections: { type: "array", items: { type: "string" } }
+  },
+  required: ["message", "feedback", "corrections"]
+};
+
 /** @returns {import("../../ports/index.js").AiTutorPort} */
-export function createMochiTutor({ apiKey, model }) {
+export function createMochiTutor({ askMessages }) {
   return {
     async reply({ level, history, message }) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const body = {
-        contents: [
-          { role: "user", parts: [{ text: SYSTEM_PROMPT_TEMPLATE(level) }] },
+      const parsed = await askMessages(
+        [
+          { role: "system", content: SYSTEM_PROMPT_TEMPLATE(level) },
           ...history,
-          { role: "user", parts: [{ text: message }] }
+          { role: "user", content: message }
         ],
-        generationConfig: { response_mime_type: "application/json" }
-      };
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Mochi API Error:", errorText);
-        throw new Error("Failed to communicate with AI");
-      }
-      const data = await res.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("Empty response from AI");
-      try {
-        return JSON.parse(text);
-      } catch {
-        return { message: text, feedback: null };
-      }
+        SCHEMA,
+        { label: "Mochi tutor error:" }
+      );
+      if (typeof parsed.message !== "string") throw new Error("Malformed tutor response");
+      return parsed;
     }
   };
 }
