@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Textarea } from "../ui/Input";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { ClickableSentence } from "../components/ClickableSentence";
 
 type Correction = { original: string; suggestion: string; explanation: string };
 type Result = { corrected: string; overallFeedback: string; corrections: Correction[] };
@@ -141,7 +142,7 @@ export default function Translation() {
             <div className="mb-2 text-xs font-bold uppercase text-primary-hover">
               {t("translation.correctedTitle")}
             </div>
-            <Card className="p-4 text-sm leading-relaxed">{result.corrected}</Card>
+            <ClickableSentence text={result.corrected} />
 
             <div className="mb-2 mt-5 text-xs font-bold uppercase text-primary-hover">
               {t("translation.feedbackTitle")}

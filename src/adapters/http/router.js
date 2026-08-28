@@ -18,6 +18,7 @@ import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
+import { lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
@@ -143,6 +144,25 @@ export async function handleRequest(request, url, deps) {
       await toggleSavedVocab({ userId, vocabId: Number(saveVocabMatch[1]), save: body.save !== false }, deps);
       return json({ success: true });
     }, { label: "Toggle saved vocab error:", fallbackMessage: "Failed to update saved vocab" })(request, url, deps);
+  }
+
+  // Tra cuu 1 tu bat ky (bam vao tu trong ban dich tham khao). Ton 1 call Mochi
+  // nen bat buoc dang nhap.
+  if (url.pathname === "/api/word/lookup" && request.method === "GET") {
+    return requireAuth(async () => {
+      const term = (url.searchParams.get("term") || "").trim();
+      if (!term) throw new ValidationError("Missing term");
+      return json(await lookupWord({ term, context: url.searchParams.get("context") }, deps));
+    }, { label: "Word lookup error:", fallbackMessage: "Failed to look up word" })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/word/save" && request.method === "POST") {
+    return requireAuth(async (userId) => {
+      const word = await request.json().catch(() => ({}));
+      if (!word.term || !word.meaning) throw new ValidationError("Missing word");
+      await saveLookedUpWord({ userId, word }, deps);
+      return json({ success: true });
+    }, { label: "Save looked-up word error:", fallbackMessage: "Failed to save word" })(request, url, deps);
   }
 
   if (url.pathname === "/api/challenge/today" && request.method === "GET") {

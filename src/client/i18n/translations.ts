@@ -11,6 +11,12 @@ export const translations: Record<string, TranslationEntry> = {
 
   "audio.speak": { vi: "Nghe phát âm", en: "Hear pronunciation" },
 
+  "word.loading": { vi: "Đang tra từ...", en: "Looking it up..." },
+  "word.synonyms": { vi: "Đồng nghĩa:", en: "Synonyms:" },
+  "word.antonyms": { vi: "Trái nghĩa:", en: "Antonyms:" },
+  "word.save": { vi: "Lưu vào bộ sưu tập", en: "Save to collection" },
+  "word.saved": { vi: "Đã lưu", en: "Saved" },
+
   "nav.home": { vi: "Trang chủ", en: "Home" },
   "nav.learn": { vi: "Học", en: "Learn" },
   "nav.chat": { vi: "Mochi", en: "Mochi" },

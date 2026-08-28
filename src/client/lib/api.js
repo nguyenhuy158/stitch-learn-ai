@@ -46,6 +46,10 @@ export const api = {
   saveVocab: (id, save) => request(`/api/vocab/${id}/save`, { method: "POST", body: JSON.stringify({ save }) }),
   reviewVocab: (id, quality) => request(`/api/vocab/${id}/review`, { method: "POST", body: JSON.stringify({ quality }) }),
 
+  lookupWord: (term, context) =>
+    request(`/api/word/lookup?term=${encodeURIComponent(term)}${context ? `&context=${encodeURIComponent(context)}` : ""}`),
+  saveLookedUpWord: (word) => request("/api/word/save", { method: "POST", body: JSON.stringify(word) }),
+
   rankings: () => request("/api/rankings"),
   weeklyRankings: () => request("/api/rankings/weekly"),
 

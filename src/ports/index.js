@@ -61,12 +61,16 @@
  * @property {(input: {term: string, meaning: string, example: string|null}) => Promise<{vietnamese: string}>} generate
  * @property {(input: {vietnamese: string, translation: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
  *
+ * @typedef {Object} WordLookupPort
+ * @property {(input: {term: string, context?: string|null}) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}>} lookup
+ *
  * @typedef {Object} FeedbackRepository
  * @property {(userId: string, message: string) => Promise<void>} create
  *
  * @typedef {Object} SavedVocabRepository
  * @property {(userId: string, vocabId: number) => Promise<void>} save
  * @property {(userId: string, vocabId: number) => Promise<void>} unsave
+ * @property {(userId: string, word: {term: string, meaning: string, type?: string, example?: string}, tag: string) => Promise<number|null>} saveGeneratedWord
  * @property {(userId: string) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listForUser
  *
  * @typedef {Object} VocabReviewRepository

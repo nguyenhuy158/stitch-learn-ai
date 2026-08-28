@@ -16,6 +16,7 @@ import { createMochiVocabGenerator } from "./adapters/mochi/vocabGenerator.js";
 import { createMochiGrammarContentGenerator } from "./adapters/mochi/grammarContentGenerator.js";
 import { createMochiWritingReviewer } from "./adapters/mochi/writingReviewer.js";
 import { createMochiTranslationExercise } from "./adapters/mochi/translationExercise.js";
+import { createMochiWordLookup } from "./adapters/mochi/wordLookup.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
@@ -49,6 +50,7 @@ function buildDeps(env) {
     grammarContentGeneratorPort: createMochiGrammarContentGenerator(mochi),
     writingReviewerPort: createMochiWritingReviewer(mochi),
     translationExercisePort: createMochiTranslationExercise(mochi),
+    wordLookupPort: createMochiWordLookup(mochi),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
     mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)
