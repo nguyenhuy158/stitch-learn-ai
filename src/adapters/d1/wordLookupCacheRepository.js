@@ -5,7 +5,7 @@ export function createD1WordLookupCacheRepository(db) {
       const row = await db.prepare("SELECT * FROM word_lookups WHERE term = ?").bind(term).first();
       if (!row) return null;
       return {
-        term: row.term,
+        term: row.base_term,
         type: row.type,
         meaning: row.meaning,
         example: row.example,
@@ -14,13 +14,14 @@ export function createD1WordLookupCacheRepository(db) {
         antonyms: row.antonyms ? row.antonyms.split(",") : []
       };
     },
-    async put(word, createdAt) {
+    async put(key, word, createdAt) {
       await db
         .prepare(
-          `INSERT INTO word_lookups (term, type, meaning, example, synonyms, antonyms, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(term) DO NOTHING`
+          `INSERT INTO word_lookups (term, base_term, type, meaning, example, synonyms, antonyms, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(term) DO NOTHING`
         )
         .bind(
+          key,
           word.term,
           word.type ?? "",
           word.meaning,

@@ -20,7 +20,7 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   const word = await wordLookupPort.lookup({ term, context });
   // Cache hong khong duoc lam hong ket qua da co.
   try {
-    await wordLookupCacheRepository.put(word, new Date().toISOString());
+    await wordLookupCacheRepository.put(key, word, new Date().toISOString());
   } catch (err) {
     console.error("Cache word lookup error:", err);
   }

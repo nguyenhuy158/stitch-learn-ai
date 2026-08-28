@@ -23,9 +23,9 @@ test("cache miss thi goi AI roi luu lai", async () => {
     { term: "coat" },
     {
       wordLookupPort: { lookup: async () => WORD },
-      wordLookupCacheRepository: { get: async () => null, put: async (w) => saved.push(w) }
+      wordLookupCacheRepository: { get: async () => null, put: async (key, w) => saved.push([key, w]) }
     }
   );
   assert.deepEqual(result, WORD);
-  assert.deepEqual(saved, [WORD]);
+  assert.deepEqual(saved, [["coat", WORD]]);
 });
