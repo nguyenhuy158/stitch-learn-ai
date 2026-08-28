@@ -9,11 +9,11 @@ import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js"
 import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
-import { createGeminiTutor } from "./adapters/gemini/tutor.js";
-import { createGeminiVocabGenerator } from "./adapters/gemini/vocabGenerator.js";
-import { createGeminiGrammarContentGenerator } from "./adapters/gemini/grammarContentGenerator.js";
-import { createGeminiWritingReviewer } from "./adapters/gemini/writingReviewer.js";
-import { createGeminiTranslationExercise } from "./adapters/gemini/translationExercise.js";
+import { createMochiTutor } from "./adapters/mochi/tutor.js";
+import { createMochiVocabGenerator } from "./adapters/mochi/vocabGenerator.js";
+import { createMochiGrammarContentGenerator } from "./adapters/mochi/grammarContentGenerator.js";
+import { createMochiWritingReviewer } from "./adapters/mochi/writingReviewer.js";
+import { createMochiTranslationExercise } from "./adapters/mochi/translationExercise.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
@@ -36,11 +36,11 @@ function buildDeps(env) {
     ssoPort: env.SSO_ISSUER
       ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
       : null,
-    aiTutorPort: createGeminiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    vocabGeneratorPort: createGeminiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    grammarContentGeneratorPort: createGeminiGrammarContentGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    writingReviewerPort: createGeminiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
-    translationExercisePort: createGeminiTranslationExercise({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    aiTutorPort: createMochiTutor({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    vocabGeneratorPort: createMochiVocabGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    grammarContentGeneratorPort: createMochiGrammarContentGenerator({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    writingReviewerPort: createMochiWritingReviewer({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
+    translationExercisePort: createMochiTranslationExercise({ apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL || "gemini-2.5-flash" }),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
     mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)

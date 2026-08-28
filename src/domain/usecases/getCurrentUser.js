@@ -1,6 +1,6 @@
 import { computeStreak, localDate, weekProgress } from "../streak.js";
 
-const DEFAULT_GEMINI_CONFIG = { voice: "neutral", speed: 1, personality: "friendly" };
+const DEFAULT_TUTOR_CONFIG = { voice: "neutral", speed: 1, personality: "friendly" };
 
 /** Enough history to cover both the current streak and this week's seven dots. */
 const HISTORY_DAYS = 400;
@@ -39,7 +39,7 @@ export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, sso
       user.streak = computeStreak(days, today);
       user.week = weekProgress(days, today);
       user.last_active_date = days[0] || null;
-      normalizeGeminiConfig(user);
+      normalizeTutorConfig(user);
     }
     return { user, mintedToken };
   } catch {
@@ -47,10 +47,10 @@ export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, sso
   }
 }
 
-function normalizeGeminiConfig(user) {
+function normalizeTutorConfig(user) {
   try {
-    user.gemini_config = JSON.parse(user.gemini_config) || DEFAULT_GEMINI_CONFIG;
+    user.gemini_config = JSON.parse(user.gemini_config) || DEFAULT_TUTOR_CONFIG;
   } catch {
-    user.gemini_config = DEFAULT_GEMINI_CONFIG;
+    user.gemini_config = DEFAULT_TUTOR_CONFIG;
   }
 }

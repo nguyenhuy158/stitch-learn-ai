@@ -32,7 +32,7 @@ export function createD1LessonRepository(db) {
       }
     },
     // Flashcards only ever show vocab that's already been generated (visiting
-    // a lesson at least once) — this never triggers a new Gemini call, and
+    // a lesson at least once) — this never triggers a new Mochi call, and
     // never includes locked lessons.
     async listAllVocab() {
       const { results } = await db

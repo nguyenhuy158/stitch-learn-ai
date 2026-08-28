@@ -1,18 +1,20 @@
-/** Generates a Vietnamese practice sentence and grades the learner's English translation, via Gemini. */
-export function createGeminiTranslationExercise({ apiKey, model }) {
-  async function callGemini(prompt) {
+/** Generates a Vietnamese practice sentence and grades the learner's English translation, via Mochi. */
+export function createMochiTranslationExercise({ apiKey, model }) {
+  async function callMochi(prompt) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { response_mime_type: "application/json" }
+        // Tat "thinking": cau day 1 dong va bai cham ngan, thinking chi lam
+        // request lau them vai giay ma khong doi ket qua.
+        generationConfig: { response_mime_type: "application/json", thinkingConfig: { thinkingBudget: 0 } }
       })
     });
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("Gemini translation exercise error:", errorText);
+      console.error("Mochi translation exercise error:", errorText);
       throw new Error("Failed to call AI");
     }
     const data = await res.json();
@@ -30,7 +32,7 @@ Write ONE natural, everyday Vietnamese sentence that a Vietnamese learner would 
 
 Return JSON only, in this exact shape:
 { "vietnamese": "the Vietnamese sentence" }`;
-      const parsed = await callGemini(prompt);
+      const parsed = await callMochi(prompt);
       if (typeof parsed.vietnamese !== "string" || !parsed.vietnamese.trim()) {
         throw new Error("Malformed translation exercise response");
       }
@@ -38,7 +40,7 @@ Return JSON only, in this exact shape:
     },
 
     async review({ vietnamese, translation }) {
-      const prompt = `You are an English tutor for a Vietnamese learner. The learner was asked to translate this Vietnamese sentence into English:
+      const prompt = `You are Mochi, the friendly English tutor in this app, grading a Vietnamese learner. Be warm and encouraging. The learner was asked to translate this Vietnamese sentence into English:
 """
 ${vietnamese}
 """
@@ -56,7 +58,7 @@ Evaluate their translation for accuracy, grammar, and natural phrasing. Return J
   "overallFeedback": "1-2 encouraging sentences in Vietnamese about the translation overall"
 }
 If the translation has no mistakes, return an empty "corrections" array and say so in "overallFeedback".`;
-      const parsed = await callGemini(prompt);
+      const parsed = await callMochi(prompt);
       if (typeof parsed.corrected !== "string" || !Array.isArray(parsed.corrections)) {
         throw new Error("Malformed translation review response");
       }

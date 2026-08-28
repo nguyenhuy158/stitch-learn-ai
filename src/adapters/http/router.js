@@ -103,7 +103,7 @@ export async function handleRequest(request, url, deps) {
 
   const lessonMatch = url.pathname.match(/^\/api\/lessons\/(\d+)$/);
   if (lessonMatch) {
-    // Generating vocab costs a real Gemini call — require a session so this
+    // Generating vocab costs a real Mochi call — require a session so this
     // can't be hit anonymously in a loop to run up the API bill.
     return requireAuth(async (userId) => {
       const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]), userId }, deps);
@@ -211,7 +211,7 @@ export async function handleRequest(request, url, deps) {
   }
 
   if (url.pathname === "/api/writing/review" && request.method === "POST") {
-    // Same reasoning as lesson detail: a real Gemini call, so require a
+    // Same reasoning as lesson detail: a real Mochi call, so require a
     // session instead of letting it be hit anonymously in a loop.
     return requireAuth(async (userId) => {
       const { text } = await request.json();

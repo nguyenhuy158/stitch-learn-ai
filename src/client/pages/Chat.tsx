@@ -87,7 +87,7 @@ export default function Chat() {
     <div className="mx-auto flex h-dvh max-w-3xl flex-col">
       <header className="flex items-center justify-between border-b border-border px-5 py-4">
         <div>
-          <h1 className="m-0 text-lg font-bold">AI Chat</h1>
+          <h1 className="m-0 text-lg font-bold">Mochi</h1>
           <p className="m-0 text-xs text-fg-muted">{t("chat.subtitle")}</p>
         </div>
         <Button

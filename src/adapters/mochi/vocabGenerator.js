@@ -1,5 +1,5 @@
-/** Generates a vocabulary list for a lesson topic via Gemini, as structured JSON. */
-export function createGeminiVocabGenerator({ apiKey, model }) {
+/** Generates a vocabulary list for a lesson topic via Mochi, as structured JSON. */
+export function createMochiVocabGenerator({ apiKey, model }) {
   return {
     async generate({ title, subTitle, count = 8 }) {
       const prompt = `You are building an English-learning app for Vietnamese speakers.
@@ -23,7 +23,7 @@ Return JSON only, in this exact shape:
       });
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Gemini vocab generation error:", errorText);
+        console.error("Mochi vocab generation error:", errorText);
         throw new Error("Failed to generate lesson content");
       }
       const data = await res.json();

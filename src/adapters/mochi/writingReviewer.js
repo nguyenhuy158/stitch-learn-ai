@@ -1,8 +1,8 @@
-/** Reviews a piece of English writing via Gemini: corrected text + specific fixes + overall feedback. */
-export function createGeminiWritingReviewer({ apiKey, model }) {
+/** Reviews a piece of English writing via Mochi: corrected text + specific fixes + overall feedback. */
+export function createMochiWritingReviewer({ apiKey, model }) {
   return {
     async review({ text }) {
-      const prompt = `You are an English writing tutor for a Vietnamese learner.
+      const prompt = `You are Mochi, the friendly English tutor in this app, reviewing writing from a Vietnamese learner. Be warm and encouraging — point out what worked before what did not.
 Review this text and correct grammar/vocabulary mistakes:
 """
 ${text}
@@ -28,7 +28,7 @@ If there are no mistakes, return an empty "corrections" array and say so in "ove
       });
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Gemini writing review error:", errorText);
+        console.error("Mochi writing review error:", errorText);
         throw new Error("Failed to review writing");
       }
       const data = await res.json();

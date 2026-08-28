@@ -7,7 +7,7 @@ Backend ban đầu được lấy lại từ bản đã deploy trên Cloudflare 
 ## Cấu trúc (hexagonal)
 ```
 src/
-  domain/            business logic thuần, không đụng D1/HTTP/Gemini/jose trực tiếp
+  domain/            business logic thuần, không đụng D1/HTTP/Mochi/jose trực tiếp
     usecases/        1 file / 1 hành động (login, getCurrentUser, sendChatMessage, ...)
     services/        passwordHasher (PBKDF2, thuần crypto, không I/O ngoài)
     errors.js        ValidationError, AuthError — router map ra HTTP status
@@ -15,21 +15,21 @@ src/
   adapters/          implement ports, chứa mọi I/O thật
     d1/              D1 queries (user/chat/lesson repository)
     jose/            ký/verify JWT nội bộ + verify JWKS remote của SSO
-    gemini/          gọi Gemini API, build prompt
+    mochi/           gọi Gemini API (persona "Mochi"), build prompt
     http/            router.js (map route -> usecase) + cookies.js
   worker.js          composition root: wire adapters vào usecases, export fetch handler
 ```
-Đổi adapter (D1 -> KV, Gemini -> OpenAI, jose -> lib khác) không cần sửa `domain/`.
+Đổi adapter (D1 -> KV, Mochi -> OpenAI, jose -> lib khác) không cần sửa `domain/`.
 
 ## Chức năng
 - Auth: SSO (huyab.click, worker `sso` tại `auth.huyab.click`) + email/password, JWT (jose), lưu D1
 - Streak học tập
 - `/api/lessons` — danh sách bài học (D1)
-- `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Gemini lần đầu rồi cache vào D1 (`lesson_vocab`)
+- `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Mochi lần đầu rồi cache vào D1 (`lesson_vocab`)
 - `/api/chat` — chat luyện ngôn ngữ, gọi Gemini API (model mặc định `gemini-2.5-flash`), lưu lịch sử D1
 - `/api/chat/history`
 - `/api/user/update`
-- `/api/writing/review` — sửa lỗi văn viết tiếng Anh qua Gemini (câu đã sửa + chi tiết từng lỗi + nhận xét chung), không lưu D1
+- `/api/writing/review` — sửa lỗi văn viết tiếng Anh qua Mochi (câu đã sửa + chi tiết từng lỗi + nhận xét chung), không lưu D1
 - `/api/vocab`, `/api/vocab/saved`, `/api/vocab/:id/save`, `/api/rankings` — flashcards/saved/rankings (xem `## Home cards`)
 - Fallback: serve static assets (SPA) qua `env.ASSETS`
 
@@ -43,7 +43,7 @@ src/
 Data `lessons` từng bị duplicate (60 dòng cho 4 bài, do seed script lỗi) — đã dedupe về đúng 4 dòng (`id` 1-4) trên D1 prod ngày 2026-08-10.
 
 ## Trang sửa lỗi viết (2026-08-10)
-`public/writing.html` — card "Sửa lỗi viết" (trong "Gợi ý cho bạn" ở `/lessons`) không có route/handler nào từ trước cả (khác lesson detail — cái này thực sự chưa tồn tại, không phải thiếu route cho data có sẵn), nên build mới hoàn toàn: textarea nhập đoạn văn, gọi `/api/writing/review`, hiển thị bản đã sửa + từng lỗi cụ thể + nhận xét chung. Không lưu lịch sử (stateless, mỗi lần gọi Gemini mới). Responsive mobile/desktop giống `lesson.html`. Gắn click vào card qua cùng script vá trong `index.html`.
+`public/writing.html` — card "Sửa lỗi viết" (trong "Gợi ý cho bạn" ở `/lessons`) không có route/handler nào từ trước cả (khác lesson detail — cái này thực sự chưa tồn tại, không phải thiếu route cho data có sẵn), nên build mới hoàn toàn: textarea nhập đoạn văn, gọi `/api/writing/review`, hiển thị bản đã sửa + từng lỗi cụ thể + nhận xét chung. Không lưu lịch sử (stateless, mỗi lần gọi Mochi mới). Responsive mobile/desktop giống `lesson.html`. Gắn click vào card qua cùng script vá trong `index.html`.
 
 ## Trang lịch sử thật (2026-08-10)
 `public/history.html` thay hoàn toàn trang "Lịch sử" mock cứng của bundle React (số liệu 12h30m/45 bài/8.5 điểm... toàn bộ là fake, không gọi API nào). Trang mới dùng data thật: `/api/auth/me` (streak, xp, level, level_progress) + `/api/chat/history` (ghép cặp user/model message thành từng lượt hội thoại, group theo ngày, đếm số lỗi từ `metadata.corrections` của mỗi reply).
@@ -58,11 +58,11 @@ Trang mock cũ trong bundle vẫn còn tồn tại về mặt code (không xoá 
 - Modal "Trợ giúp & Phản hồi": bundle render ra sheet **hoàn toàn rỗng** (không có nội dung nào cả). Chặn click trước khi React mở modal đó, chuyển sang `public/help.html` (FAQ tĩnh + form gửi phản hồi thật qua `POST /api/feedback`, lưu bảng `feedback` mới trên D1).
 
 ## Home cards (2026-08-10)
-Home page có 1 khối UI hoàn toàn chưa test/gắn trước đó (nằm dưới màn hình, phải scroll mới thấy) — "Gemini Suggests" (Pronunciation Fix, Mistake Review, Coffee Chat) và "Learning Tools" (AI Tutor, Flashcards, Saved, Rankings). Không nút nào có handler trong bundle. Đã gắn hết:
+Home page có 1 khối UI hoàn toàn chưa test/gắn trước đó (nằm dưới màn hình, phải scroll mới thấy) — "Gemini Suggests" (nay là gợi ý của Mochi) (Pronunciation Fix, Mistake Review, Coffee Chat) và "Learning Tools" (AI Tutor, Flashcards, Saved, Rankings). Không nút nào có handler trong bundle. Đã gắn hết:
 
 - **AI Tutor**, **Pronunciation Fix → Start**, **Coffee Chat → Start**: đều dẫn về `/chat` (AI Chat có sẵn) — không có backend riêng cho luyện phát âm hay roleplay tình huống, AI Chat là tính năng hội thoại thật gần nhất.
 - **Mistake Review → Start**: `public/mistakes.html` — tổng hợp lỗi ngữ pháp thật từ `metadata.corrections` trong lịch sử chat (`/api/chat/history`), không cần route backend mới.
-- **Flashcards**: `public/flashcards.html` + `GET /api/vocab` — lật thẻ từ vựng, gộp từ tất cả bài học đã tạo nội dung (không tính bài `is_locked`), **chỉ đọc data đã cache sẵn, không gọi Gemini mới**. Có nút ★ lưu từ.
+- **Flashcards**: `public/flashcards.html` + `GET /api/vocab` — lật thẻ từ vựng, gộp từ tất cả bài học đã tạo nội dung (không tính bài `is_locked`), **chỉ đọc data đã cache sẵn, không gọi Mochi mới**. Có nút ★ lưu từ.
 - **Saved**: `public/saved.html` + `GET /api/vocab/saved` + `POST /api/vocab/:id/save` (bảng `saved_vocab` mới) — danh sách từ đã lưu từ Flashcards, bỏ lưu được.
 - **Rankings**: `public/rankings.html` + `GET /api/rankings` — xếp hạng theo `xp` thật. Trước đó **`xp` không có chỗ nào cộng cả** (luôn = 0 với mọi user) — đã thêm `+5 xp` mỗi lần chat AI Tutor và mỗi lần dùng Sửa lỗi viết (`userRepository.incrementXp`).
 

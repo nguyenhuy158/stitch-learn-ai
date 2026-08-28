@@ -14,7 +14,7 @@ function shuffle(items) {
 
 /**
  * 5 multiple-choice questions (term -> pick the right Vietnamese meaning),
- * built from the existing vocab pool — no Gemini call, so it's free to
+ * built from the existing vocab pool — no Mochi call, so it's free to
  * regenerate any time the day's challenge hasn't been completed yet.
  * The correct answer ships with the question and is graded client-side;
  * this app has no anti-cheat bar (same trust level as the chat XP grant).

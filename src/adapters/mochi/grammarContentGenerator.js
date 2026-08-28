@@ -1,5 +1,5 @@
-/** Generates an original grammar explanation for a lesson topic via Gemini, as structured JSON. */
-export function createGeminiGrammarContentGenerator({ apiKey, model }) {
+/** Generates an original grammar explanation for a lesson topic via Mochi, as structured JSON. */
+export function createMochiGrammarContentGenerator({ apiKey, model }) {
   return {
     async generate({ title, subTitle }) {
       const prompt = `You are writing an English grammar lesson for Vietnamese learners, for the grammar point titled "${title}" (category: ${subTitle || ""}).
@@ -24,7 +24,7 @@ Include 2 to 4 sections, each with 2 to 4 examples.`;
       });
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Gemini grammar content generation error:", errorText);
+        console.error("Mochi grammar content generation error:", errorText);
         throw new Error("Failed to generate lesson content");
       }
       const data = await res.json();
