@@ -9,8 +9,28 @@ import { LoadingState, ErrorState } from "../ui/states";
 import { CheckIcon, HistoryIcon, PlusIcon, SendIcon } from "../components/icons";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { ClickableSentence } from "../components/ClickableSentence";
 
-type Message = { role: "user" | "model"; content: string; created_at?: string };
+type Message = {
+  role: "user" | "model";
+  content: string;
+  created_at?: string;
+  /** Chuoi JSON Mochi cham cau vua roi, D1 tra ve nguyen si. */
+  metadata?: string | null;
+  feedback?: string;
+  corrections?: string[];
+};
+
+/** Loi sua nam trong cot metadata voi tin nhan cu, nam thang voi tin nhan vua gui. */
+function coaching(m: Message): { feedback?: string; corrections: string[] } {
+  if (m.corrections || m.feedback) return { feedback: m.feedback, corrections: m.corrections ?? [] };
+  try {
+    const meta = m.metadata ? JSON.parse(m.metadata) : null;
+    return { feedback: meta?.feedback, corrections: Array.isArray(meta?.corrections) ? meta.corrections : [] };
+  } catch {
+    return { corrections: [] };
+  }
+}
 type Conversation = { id: string; title: string | null; last_at: string; message_count: number };
 
 /** Cuoc tro chuyen dang mo duoc nho lai de F5 khong nhay ve cuoc khac. */
@@ -65,7 +85,15 @@ export default function Chat() {
     setSending(true);
     try {
       const reply = await api.sendChat(text, conversationId);
-      setMessages((prev) => [...(prev || []), { role: "model", content: reply.message ?? "" }]);
+      setMessages((prev) => [
+        ...(prev || []),
+        {
+          role: "model",
+          content: reply.message ?? "",
+          feedback: reply.feedback,
+          corrections: Array.isArray(reply.corrections) ? reply.corrections : []
+        }
+      ]);
       loadConversations();
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
@@ -120,17 +148,42 @@ export default function Chat() {
         )}
         {!error && messages && (
           <div className="flex flex-col gap-3">
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "max-w-[85%] rounded-ui px-4 py-2.5 text-sm leading-relaxed",
-                  m.role === "user" ? "ml-auto bg-primary text-primary-fg" : "bg-surface-muted text-fg"
-                )}
-              >
-                {m.content}
-              </div>
-            ))}
+            {messages.map((m, i) => {
+              const coach = m.role === "model" ? coaching(m) : null;
+              return (
+                <div key={i} className={cn("flex max-w-[85%] flex-col gap-1.5", m.role === "user" && "ml-auto")}>
+                  <div
+                    className={cn(
+                      "rounded-ui px-4 py-2.5 text-sm leading-relaxed",
+                      m.role === "user" ? "bg-primary text-primary-fg" : "bg-surface-muted text-fg"
+                    )}
+                  >
+                    {m.role === "model" ? <ClickableSentence text={m.content} bare /> : m.content}
+                  </div>
+                  {coach && (coach.corrections.length > 0 || coach.feedback) && (
+                    <div className="rounded-ui border-l-3 border-accent bg-warning-soft px-3 py-2 text-xs">
+                      {coach.corrections.length > 0 && (
+                        <>
+                          <div className="font-bold uppercase text-primary-hover">{t("chat.corrections")}</div>
+                          <ul className="m-0 mt-1 flex list-none flex-col gap-1 p-0">
+                            {coach.corrections.map((c, j) => {
+                              const [wrong, right] = c.split(/\s*->\s*/);
+                              return (
+                                <li key={j} className="flex flex-wrap items-baseline gap-1.5">
+                                  <span className="text-danger line-through">{wrong}</span>
+                                  {right && <span className="font-bold text-primary">{right}</span>}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </>
+                      )}
+                      {coach.feedback && <div className={cn("text-fg-muted", coach.corrections.length > 0 && "mt-1.5")}>{coach.feedback}</div>}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
             {sending && (
               <div className="w-fit rounded-ui bg-surface-muted px-4 py-2.5">
                 <Spinner size={16} />

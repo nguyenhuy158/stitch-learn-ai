@@ -107,6 +107,7 @@ export const translations: Record<string, TranslationEntry> = {
 
   "chat.subtitle": { vi: "Luyện nói tiếng Anh với Mochi, có sửa lỗi kèm giải thích.", en: "Practice English with Mochi, with corrections and explanations." },
   "chat.empty": { vi: "Chưa có hội thoại nào. Gõ gì đó bằng tiếng Anh để bắt đầu!", en: "No conversation yet. Type something in English to get started!" },
+  "chat.corrections": { vi: "Sửa lỗi", en: "Corrections" },
   "chat.placeholder": { vi: "Nhập tiếng Anh...", en: "Type in English..." },
   "chat.send": { vi: "Gửi", en: "Send" },
   "chat.newChat": { vi: "Cuộc trò chuyện mới", en: "New chat" },

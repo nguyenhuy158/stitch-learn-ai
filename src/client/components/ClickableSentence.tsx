@@ -20,7 +20,7 @@ type WordInfo = {
  * Cau tieng Anh doc duoc ca cau, va bam vao tung tu de xem nghia / IPA /
  * dong nghia - trai nghia roi luu tu do vao bo suu tap.
  */
-export function ClickableSentence({ text }: { text: string }) {
+export function ClickableSentence({ text, bare = false }: { text: string; bare?: boolean }) {
   const { t } = useLanguage();
   const [picked, setPicked] = useState<string | null>(null);
   const [info, setInfo] = useState<WordInfo | null>(null);
@@ -59,27 +59,35 @@ export function ClickableSentence({ text }: { text: string }) {
     }
   }
 
+  const sentence = (
+    <>
+      <p className="flex-1 text-sm leading-relaxed">
+        {text.split(/(\s+)/).map((token, i) =>
+          cleanIpaToken(token) ? (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setPicked(cleanIpaToken(token))}
+              className="rounded px-0.5 underline decoration-dotted underline-offset-4 outline-none transition hover:bg-primary-soft focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {token}
+            </button>
+          ) : (
+            <span key={i}>{token}</span>
+          )
+        )}
+      </p>
+      <SpeakButton text={text} size="sm" />
+    </>
+  );
+
   return (
     <>
-      <Card className="flex items-start gap-3 p-4">
-        <p className="flex-1 text-sm leading-relaxed">
-          {text.split(/(\s+)/).map((token, i) =>
-            cleanIpaToken(token) ? (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setPicked(cleanIpaToken(token))}
-                className="rounded px-0.5 underline decoration-dotted underline-offset-4 outline-none transition hover:bg-primary-soft focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {token}
-              </button>
-            ) : (
-              <span key={i}>{token}</span>
-            )
-          )}
-        </p>
-        <SpeakButton text={text} size="sm" />
-      </Card>
+      {bare ? (
+        <div className="flex items-start gap-2">{sentence}</div>
+      ) : (
+        <Card className="flex items-start gap-3 p-4">{sentence}</Card>
+      )}
 
       {picked && (
         <Card className="mt-2 p-4">
