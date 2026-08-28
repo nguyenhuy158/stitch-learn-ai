@@ -12,7 +12,12 @@ export async function reviewTranslation(
   if (!trimmedSentence) throw new ValidationError("Thiếu câu tiếng Việt cần dịch");
   if (!trimmedTranslation) throw new ValidationError("Vui lòng nhập bản dịch");
   if (trimmedTranslation.length > 500) throw new ValidationError("Bản dịch quá dài (tối đa 500 ký tự)");
-  const result = await translationExercisePort.review({ vietnamese: trimmedSentence, translation: trimmedTranslation });
+  const user = await userRepository.findById(userId);
+  const result = await translationExercisePort.review({
+    vietnamese: trimmedSentence,
+    translation: trimmedTranslation,
+    config: user?.gemini_config
+  });
   await translationRepository.saveAttempt({
     userId,
     vietnamese: trimmedSentence,

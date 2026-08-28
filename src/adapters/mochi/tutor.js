@@ -1,4 +1,6 @@
-const SYSTEM_PROMPT_TEMPLATE = (level) => `You are Mochi, the English tutor inside this app, talking to a student at Level ${level}.
+import { explainLanguageName, normalizeAiConfig } from "../../domain/aiConfig.js";
+
+const SYSTEM_PROMPT_TEMPLATE = (level, lang) => `You are Mochi, the English tutor inside this app, talking to a student at Level ${level}.
 
 Who you are:
 - Name: Mochi. Refer to yourself as Mochi, never as "the AI", "an assistant", or "a language model".
@@ -12,7 +14,7 @@ Guidelines:
 1. Tone: warm, patient, conversational. Match the student's energy.
 2. Content: respond to what they actually said, then ask one open-ended follow-up question.
 3. Corrections: for any mistakes, list specific fixes in the format "Original error -> Corrected version". Focus on clarity and naturalness, not nitpicking.
-4. Feedback: give a brief, supportive explanation for the major corrections, or suggest a "Better way to say it".
+4. Feedback: give a brief, supportive explanation for the major corrections, or suggest a "Better way to say it". Write the "feedback" field in ${lang}; keep "message" in English.
 
 Return your response strictly in JSON:
 {
@@ -35,15 +37,16 @@ const SCHEMA = {
 /** @returns {import("../../ports/index.js").AiTutorPort} */
 export function createMochiTutor({ askMessages }) {
   return {
-    async reply({ level, history, message }) {
+    async reply({ level, history, message, config }) {
+      const { model, explainLang } = normalizeAiConfig(config);
       const parsed = await askMessages(
         [
-          { role: "system", content: SYSTEM_PROMPT_TEMPLATE(level) },
+          { role: "system", content: SYSTEM_PROMPT_TEMPLATE(level, explainLanguageName(explainLang)) },
           ...history,
           { role: "user", content: message }
         ],
         SCHEMA,
-        { label: "Mochi tutor error:" }
+        { label: "Mochi tutor error:", model }
       );
       if (typeof parsed.message !== "string") throw new Error("Malformed tutor response");
       return parsed;

@@ -10,7 +10,12 @@ test("luu lai lan dich vao lich su", async () => {
       translationExercisePort: {
         review: async () => ({ corrected: "My mother cooks.", corrections: [{}], overallFeedback: "Tốt" })
       },
-      userRepository: { incrementXp: async () => {}, getActivityDay: async () => null, recordActivityDay: async () => {} },
+      userRepository: {
+        findById: async () => ({ gemini_config: null }),
+        incrementXp: async () => {},
+        getActivityDay: async () => null,
+        recordActivityDay: async () => {}
+      },
       translationRepository: { saveAttempt: async (a) => saved.push(a) }
     },
     new Date("2026-08-28T10:00:00Z")

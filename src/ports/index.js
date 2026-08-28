@@ -46,7 +46,7 @@
  * @property {(token: string) => Promise<object>} verify
  *
  * @typedef {Object} AiTutorPort
- * @property {(input: {level: string, history: object[], message: string}) => Promise<{message: string, feedback: string|null, corrections: string[]|undefined}>} reply
+ * @property {(input: {level: string, history: object[], message: string, config?: object}) => Promise<{message: string, feedback: string|null, corrections: string[]|undefined}>} reply
  *
  * @typedef {Object} PasswordHasher
  * @property {(password: string, salt?: string) => Promise<{hash: string, salt: string}>} hash
@@ -55,11 +55,11 @@
  * @property {(seed: string) => string} generate - deterministic SVG data URI from a seed (e.g. email)
  *
  * @typedef {Object} WritingReviewerPort
- * @property {(input: {text: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
+ * @property {(input: {text: string, config?: object}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
  *
  * @typedef {Object} TranslationExercisePort
  * @property {(input: {term: string, meaning: string, example: string|null}) => Promise<{vietnamese: string}>} generate
- * @property {(input: {vietnamese: string, translation: string}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
+ * @property {(input: {vietnamese: string, translation: string, config?: object}) => Promise<{corrected: string, corrections: Array<{original: string, suggestion: string, explanation: string}>, overallFeedback: string}>} review
  *
  * @typedef {Object} WordLookupPort
  * @property {(input: {term: string, context?: string|null}) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}>} lookup

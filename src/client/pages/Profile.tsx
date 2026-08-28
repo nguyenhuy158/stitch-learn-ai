@@ -11,6 +11,13 @@ import { useToast } from "../ui/Toast";
 import { useTheme } from "../theme/ThemeProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
 
+// Phai trung allowlist trong src/domain/aiConfig.js — server tu loc lai neu lech.
+const AI_MODELS = [
+  { id: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", label: "Llama 3.3 70B" },
+  { id: "@cf/meta/llama-3.1-70b-instruct", label: "Llama 3.1 70B" },
+  { id: "@cf/meta/llama-3.1-8b-instruct-fast", label: "Llama 3.1 8B (nhanh)" }
+];
+
 export default function Profile() {
   const navigate = useNavigate();
   const { theme, mode, themes } = useTheme();
@@ -35,6 +42,14 @@ export default function Profile() {
     return <LoadingState />;
   }
   if (!user) return null;
+
+  const aiConfig = { model: AI_MODELS[0].id, explainLang: "vi", ...(user.gemini_config || {}) };
+  // updateProfile ghi de ca cot JSON nen phai gui du object, khong gui rieng 1 field.
+  const saveAiConfig = (patch: Record<string, string>) => {
+    const next = { ...aiConfig, ...patch };
+    setUser((u: any) => ({ ...u, gemini_config: next }));
+    api.updateProfile({ gemini_config: next }).catch(() => toast.error(t("common.error")));
+  };
 
   return (
     <div className="mx-auto max-w-2xl p-5 sm:p-9">
@@ -137,6 +152,45 @@ export default function Profile() {
                 }
               >
                 {n}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-3 p-4">
+          <div>
+            <div className="text-sm">{t("profile.aiModelLabel")}</div>
+            <div className="mt-0.5 text-xs text-fg-muted">{t("profile.aiModelDesc")}</div>
+          </div>
+          <select
+            value={aiConfig.model}
+            onChange={(e) => saveAiConfig({ model: e.target.value })}
+            className="shrink-0 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold"
+          >
+            {AI_MODELS.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-center justify-between gap-3 p-4">
+          <div>
+            <div className="text-sm">{t("profile.explainLangLabel")}</div>
+            <div className="mt-0.5 text-xs text-fg-muted">{t("profile.explainLangDesc")}</div>
+          </div>
+          <div className="inline-flex shrink-0 overflow-hidden rounded-full border border-border text-xs font-semibold">
+            {(["vi", "en"] as const).map((code) => (
+              <button
+                key={code}
+                type="button"
+                onClick={() => saveAiConfig({ explainLang: code })}
+                aria-pressed={aiConfig.explainLang === code}
+                className={
+                  "px-3 py-1.5 transition " +
+                  (aiConfig.explainLang === code ? "bg-primary text-primary-fg" : "bg-surface text-fg-muted")
+                }
+              >
+                {code === "vi" ? "Tiếng Việt" : "English"}
               </button>
             ))}
           </div>

@@ -14,11 +14,12 @@ export function createMochiClient({ ai, model, gateway }) {
    * Goi model voi ca doan hoi thoai, ep tra ve JSON dung `schema`.
    * @returns {Promise<any>}
    */
-  async function askMessages(messages, schema, { label = "Mochi AI error:" } = {}) {
+  async function askMessages(messages, schema, { label = "Mochi AI error:", model: override } = {}) {
     let result;
     try {
       result = await ai.run(
-        model,
+        // `override` la model nguoi dung chon trong Settings (da qua allowlist).
+        override || model,
         // max_tokens mac dinh cua Workers AI qua nho: JSON bi cat giua chung roi
         // parse loi (bai chua nhieu correction + giai thich tieng Viet la dinh).
         { messages, max_tokens: 2048, response_format: { type: "json_schema", json_schema: schema } },

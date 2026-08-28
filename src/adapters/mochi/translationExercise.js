@@ -1,3 +1,5 @@
+import { explainLanguageName, normalizeAiConfig } from "../../domain/aiConfig.js";
+
 /** Generates a Vietnamese practice sentence and grades the learner's English translation, via Mochi. */
 const GENERATE_SCHEMA = {
   type: "object",
@@ -40,7 +42,9 @@ Return JSON only, in this exact shape:
       return parsed;
     },
 
-    async review({ vietnamese, translation }) {
+    async review({ vietnamese, translation, config }) {
+      const { model, explainLang } = normalizeAiConfig(config);
+      const lang = explainLanguageName(explainLang);
       const prompt = `You are Mochi, the friendly English tutor in this app, grading a Vietnamese learner. Be warm and encouraging. The learner was asked to translate this Vietnamese sentence into English:
 """
 ${vietnamese}
@@ -54,12 +58,12 @@ Evaluate their translation for accuracy, grammar, and natural phrasing. Return J
 {
   "corrected": "the best natural English translation of the Vietnamese sentence",
   "corrections": [
-    { "original": "the learner's phrase with a mistake", "suggestion": "the corrected phrase", "explanation": "short explanation in Vietnamese" }
+    { "original": "the learner's phrase with a mistake", "suggestion": "the corrected phrase", "explanation": "short explanation in ${lang}" }
   ],
-  "overallFeedback": "1-2 encouraging sentences in Vietnamese about the translation overall"
+  "overallFeedback": "1-2 encouraging sentences in ${lang} about the translation overall"
 }
 If the translation has no mistakes, return an empty "corrections" array and say so in "overallFeedback".`;
-      const parsed = await askJson(prompt, REVIEW_SCHEMA, { label });
+      const parsed = await askJson(prompt, REVIEW_SCHEMA, { label, model });
       if (typeof parsed.corrected !== "string" || !Array.isArray(parsed.corrections)) {
         throw new Error("Malformed translation review response");
       }
