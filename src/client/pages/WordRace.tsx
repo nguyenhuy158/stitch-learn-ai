@@ -35,6 +35,7 @@ export default function WordRace() {
   const [error, setError] = useState("");
   const [best, setBest] = useState<number | null>(null);
   const [submitResult, setSubmitResult] = useState<{ bestScore: number; isNewBest: boolean; xpAwarded: number } | null>(null);
+  const [lastMissed, setLastMissed] = useState<Word | null>(null);
   const durationRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef(0);
@@ -56,6 +57,7 @@ export default function WordRace() {
     setError("");
     setDifficulty(d);
     setWords(null);
+    setLastMissed(null);
     submittedRef.current = false;
     setSubmitResult(null);
     api
@@ -95,6 +97,7 @@ export default function WordRace() {
     if (!difficulty) return;
     stopLoop();
     if (miss) {
+      setLastMissed(current);
       setLives((l) => l - 1);
       setFeedback("wrong");
       playWrongSound();
@@ -205,6 +208,12 @@ export default function WordRace() {
           <Card className="p-5 text-center">
             <div className="text-2xl font-extrabold text-primary-hover">{t("wordRace.points", { n: score })}</div>
             <div className="mt-1 text-sm text-fg-muted">{lives <= 0 ? t("wordRace.outOfLives") : t("wordRace.completed")}</div>
+            {lastMissed && (
+              <div className="mt-4 rounded-ui bg-danger-soft p-3 text-left">
+                <div className="text-sm font-semibold text-danger">{t("wordRace.missedWord", { term: lastMissed.term })}</div>
+                <div className="mt-1 text-base font-bold text-fg">{lastMissed.meaning}</div>
+              </div>
+            )}
             {submitResult && (
               <div className="mt-2 text-sm font-semibold text-accent">
                 {submitResult.isNewBest ? t("game.newRecord") : t("game.record", { n: submitResult.bestScore })}
@@ -212,19 +221,15 @@ export default function WordRace() {
               </div>
             )}
             <div className="mt-4 flex gap-3">
-              <Button leftIcon={<SlidersIcon size={16} />}
-                block
-                variant="outline"
-                onClick={() => {
-                  setWords(null);
-                  setDifficulty(null);
-                }}
-              >
+              <Button leftIcon={<SlidersIcon size={16} />} block variant="outline" onClick={() => {
+                setWords(null);
+                setDifficulty(null);
+              }}>
                 {t("game.changeDifficulty")}
               </Button>
               <Button block onClick={() => load(difficulty)} leftIcon={<ReplayIcon size={16} />}>
-            {t("game.playAgain")}
-          </Button>
+                {t("game.playAgain")}
+              </Button>
             </div>
           </Card>
         )}

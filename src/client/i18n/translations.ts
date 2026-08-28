@@ -344,6 +344,7 @@ export const translations: Record<string, TranslationEntry> = {
   "wordRace.points": { vi: "{n} điểm", en: "{n} points" },
   "wordRace.placeholder": { vi: "Nhập nghĩa tiếng Việt...", en: "Type the meaning..." },
   "wordRace.answer": { vi: "Đáp án: {meaning}", en: "Answer: {meaning}" },
+  "wordRace.missedWord": { vi: "Từ vừa sai: {term}", en: "Missed word: {term}" },
   "wordRace.outOfLives": { vi: "Hết mạng!", en: "Out of lives!" },
   "wordRace.completed": { vi: "Hoàn thành!", en: "Completed!" },
 };
