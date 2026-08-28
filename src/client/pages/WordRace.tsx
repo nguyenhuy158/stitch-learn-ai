@@ -4,11 +4,11 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
-import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { SpeakButton } from "../components/SpeakButton";
+import { DifficultyPicker } from "../components/DifficultyPicker";
 
 type Word = { id: number; term: string; meaning: string };
 type Difficulty = { key: string; label: string; desc: string; startMs: number; minMs: number; poolSize: number };
@@ -152,36 +152,21 @@ export default function WordRace() {
         {error && <PageState tone="error">{error}</PageState>}
 
         {!words && !error && (
-          <div className="flex flex-col gap-3">
-            {DIFFICULTIES.map((d) => (
-              <button key={d.key} type="button" onClick={() => load(d)} disabled={difficulty?.key === d.key}>
-                <Card className="p-4 text-left">
-                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
-                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
-                </Card>
-              </button>
-            ))}
-            {difficulty && !words && !error && (
-              <div className="flex justify-center py-6">
-                <Spinner />
-              </div>
-            )}
-          </div>
+          <DifficultyPicker
+            options={DIFFICULTIES}
+            selected={difficulty?.key}
+            loading={Boolean(difficulty && !words && !error)}
+            onPick={load}
+          />
         )}
 
         {current && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
-              <span>{"❤️".repeat(lives)}</span>
-              <button
-                type="button"
-                onClick={() => speak(current.term)}
-                title={t("audio.speak")}
-                aria-label={t("audio.speak")}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-hover text-lg text-white"
-              >
-                🔊
-              </button>
+              <span aria-label={t("wordRace.livesLeft", { n: lives })}>
+                <span aria-hidden="true">{"❤️".repeat(lives)}</span>
+              </span>
+              <SpeakButton text={current.term} size="sm" />
               <span>{t("game.scoreLabel", { n: score })}</span>
             </div>
             <div className="relative mb-4 h-56 overflow-hidden rounded-3xl bg-surface shadow-lg">

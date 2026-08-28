@@ -1,8 +1,8 @@
 import ipaChartData from "../../data/ipa-chart.json";
 import { PageHeader } from "../components/PageHeader";
 import { Card } from "../ui/Card";
-import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { SpeakButton } from "../components/SpeakButton";
 
 type Sound = { symbol: string; type?: string; example: string; meaning_vi?: string };
 
@@ -16,15 +16,7 @@ function SoundGrid({ sounds, speakLabel }: { sounds: Sound[]; speakLabel: string
             <div className="mt-1 truncate text-sm font-semibold text-fg">{sound.example}</div>
             {sound.meaning_vi && <div className="truncate text-xs text-fg-muted">{sound.meaning_vi}</div>}
           </div>
-          <button
-            type="button"
-            onClick={() => speak(sound.example)}
-            title={speakLabel}
-            aria-label={speakLabel}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-ui bg-primary-hover text-lg text-white shadow-sm"
-          >
-            🔊
-          </button>
+          <SpeakButton text={sound.example} size="sm" label={speakLabel} className="rounded-ui" />
         </Card>
       ))}
     </div>

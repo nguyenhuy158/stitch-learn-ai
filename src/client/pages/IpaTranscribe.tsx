@@ -4,9 +4,9 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { LoadingState } from "../ui/states";
-import { speak } from "../lib/speak";
 import { cleanIpaToken, lookupIpa } from "../lib/ipa";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { SpeakButton } from "../components/SpeakButton";
 
 type Result = { original: string; ipa: string | null };
 
@@ -66,15 +66,7 @@ export default function IpaTranscribe() {
                   )}
                 </div>
                 {r.ipa && (
-                  <button
-                    type="button"
-                    onClick={() => speak(r.original)}
-                    title={t("audio.speak")}
-                    aria-label={t("audio.speak")}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-ui bg-primary-hover text-lg text-white shadow-sm"
-                  >
-                    🔊
-                  </button>
+                  <SpeakButton text={r.original} size="sm" className="rounded-ui" />
                 )}
               </Card>
             ))}

@@ -22,6 +22,7 @@ export const translations: Record<string, TranslationEntry> = {
   "game.matching-game.label": { vi: "Ghép thẻ", en: "Match Cards" },
   "game.spelling-game.label": { vi: "Gõ chữ theo nghĩa", en: "Spell the Word" },
   "game.word-race.label": { vi: "Từ rơi", en: "Word Race" },
+  "game.scramble-game.label": { vi: "Xếp chữ", en: "Word Scramble" },
 
   "common.anonymous": { vi: "Ẩn danh", en: "Anonymous" },
   "common.you": { vi: "Bạn", en: "You" },
@@ -194,6 +195,7 @@ export const translations: Record<string, TranslationEntry> = {
   "home.tool.matchingGame": { vi: "Ghép thẻ", en: "Match Cards" },
   "home.tool.spellingGame": { vi: "Gõ chữ theo nghĩa", en: "Spell the Word" },
   "home.tool.wordRace": { vi: "Từ rơi", en: "Word Race" },
+  "home.tool.scrambleGame": { vi: "Xếp chữ", en: "Word Scramble" },
   "home.tool.gamesLeaderboard": { vi: "Xếp hạng trò chơi", en: "Game Leaderboards" },
   "home.tool.pictureVocab": { vi: "Từ vựng qua hình", en: "Picture Vocabulary" },
   "home.tool.saved": { vi: "Đã lưu", en: "Saved" },
@@ -293,6 +295,16 @@ export const translations: Record<string, TranslationEntry> = {
   "spelling.wrongStop": { vi: "Sai hoặc hết giờ, dừng cuộc chơi!", en: "Wrong answer or timeout, game over!" },
   "spelling.correctSuffix": { vi: "câu đúng", en: "correct" },
 
+  "scramble.title": { vi: "Xếp chữ", en: "Word Scramble" },
+  "scramble.subtitle": { vi: "Đọc nghĩa rồi bấm các chữ cái để xếp thành từ đúng — sai là dừng cuộc chơi.", en: "Read the meaning, then tap the letters to build the right word — one mistake ends the run." },
+  "scramble.easyDesc": { vi: "A1-A2 · 8 từ · 25s/từ", en: "A1-A2 · 8 words · 25s/word" },
+  "scramble.hardDesc": { vi: "B1-B2 · 10 từ · 18s/từ", en: "B1-B2 · 10 words · 18s/word" },
+  "scramble.legendDesc": { vi: "Trộn mọi trình độ · 12 từ · 12s/từ", en: "Mixed levels · 12 words · 12s/word" },
+  "scramble.tapHint": { vi: "Bấm chữ cái bên dưới", en: "Tap the letters below" },
+  "scramble.undo": { vi: "Xoá chữ cuối", en: "Undo letter" },
+  "scramble.wrongStop": { vi: "Sai hoặc hết giờ, dừng cuộc chơi!", en: "Wrong answer or timeout, game over!" },
+
+  "wordRace.livesLeft": { vi: "Còn {n} mạng", en: "{n} lives left" },
   "wordRace.title": { vi: "Từ rơi", en: "Word Race" },
   "wordRace.subtitle": { vi: "Gõ nghĩa trước khi từ chạm đáy — tốc độ tăng dần.", en: "Type the meaning before the word hits the bottom — speed increases over time." },
   "wordRace.easyDesc": { vi: "A1-A2 · 20 từ · rơi chậm dần", en: "A1-A2 · 20 words · falls slowly" },

@@ -2,7 +2,7 @@ import { ValidationError } from "../errors.js";
 import { localDate } from "../streak.js";
 import { recordLearningActivity } from "./recordLearningActivity.js";
 
-export const GAMES = ["word-game", "listening-game", "matching-game", "spelling-game", "word-race"];
+export const GAMES = ["word-game", "listening-game", "matching-game", "spelling-game", "word-race", "scramble-game"];
 
 // XP per finished round: correct-answer games pay 1 XP/correct answer (capped so a
 // long "legend" run can't outpay real lessons); matching pays a flat completion bonus.
@@ -11,7 +11,8 @@ const XP_BY_GAME = {
   "listening-game": (correct) => Math.min(12, correct),
   "spelling-game": (correct) => Math.min(10, correct),
   "word-race": (correct) => Math.min(20, correct),
-  "matching-game": () => 5
+  "matching-game": () => 5,
+  "scramble-game": (correct) => Math.min(12, correct)
 };
 
 export async function submitGameScore({ userId, game, score, correct }, deps, now = new Date()) {

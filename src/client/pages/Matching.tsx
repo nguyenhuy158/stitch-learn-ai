@@ -4,11 +4,11 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { DifficultyPicker } from "../components/DifficultyPicker";
 
 type Word = { id: number; term: string; meaning: string };
 type Tile = { key: string; wordId: number; text: string; kind: "term" | "meaning" };
@@ -154,21 +154,12 @@ export default function Matching() {
         {error && <PageState tone="error">{error}</PageState>}
 
         {!tiles && !error && (
-          <div className="flex flex-col gap-3">
-            {DIFFICULTIES.map((d) => (
-              <button key={d.key} type="button" onClick={() => load(d)} disabled={difficulty?.key === d.key}>
-                <Card className="p-4 text-left">
-                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
-                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
-                </Card>
-              </button>
-            ))}
-            {difficulty && !tiles && !error && (
-              <div className="flex justify-center py-6">
-                <Spinner />
-              </div>
-            )}
-          </div>
+          <DifficultyPicker
+            options={DIFFICULTIES}
+            selected={difficulty?.key}
+            loading={Boolean(difficulty && !tiles && !error)}
+            onPick={load}
+          />
         )}
 
         {tiles && difficulty && !over && (
@@ -195,7 +186,7 @@ export default function Matching() {
                     disabled={isMatched}
                     onClick={() => pick(tile)}
                     className={cn(
-                      "flex min-h-20 items-center justify-center rounded-ui border p-3 text-center text-sm",
+                      "flex min-h-20 items-center justify-center rounded-ui border p-3 text-center text-sm transition active:scale-[0.98]",
                       isMatched && "border-success bg-success-soft opacity-40",
                       !isMatched && isWrong && "border-danger bg-danger-soft",
                       !isMatched && !isWrong && isSelected && "border-primary bg-primary-soft",

@@ -11,6 +11,7 @@ import WordGame from "./pages/WordGame";
 import Listening from "./pages/Listening";
 import Matching from "./pages/Matching";
 import Spelling from "./pages/Spelling";
+import Scramble from "./pages/Scramble";
 import WordRace from "./pages/WordRace";
 import GamesLeaderboard from "./pages/GamesLeaderboard";
 import Challenge from "./pages/Challenge";
@@ -48,6 +49,7 @@ export default function App() {
       <Route path="/matching-game" element={<Matching />} />
       <Route path="/spelling-game" element={<Spelling />} />
       <Route path="/word-race" element={<WordRace />} />
+      <Route path="/scramble-game" element={<Scramble />} />
       <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/picture-vocab" element={<PictureVocab />} />

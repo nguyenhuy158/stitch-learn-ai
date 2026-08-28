@@ -4,3 +4,16 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Keyboard focus fallback: many game tiles are bare <button>s that never opted
+   into a focus ring. One global rule beats chasing every call site. */
+:focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

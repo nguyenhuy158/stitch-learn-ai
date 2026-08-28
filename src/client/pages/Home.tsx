@@ -4,7 +4,7 @@ import { api } from "../lib/api";
 import { Spinner } from "../ui/Spinner";
 import { Card } from "../ui/Card";
 import { Tabs } from "../ui/Tabs";
-import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, SearchIcon, StarIcon, TranslateIcon } from "../components/icons";
+import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, ShuffleIcon, SearchIcon, StarIcon, TranslateIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Lesson = { id: number; title: string; sub_title?: string; status?: string };
@@ -50,17 +50,17 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-3xl p-5 sm:p-9">
       <header className="mb-5">
-        <h1 className="m-0 text-2xl font-extrabold tracking-tight">{t("home.greeting")}{user?.name ? `, ${user.name}` : ""} 👋</h1>
+        <h1 className="m-0 text-2xl font-extrabold tracking-tight">{t("home.greeting")}{user?.name ? `, ${user.name}` : ""} <span aria-hidden="true">👋</span></h1>
         <p className="mt-1 text-sm text-fg-muted">{t("home.subtitle")}</p>
       </header>
 
       <Card tone="primary" className="relative mb-5 overflow-hidden">
         <div className="relative z-10 flex items-center justify-between text-sm font-medium text-white/90">
           <span className="flex items-center gap-1.5">
-            <span className="text-base">🔥</span> {t("home.streakDays", { n: user?.streak ?? 0 })}
+            <span aria-hidden="true" className="text-base">🔥</span> {t("home.streakDays", { n: user?.streak ?? 0 })}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="text-base text-yellow-300">⭐</span> {user?.xp ?? 0} XP
+            <span aria-hidden="true" className="text-base text-yellow-300">⭐</span> {user?.xp ?? 0} XP
           </span>
         </div>
         {continueLesson ? (

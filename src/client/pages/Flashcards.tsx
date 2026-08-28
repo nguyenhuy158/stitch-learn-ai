@@ -10,6 +10,7 @@ import { speak } from "../lib/speak";
 import { transcribeToIpa } from "../lib/ipa";
 import { StarIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { SpeakButton } from "../components/SpeakButton";
 
 type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
 
@@ -205,7 +206,7 @@ export default function Flashcards() {
                     style={{ backfaceVisibility: "hidden" }}
                   >
                     <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
-                    <div className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
+                    <div aria-hidden="true" className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
                     <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
                     {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
                   </div>
@@ -229,15 +230,7 @@ export default function Flashcards() {
               </div>
             </div>
             <div className="mb-3 flex items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => speak(current.term)}
-                title={t("audio.speak")}
-                aria-label={t("audio.speak")}
-                className="flex h-11 w-12 shrink-0 items-center justify-center rounded-ui bg-primary-hover text-xl text-white shadow-sm"
-              >
-                🔊
-              </button>
+              <SpeakButton text={current.term} size="sm" className="rounded-ui" />
               <button
                 type="button"
                 onClick={toggleSave}

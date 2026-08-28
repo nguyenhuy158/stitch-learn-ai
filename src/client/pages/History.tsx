@@ -57,7 +57,7 @@ function Entry({ pair, t, locale }: { pair: Pair; t: (key: string, params?: Reco
 
   return (
     <div className="mb-2 flex items-start gap-3 rounded-ui bg-surface p-4 shadow-sm">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-primary-soft text-lg text-primary">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-primary-soft text-lg text-primary" aria-hidden="true">
         💬
       </div>
       <div className="min-w-0 flex-1">

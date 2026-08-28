@@ -4,11 +4,11 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
-import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { SpeakButton } from "../components/SpeakButton";
+import { DifficultyPicker } from "../components/DifficultyPicker";
 
 type Question = { id: number; term: string; choices: string[]; correctMeaning: string };
 type Round = { difficulty: string; secondsPerWord: number; questions: Question[] };
@@ -137,21 +137,12 @@ export default function WordGame() {
         {error && <PageState tone="error">{error}</PageState>}
 
         {!round && (
-          <div className="flex flex-col gap-3">
-            {DIFFICULTIES.map((d) => (
-              <button key={d.key} type="button" onClick={() => start(d.key)} disabled={difficulty === d.key}>
-                <Card className="p-4 text-left">
-                  <div className="text-lg font-bold text-primary-hover">{d.label}</div>
-                  <div className="mt-0.5 text-sm text-fg-muted">{d.desc}</div>
-                </Card>
-              </button>
-            ))}
-            {difficulty && !round && !error && (
-              <div className="flex justify-center py-6">
-                <Spinner />
-              </div>
-            )}
-          </div>
+          <DifficultyPicker
+            options={DIFFICULTIES}
+            selected={difficulty}
+            loading={Boolean(difficulty && !round && !error)}
+            onPick={(d) => start(d.key)}
+          />
         )}
 
         {q && (
@@ -170,15 +161,7 @@ export default function WordGame() {
             </div>
             <Card className="mb-4 flex flex-col items-center gap-3 p-6 text-center">
               <div className="text-3xl font-extrabold text-primary-hover">{q.term}</div>
-              <button
-                type="button"
-                onClick={() => speak(q.term)}
-                title={t("audio.speak")}
-                aria-label={t("audio.speak")}
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-hover text-2xl text-white"
-              >
-                🔊
-              </button>
+              <SpeakButton text={q.term} size="md" />
             </Card>
             <div className="flex flex-col gap-2">
               {q.choices.map((choice) => {
@@ -191,7 +174,7 @@ export default function WordGame() {
                     disabled={picked !== null}
                     onClick={() => answer(choice)}
                     className={cn(
-                      "rounded-ui border px-3.5 py-3 text-left text-sm",
+                      "min-h-11 rounded-ui border px-3.5 py-3 text-left text-sm transition active:scale-[0.99]",
                       isCorrect && "border-success bg-success-soft",
                       isPicked && !isCorrect && "border-danger bg-danger-soft",
                       !isPicked && !isCorrect && "border-border bg-surface"
