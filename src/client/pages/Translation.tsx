@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
@@ -9,10 +9,23 @@ import { useLanguage } from "../i18n/LanguageProvider";
 
 type Correction = { original: string; suggestion: string; explanation: string };
 type Result = { corrected: string; overallFeedback: string; corrections: Correction[] };
+type Attempt = {
+  id: number;
+  vietnamese: string;
+  translation: string;
+  corrected: string;
+  feedback: string;
+  correctionCount: number;
+  createdAt: string;
+};
+type Exercise = { vietnamese: string; term: string };
 
 export default function Translation() {
   const navigate = useNavigate();
-  const [exercise, setExercise] = useState<{ vietnamese: string; term: string } | null>(null);
+  const [exercise, setExercise] = useState<Exercise | null>(null);
+  const [history, setHistory] = useState<Attempt[]>([]);
+  // Cau ke duoc tai san trong luc nguoi hoc go, nen bam "Cau tiep theo" la co ngay.
+  const nextExercise = useRef<Promise<Exercise> | null>(null);
   const [translation, setTranslation] = useState("");
   const [state, setState] = useState<{ tone: "info" | "error"; text: string } | null>(null);
   const [result, setResult] = useState<Result | null>(null);
@@ -24,13 +37,27 @@ export default function Translation() {
     setResult(null);
     setTranslation("");
     setState(null);
-    api.translationExercise().then(setExercise).catch((err) => {
-      if (isUnauthorized(err)) return navigate("/login");
-      setState({ tone: "error", text: err.message });
-    });
+    const pending = nextExercise.current ?? api.translationExercise();
+    nextExercise.current = null;
+    pending
+      .then((data: Exercise) => {
+        setExercise(data);
+        // Ngay sau khi co cau hien tai, tai truoc cau ke tiep.
+        const prefetch = api.translationExercise();
+        prefetch.catch(() => {}); // giu im lang, loi se hien khi that su dung toi
+        nextExercise.current = prefetch;
+      })
+      .catch((err) => {
+        if (isUnauthorized(err)) return navigate("/login");
+        setState({ tone: "error", text: err.message });
+      });
   }
 
   useEffect(loadExercise, [navigate]);
+
+  useEffect(() => {
+    api.translationHistory().then((res: { attempts: Attempt[] }) => setHistory(res.attempts)).catch(() => {});
+  }, []);
 
   async function submit() {
     if (!exercise) return;
@@ -46,6 +73,7 @@ export default function Translation() {
       const data = await api.reviewTranslation(exercise.vietnamese, trimmed);
       setState(null);
       setResult(data);
+      api.translationHistory().then((res: { attempts: Attempt[] }) => setHistory(res.attempts)).catch(() => {});
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
       setState({ tone: "error", text: err.message });
@@ -68,6 +96,15 @@ export default function Translation() {
             value={translation}
             maxLength={500}
             onChange={(e) => setTranslation(e.target.value)}
+            onKeyDown={(e) => {
+              // Ban dich chi 1 cau nen Enter = gui luon; Shift+Enter neu can xuong dong.
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (submitting || !exercise) return;
+                if (result) loadExercise(); // da cham xong -> Enter la sang cau moi
+                else submit();
+              }
+            }}
             placeholder={t("translation.placeholder")}
             className="min-h-[100px] w-full"
             disabled={!exercise}
@@ -90,6 +127,12 @@ export default function Translation() {
             </div>
           )}
         </div>
+
+        {!result && (
+          <div className="hidden rounded-ui border border-dashed border-border p-6 text-center text-sm text-fg-muted lg:block">
+            {t("translation.waitingResult")}
+          </div>
+        )}
 
         {result && (
           <div>
@@ -128,6 +171,32 @@ export default function Translation() {
             )}
           </div>
         )}
+
+        <section className="lg:col-span-2">
+          <div className="mb-2 text-xs font-bold uppercase text-primary-hover">{t("translation.historyTitle")}</div>
+          {history.length === 0 ? (
+            <div className="rounded-ui border border-dashed border-border p-4 text-center text-sm text-fg-muted">
+              {t("translation.historyEmpty")}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {history.map((a) => (
+                <Card key={a.id} className="p-3.5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <span className="font-semibold">{a.vietnamese}</span>
+                    <span className={"text-xs " + (a.correctionCount === 0 ? "text-primary" : "text-fg-muted")}>
+                      {a.correctionCount === 0
+                        ? t("translation.historyPerfect")
+                        : t("translation.historyErrors", { n: a.correctionCount })}
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm text-fg-muted">{a.translation}</div>
+                  <div className="mt-0.5 text-sm text-primary-hover">{a.corrected}</div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );

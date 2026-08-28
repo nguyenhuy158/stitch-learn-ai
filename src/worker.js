@@ -1,6 +1,7 @@
 import { createD1UserRepository } from "./adapters/d1/userRepository.js";
 import { createD1ChatRepository } from "./adapters/d1/chatRepository.js";
 import { createD1LessonRepository } from "./adapters/d1/lessonRepository.js";
+import { createD1TranslationRepository } from "./adapters/d1/translationRepository.js";
 import { createD1FeedbackRepository } from "./adapters/d1/feedbackRepository.js";
 import { createD1SavedVocabRepository } from "./adapters/d1/savedVocabRepository.js";
 import { createD1VocabReviewRepository } from "./adapters/d1/vocabReviewRepository.js";
@@ -27,6 +28,7 @@ function buildDeps(env) {
     chatRepository: createD1ChatRepository(env.DB),
     lessonRepository: createD1LessonRepository(env.DB),
     feedbackRepository: createD1FeedbackRepository(env.DB),
+    translationRepository: createD1TranslationRepository(env.DB),
     savedVocabRepository: createD1SavedVocabRepository(env.DB),
     vocabReviewRepository: createD1VocabReviewRepository(env.DB),
     dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),

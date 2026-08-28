@@ -8,6 +8,7 @@ import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
+import { getTranslationHistory } from "../../domain/usecases/getTranslationHistory.js";
 import { getTranslationExercise } from "../../domain/usecases/getTranslationExercise.js";
 import { reviewTranslation } from "../../domain/usecases/reviewTranslation.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
@@ -225,6 +226,13 @@ export async function handleRequest(request, url, deps) {
       const result = await getTranslationExercise({ userId }, deps);
       return json(result);
     }, { label: "Translation exercise error:", fallbackMessage: "Failed to load translation exercise" })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/translation/history" && request.method === "GET") {
+    return requireAuth(async (userId) => {
+      const result = await getTranslationHistory({ userId }, deps);
+      return json(result);
+    }, { label: "Translation history error:", fallbackMessage: "Failed to load translation history" })(request, url, deps);
   }
 
   if (url.pathname === "/api/translation/review" && request.method === "POST") {
