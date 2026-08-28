@@ -21,6 +21,8 @@ import { createMochiWordLookup } from "./adapters/mochi/wordLookup.js";
 import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerator.js";
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
+import { createNewsInLevelsFeed } from "./adapters/newsinlevels/feed.js";
+import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
 import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
 
@@ -55,7 +57,9 @@ function buildDeps(env) {
     wordLookupPort: createMochiWordLookup(mochi),
     avatarGeneratorPort: createDicebearAvatarGenerator(),
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
-    mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY)
+    mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY),
+    newsFeedPort: createNewsInLevelsFeed(),
+    readingRepository: createD1ReadingRepository(env.DB)
   };
 }
 

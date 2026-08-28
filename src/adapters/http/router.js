@@ -19,6 +19,7 @@ import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
+import { listReadingStories, getReadingArticle } from "../../domain/usecases/getReading.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
@@ -163,6 +164,21 @@ export async function handleRequest(request, url, deps) {
       await saveLookedUpWord({ userId, word }, deps);
       return json({ success: true });
     }, { label: "Save looked-up word error:", fallbackMessage: "Failed to save word" })(request, url, deps);
+  }
+
+  // Bai doc tin tuc theo level (nguon: newsinlevels.com, cache trong D1).
+  if (url.pathname === "/api/reading" && request.method === "GET") {
+    return requireAuth(async () => json(await listReadingStories({}, deps)), {
+      label: "Reading list error:",
+      fallbackMessage: "Failed to load reading list"
+    })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/reading/article" && request.method === "GET") {
+    return requireAuth(async () => json(await getReadingArticle({ guid: url.searchParams.get("g") }, deps)), {
+      label: "Reading article error:",
+      fallbackMessage: "Failed to load article"
+    })(request, url, deps);
   }
 
   if (url.pathname === "/api/challenge/today" && request.method === "GET") {

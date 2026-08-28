@@ -1,4 +1,4 @@
-import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, ShuffleIcon, SearchIcon, StarIcon, TranslateIcon } from "../components/icons";
+import { BookIcon, TutorIcon, CardsIcon, TargetIcon, MistakeIcon, GameIcon, SpeakerIcon, PuzzleIcon, KeyboardIcon, RainIcon, MedalIcon, TrophyIcon, ImageIcon, AlphabetIcon, ShuffleIcon, SearchIcon, StarIcon, TranslateIcon, NewspaperIcon } from "../components/icons";
 
 /* Danh sach cong cu dung chung cho trang chu va sidebar desktop. */
 export const TOOL_TABS = ["core", "games", "vocab"] as const;
@@ -9,6 +9,7 @@ export const TOOL_KEYS = [
   { key: "challenge", to: "/challenge", icon: TargetIcon, tab: "core", color: "text-red-500 bg-red-50 dark:bg-red-900/20" },
   { key: "mistakes", to: "/mistakes", icon: MistakeIcon, tab: "core", color: "text-orange-500 bg-orange-50 dark:bg-orange-900/20" },
   { key: "translation", to: "/translation", icon: TranslateIcon, tab: "core", color: "text-sky-500 bg-sky-50 dark:bg-sky-900/20" },
+  { key: "reading", to: "/reading", icon: NewspaperIcon, tab: "core", color: "text-lime-600 bg-lime-50 dark:bg-lime-900/20" },
   { key: "wordGame", to: "/word-game", icon: GameIcon, tab: "games", color: "text-green-500 bg-green-50 dark:bg-green-900/20" },
   { key: "listeningGame", to: "/listening-game", icon: SpeakerIcon, tab: "games", color: "text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20" },
   { key: "matchingGame", to: "/matching-game", icon: PuzzleIcon, tab: "games", color: "text-pink-500 bg-pink-50 dark:bg-pink-900/20" },

@@ -91,5 +91,16 @@
  *
  * @typedef {Object} MailerPort
  * @property {(input: {to: string, subject: string, html: string}) => Promise<void>} send
+ *
+ * @typedef {{guid: string, story: string, level: number, title: string, category: string, publishedAt: string, sourceUrl: string, paragraphs: string[]}} NewsArticle
+ *
+ * @typedef {Object} NewsFeedPort
+ * @property {() => Promise<NewsArticle[]>} fetchArticles
+ *
+ * @typedef {Object} ReadingRepository
+ * @property {() => Promise<string|null>} latestFetchedAt
+ * @property {(articles: NewsArticle[], fetchedAt: string) => Promise<void>} upsertArticles
+ * @property {(limit: number) => Promise<Array<{guid: string, story: string, level: number, category: string, published_at: string}>>} listArticles
+ * @property {(guid: string) => Promise<object|null>} getArticle
  */
 export {};

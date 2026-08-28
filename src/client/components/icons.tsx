@@ -38,4 +38,5 @@ export {
   Play as PlayIcon,
   Eye as EyeIcon,
   ChevronDown as ChevronDownIcon,
+  Newspaper as NewspaperIcon,
 } from "lucide-react";

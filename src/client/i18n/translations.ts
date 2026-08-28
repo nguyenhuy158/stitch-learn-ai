@@ -108,6 +108,13 @@ export const translations: Record<string, TranslationEntry> = {
   "chat.subtitle": { vi: "Luyện nói tiếng Anh với Mochi, có sửa lỗi kèm giải thích.", en: "Practice English with Mochi, with corrections and explanations." },
   "chat.empty": { vi: "Chưa có hội thoại nào. Gõ gì đó bằng tiếng Anh để bắt đầu!", en: "No conversation yet. Type something in English to get started!" },
   "chat.corrections": { vi: "Sửa lỗi", en: "Corrections" },
+
+  "reading.title": { vi: "Đọc tin tức", en: "News reading" },
+  "reading.subtitle": { vi: "Tin thật viết lại theo 3 cấp độ (nguồn: News in Levels). Bấm vào từ để tra nghĩa.", en: "Real news rewritten in 3 levels (source: News in Levels). Tap any word to look it up." },
+  "reading.empty": { vi: "Chưa có bài đọc nào, quay lại sau nhé.", en: "No articles yet, check back later." },
+  "reading.backToList": { vi: "Danh sách bài đọc", en: "Article list" },
+  "reading.source": { vi: "Xem bài gốc trên News in Levels", en: "View original on News in Levels" },
+  "home.tool.reading": { vi: "Đọc tin tức", en: "News reading" },
   "chat.placeholder": { vi: "Nhập tiếng Anh...", en: "Type in English..." },
   "chat.send": { vi: "Gửi", en: "Send" },
   "chat.newChat": { vi: "Cuộc trò chuyện mới", en: "New chat" },
