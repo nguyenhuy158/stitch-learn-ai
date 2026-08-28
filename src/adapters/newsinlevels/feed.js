@@ -57,13 +57,35 @@ export function parseNewsFeed(xml) {
   return articles;
 }
 
+/** Lay anh og:image va iframe audio SoundCloud tu HTML trang bai goc. */
+export function parseArticleMedia(html) {
+  const img = html.match(/property="og:image"\s+content="([^"]+)"/);
+  const audio = html.match(/<iframe[^>]+src="(https:\/\/w\.soundcloud\.com\/player\/[^"]+)"/);
+  return { imageUrl: img ? decode(img[1]) : "", audioUrl: audio ? decode(audio[1]) : "" };
+}
+
+const HEADERS = { "User-Agent": "ai-english (personal study app)" };
+
 /** @returns {import("../../ports/index.js").NewsFeedPort} */
 export function createNewsInLevelsFeed() {
   return {
     async fetchArticles() {
-      const res = await fetch(FEED_URL, { headers: { "User-Agent": "ai-english (personal study app)" } });
+      const res = await fetch(FEED_URL, { headers: HEADERS });
       if (!res.ok) throw new Error(`News feed error: ${res.status}`);
-      return parseNewsFeed(await res.text());
+      const articles = parseNewsFeed(await res.text());
+      // Feed khong co anh/audio — lay tu trang bai. Loi 1 trang thi bai do chi thieu media.
+      await Promise.all(
+        articles.map(async (a) => {
+          try {
+            const page = await fetch(a.sourceUrl, { headers: HEADERS });
+            Object.assign(a, page.ok ? parseArticleMedia(await page.text()) : { imageUrl: "", audioUrl: "" });
+          } catch {
+            a.imageUrl = "";
+            a.audioUrl = "";
+          }
+        })
+      );
+      return articles;
     }
   };
 }

@@ -4,7 +4,8 @@ import { cleanIpaToken, lookupIpa } from "../lib/ipa";
 import { SpeakButton } from "./SpeakButton";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
-import { StarIcon } from "./icons";
+import { CloseIcon, StarIcon } from "./icons";
+import { ShadowingButton } from "./ShadowingButton";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type WordInfo = {
@@ -39,7 +40,12 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
     lookupIpa(picked).then((res) => !stale && setIpa(res)).catch(() => {});
     api
       .lookupWord(picked, text)
-      .then((res: WordInfo) => !stale && setInfo(res))
+      .then((res: WordInfo) => {
+        if (stale) return;
+        setInfo(res);
+        // Tu da co trong bo suu tap thi nut luu hien "da luu" ngay, khong cho luu trung.
+        api.isWordSaved(res.term).then((r: { saved: boolean }) => !stale && r.saved && setSaved(true)).catch(() => {});
+      })
       .catch((err) => !stale && setError(isUnauthorized(err) ? t("common.error") : err.message));
     return () => {
       stale = true;
@@ -78,15 +84,16 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
         )}
       </p>
       <SpeakButton text={text} size="sm" />
+      <ShadowingButton text={text} />
     </>
   );
 
   return (
     <>
       {bare ? (
-        <div className="flex items-start gap-2">{sentence}</div>
+        <div className="flex flex-wrap items-start gap-2">{sentence}</div>
       ) : (
-        <Card className="flex items-start gap-3 p-4">{sentence}</Card>
+        <Card className="flex flex-wrap items-start gap-3 p-4">{sentence}</Card>
       )}
 
       {picked && (
@@ -98,6 +105,14 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
               {info?.type && <span className="ml-2 text-xs italic text-fg-muted">{info.type}</span>}
               {ipa && <span className="ml-2 text-xs text-fg-muted">/{ipa}/</span>}
             </div>
+            <button
+              type="button"
+              aria-label={t("common.close")}
+              onClick={() => setPicked(null)}
+              className="rounded p-1 text-fg-muted outline-none transition hover:bg-primary-soft focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <CloseIcon size={16} />
+            </button>
           </div>
 
           {error && <div className="mt-2 text-sm text-danger">{error}</div>}

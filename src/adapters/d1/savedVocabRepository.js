@@ -33,6 +33,16 @@ export function createD1SavedVocabRepository(db) {
         .run();
       return vocab.id;
     },
+    /** Tu nay da co trong bo suu tap cua nguoi hoc chua (so khop term, khong phan biet hoa thuong). */
+    async isTermSaved(userId, term) {
+      const row = await db
+        .prepare(
+          "SELECT 1 AS found FROM saved_vocab s JOIN vocab v ON v.id = s.vocab_id WHERE s.user_id = ? AND v.term = ? COLLATE NOCASE"
+        )
+        .bind(userId, term)
+        .first();
+      return !!row;
+    },
     async listForUser(userId) {
       const { results } = await db
         .prepare(

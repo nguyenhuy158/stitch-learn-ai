@@ -18,8 +18,8 @@ import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
-import { lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
-import { listReadingStories, getReadingArticle } from "../../domain/usecases/getReading.js";
+import { isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
+import { listReadingStories, getReadingArticle, getReadingQuiz } from "../../domain/usecases/getReading.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
@@ -157,6 +157,15 @@ export async function handleRequest(request, url, deps) {
     }, { label: "Word lookup error:", fallbackMessage: "Failed to look up word" })(request, url, deps);
   }
 
+  // Tu nay da co trong bo suu tap chua (de nut luu hien dung trang thai).
+  if (url.pathname === "/api/word/saved" && request.method === "GET") {
+    return requireAuth(async (userId) => {
+      const term = (url.searchParams.get("term") || "").trim();
+      if (!term) throw new ValidationError("Missing term");
+      return json({ saved: await isWordSaved({ userId, term }, deps) });
+    }, { label: "Check saved word error:", fallbackMessage: "Failed to check saved word" })(request, url, deps);
+  }
+
   if (url.pathname === "/api/word/save" && request.method === "POST") {
     return requireAuth(async (userId) => {
       const word = await request.json().catch(() => ({}));
@@ -178,6 +187,13 @@ export async function handleRequest(request, url, deps) {
     return requireAuth(async () => json(await getReadingArticle({ guid: url.searchParams.get("g") }, deps)), {
       label: "Reading article error:",
       fallbackMessage: "Failed to load article"
+    })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/reading/quiz" && request.method === "GET") {
+    return requireAuth(async () => json(await getReadingQuiz({ guid: url.searchParams.get("g") }, deps)), {
+      label: "Reading quiz error:",
+      fallbackMessage: "Failed to load quiz"
     })(request, url, deps);
   }
 

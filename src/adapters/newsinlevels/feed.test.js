@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseNewsFeed } from "./feed.js";
+import { parseNewsFeed, parseArticleMedia } from "./feed.js";
 
 const SAMPLE = `<rss><channel>
 <item>
@@ -35,4 +35,14 @@ test("parseNewsFeed lay bai theo level, bo boilerplate va item khong phai bai", 
     "Taylor Swift is a very famous singer. Fans buy tickets.",
     "Difficult words: ticket (a pass)."
   ]);
+});
+
+test("parseArticleMedia lay og:image va iframe soundcloud", () => {
+  const html = `<meta property="og:image" content="https://x.com/a.jpg" />
+<iframe width="100%" height="166" src="https://w.soundcloud.com/player/?url=abc&#038;color=%23ff5500"></iframe>`;
+  assert.deepEqual(parseArticleMedia(html), {
+    imageUrl: "https://x.com/a.jpg",
+    audioUrl: "https://w.soundcloud.com/player/?url=abc&color=%23ff5500"
+  });
+  assert.deepEqual(parseArticleMedia("<p>no media</p>"), { imageUrl: "", audioUrl: "" });
 });

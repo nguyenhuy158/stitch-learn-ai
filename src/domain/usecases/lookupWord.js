@@ -27,6 +27,11 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   return word;
 }
 
+/** Tu nay da nam trong bo suu tap cua nguoi hoc chua. */
+export async function isWordSaved({ userId, term }, deps) {
+  return deps.savedVocabRepository.isTermSaved(userId, term.trim());
+}
+
 /** Luu tu vua tra cuu vao bo suu tap (tu nay khong thuoc lesson nao). */
 export async function saveLookedUpWord({ userId, word }, deps) {
   await deps.savedVocabRepository.saveGeneratedWord(userId, word, LOOKUP_WORD_TAG);

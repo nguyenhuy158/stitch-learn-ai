@@ -39,4 +39,7 @@ export {
   Eye as EyeIcon,
   ChevronDown as ChevronDownIcon,
   Newspaper as NewspaperIcon,
+  Mic as MicIcon,
+  Flame as FlameIcon,
+  X as CloseIcon,
 } from "lucide-react";

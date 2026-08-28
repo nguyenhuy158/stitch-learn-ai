@@ -49,6 +49,7 @@ export const api = {
   lookupWord: (term, context) =>
     request(`/api/word/lookup?term=${encodeURIComponent(term)}${context ? `&context=${encodeURIComponent(context)}` : ""}`),
   saveLookedUpWord: (word) => request("/api/word/save", { method: "POST", body: JSON.stringify(word) }),
+  isWordSaved: (term) => request(`/api/word/saved?term=${encodeURIComponent(term)}`),
 
   rankings: () => request("/api/rankings"),
   weeklyRankings: () => request("/api/rankings/weekly"),
@@ -68,6 +69,9 @@ export const api = {
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
   readingStories: () => request("/api/reading"),
   readingArticle: (guid) => request(`/api/reading/article?g=${encodeURIComponent(guid)}`),
+  readingQuiz: (guid) => request(`/api/reading/quiz?g=${encodeURIComponent(guid)}`),
+  flashcardsDueCount: () => request("/api/flashcards/due-count"),
+  learningStats: () => request("/api/stats"),
   translationExercise: () => request("/api/translation/today"),
   translationHistory: () => request("/api/translation/history"),
   translationRecall: (count) => request(`/api/translation/recall?count=${count}`),

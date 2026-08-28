@@ -23,6 +23,8 @@ import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
 import { createNewsInLevelsFeed } from "./adapters/newsinlevels/feed.js";
 import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
+import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
+import { createMochiReadingQuiz } from "./adapters/mochi/readingQuiz.js";
 import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
 
@@ -59,7 +61,9 @@ function buildDeps(env) {
     vocabImagePort: createR2VocabImageStore(env.VOCAB_IMAGES),
     mailerPort: createMailerPort(env.MAILER, env.MAILER_KEY),
     newsFeedPort: createNewsInLevelsFeed(),
-    readingRepository: createD1ReadingRepository(env.DB)
+    readingRepository: createD1ReadingRepository(env.DB),
+    readingQuizRepository: createD1ReadingQuizRepository(env.DB),
+    readingQuizPort: createMochiReadingQuiz(mochi)
   };
 }
 

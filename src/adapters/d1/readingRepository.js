@@ -8,19 +8,21 @@ export function createD1ReadingRepository(db) {
     async upsertArticles(articles, fetchedAt) {
       if (articles.length === 0) return;
       const stmt = db.prepare(
-        `INSERT INTO reading_articles (guid, story, level, title, category, published_at, paragraphs, source_url, fetched_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-         ON CONFLICT(guid) DO UPDATE SET fetched_at = excluded.fetched_at`
+        `INSERT INTO reading_articles (guid, story, level, title, category, published_at, paragraphs, source_url, image_url, audio_url, fetched_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON CONFLICT(guid) DO UPDATE SET fetched_at = excluded.fetched_at,
+           image_url = CASE WHEN excluded.image_url != '' THEN excluded.image_url ELSE image_url END,
+           audio_url = CASE WHEN excluded.audio_url != '' THEN excluded.audio_url ELSE audio_url END`
       );
       await db.batch(
         articles.map((a) =>
-          stmt.bind(a.guid, a.story, a.level, a.title, a.category, a.publishedAt, JSON.stringify(a.paragraphs), a.sourceUrl, fetchedAt)
+          stmt.bind(a.guid, a.story, a.level, a.title, a.category, a.publishedAt, JSON.stringify(a.paragraphs), a.sourceUrl, a.imageUrl || "", a.audioUrl || "", fetchedAt)
         )
       );
     },
     async listArticles(limit) {
       const { results } = await db.prepare(
-        "SELECT guid, story, level, category, published_at FROM reading_articles ORDER BY published_at DESC LIMIT ?"
+        "SELECT guid, story, level, category, published_at, image_url FROM reading_articles ORDER BY published_at DESC LIMIT ?"
       ).bind(limit).all();
       return results;
     },

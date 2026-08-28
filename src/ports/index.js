@@ -77,6 +77,7 @@
  * @property {(userId: string, vocabId: number) => Promise<void>} save
  * @property {(userId: string, vocabId: number) => Promise<void>} unsave
  * @property {(userId: string, word: {term: string, meaning: string, type?: string, example?: string}, tag: string) => Promise<number|null>} saveGeneratedWord
+ * @property {(userId: string, term: string) => Promise<boolean>} isTermSaved
  * @property {(userId: string) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listForUser
  *
  * @typedef {Object} VocabReviewRepository
@@ -102,5 +103,14 @@
  * @property {(articles: NewsArticle[], fetchedAt: string) => Promise<void>} upsertArticles
  * @property {(limit: number) => Promise<Array<{guid: string, story: string, level: number, category: string, published_at: string}>>} listArticles
  * @property {(guid: string) => Promise<object|null>} getArticle
+ *
+ * @typedef {{question: string, choices: string[], answer: number, explanation: string}} QuizQuestion
+ *
+ * @typedef {Object} ReadingQuizPort
+ * @property {(input: {story: string, level: number, paragraphs: string[]}) => Promise<QuizQuestion[]>} generate
+ *
+ * @typedef {Object} ReadingQuizRepository
+ * @property {(guid: string) => Promise<QuizQuestion[]|null>} get
+ * @property {(guid: string, questions: QuizQuestion[], createdAt: string) => Promise<void>} put
  */
 export {};

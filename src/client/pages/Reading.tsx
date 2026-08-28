@@ -6,10 +6,11 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { cn } from "../ui/cn";
 import { ClickableSentence } from "../components/ClickableSentence";
+import { ReadingQuiz } from "../components/ReadingQuiz";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type StoryLevel = { guid: string; level: number };
-type Story = { story: string; category: string; publishedAt: string; levels: StoryLevel[] };
+type Story = { story: string; category: string; publishedAt: string; imageUrl: string; levels: StoryLevel[] };
 type Article = {
   guid: string;
   story: string;
@@ -17,6 +18,8 @@ type Article = {
   category: string;
   publishedAt: string;
   sourceUrl: string;
+  imageUrl: string;
+  audioUrl: string;
   paragraphs: string[];
 };
 
@@ -73,20 +76,30 @@ export default function Reading() {
           ) : (
             <div className="flex flex-col gap-3">
               {stories.map((s) => (
-                <Card key={s.story} className="p-4">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="text-base font-bold text-primary-hover">{s.story}</span>
-                    <span className="text-xs text-fg-muted">
-                      {s.category && `${s.category} · `}
-                      {new Date(s.publishedAt).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US")}
-                    </span>
-                  </div>
-                  <div className="mt-3 flex gap-2">
-                    {s.levels.map((l) => (
-                      <Button key={l.guid} variant="outline" size="sm" onClick={() => openLevel(l.guid)}>
-                        Level {l.level}
-                      </Button>
-                    ))}
+                <Card key={s.story} className="flex gap-4 p-4">
+                  {s.imageUrl && (
+                    <img
+                      src={s.imageUrl}
+                      alt=""
+                      loading="lazy"
+                      className="h-20 w-28 shrink-0 rounded-lg object-cover"
+                    />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <span className="text-base font-bold text-primary-hover">{s.story}</span>
+                      <span className="text-xs text-fg-muted">
+                        {s.category && `${s.category} · `}
+                        {new Date(s.publishedAt).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US")}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      {s.levels.map((l) => (
+                        <Button key={l.guid} variant="outline" size="sm" onClick={() => openLevel(l.guid)}>
+                          Level {l.level}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -120,11 +133,27 @@ export default function Reading() {
                   </Button>
                 ))}
               </div>
+              {article.imageUrl && (
+                <img src={article.imageUrl} alt="" className="mb-4 max-h-72 w-full rounded-xl object-cover" />
+              )}
+              {article.audioUrl && (
+                <iframe
+                  title="audio"
+                  src={article.audioUrl}
+                  width="100%"
+                  height="166"
+                  scrolling="no"
+                  frameBorder="no"
+                  allow="autoplay"
+                  className="mb-4 rounded-xl"
+                />
+              )}
               <div className="flex flex-col gap-3">
                 {article.paragraphs.map((p, i) => (
                   <ClickableSentence key={i} text={p} />
                 ))}
               </div>
+              <ReadingQuiz guid={article.guid} />
               <a
                 href={article.sourceUrl}
                 target="_blank"
