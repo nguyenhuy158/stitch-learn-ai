@@ -5,6 +5,7 @@ import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
+import { Modal } from "../ui/Modal";
 import { Textarea } from "../ui/Input";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { ClickableSentence } from "../components/ClickableSentence";
@@ -20,6 +21,8 @@ type Attempt = {
   correctionCount: number;
   createdAt: string;
 };
+const PAGE_SIZE = 5;
+
 type NewWord = { term: string; type: string; meaning: string; example: string };
 type Exercise = { vietnamese: string; term: string; newWord?: NewWord | null };
 
@@ -27,6 +30,8 @@ export default function Translation() {
   const navigate = useNavigate();
   const [exercise, setExercise] = useState<Exercise | null>(null);
   const [history, setHistory] = useState<Attempt[]>([]);
+  const [page, setPage] = useState(0);
+  const [opened, setOpened] = useState<Attempt | null>(null);
   // Cau ke duoc tai san trong luc nguoi hoc go, nen bam "Cau tiep theo" la co ngay.
   const nextExercise = useRef<Promise<Exercise> | null>(null);
   const [translation, setTranslation] = useState("");
@@ -34,6 +39,7 @@ export default function Translation() {
   const [result, setResult] = useState<Result | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const { t } = useLanguage();
+  const pageCount = Math.ceil(history.length / PAGE_SIZE);
 
   function loadExercise() {
     setExercise(null);
@@ -76,7 +82,10 @@ export default function Translation() {
       const data = await api.reviewTranslation(exercise.vietnamese, trimmed);
       setState(null);
       setResult(data);
-      api.translationHistory().then((res: { attempts: Attempt[] }) => setHistory(res.attempts)).catch(() => {});
+      api.translationHistory().then((res: { attempts: Attempt[] }) => {
+        setHistory(res.attempts);
+        setPage(0); // lan dich moi nhat nam o trang dau
+      }).catch(() => {});
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
       setState({ tone: "error", text: err.message });
@@ -201,24 +210,58 @@ export default function Translation() {
               {t("translation.historyEmpty")}
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
-              {history.map((a) => (
-                <Card key={a.id} className="p-3.5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="font-semibold">{a.vietnamese}</span>
-                    <span className={"text-xs " + (a.correctionCount === 0 ? "text-primary" : "text-fg-muted")}>
-                      {a.correctionCount === 0
-                        ? t("translation.historyPerfect")
-                        : t("translation.historyErrors", { n: a.correctionCount })}
-                    </span>
-                  </div>
-                  <div className="mt-1 text-sm text-fg-muted">{a.translation}</div>
-                  <div className="mt-0.5 text-sm text-primary-hover">{a.corrected}</div>
-                </Card>
-              ))}
-            </div>
+            <>
+              <div className="flex flex-col gap-2">
+                {history.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE).map((a) => (
+                  <button key={a.id} type="button" onClick={() => setOpened(a)} className="rounded-ui text-left outline-none transition focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]">
+                    <Card className="p-3.5">
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <span className="font-semibold">{a.vietnamese}</span>
+                        <span className={"text-xs " + (a.correctionCount === 0 ? "text-primary" : "text-fg-muted")}>
+                          {a.correctionCount === 0
+                            ? t("translation.historyPerfect")
+                            : t("translation.historyErrors", { n: a.correctionCount })}
+                        </span>
+                      </div>
+                      <div className="mt-1 text-sm text-fg-muted">{a.translation}</div>
+                      <div className="mt-0.5 text-sm text-primary-hover">{a.corrected}</div>
+                    </Card>
+                  </button>
+                ))}
+              </div>
+              {pageCount > 1 && (
+                <div className="mt-3 flex items-center justify-center gap-3">
+                  <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page === 0}>
+                    {t("common.prev")}
+                  </Button>
+                  <span className="text-xs text-fg-muted">{t("common.pageOf", { n: page + 1, total: pageCount })}</span>
+                  <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page + 1 >= pageCount}>
+                    {t("common.next")}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </section>
+
+        <Modal open={!!opened} onClose={() => setOpened(null)} title={t("translation.historyDetail")} description={opened?.vietnamese} size="lg">
+          {opened && (
+            <>
+              <div className="mb-1 text-xs font-bold uppercase text-primary-hover">{t("translation.yourAnswer")}</div>
+              <Card tone="muted" className="text-sm">{opened.translation}</Card>
+
+              <div className="mb-1 mt-4 text-xs font-bold uppercase text-primary-hover">{t("translation.correctedTitle")}</div>
+              <ClickableSentence text={opened.corrected} />
+
+              {opened.feedback && (
+                <>
+                  <div className="mb-1 mt-4 text-xs font-bold uppercase text-primary-hover">{t("translation.feedbackTitle")}</div>
+                  <div className="rounded-xl border-l-3 border-accent bg-warning-soft p-3 text-sm">{opened.feedback}</div>
+                </>
+              )}
+            </>
+          )}
+        </Modal>
       </main>
     </div>
   );

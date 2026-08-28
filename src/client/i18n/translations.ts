@@ -147,6 +147,12 @@ export const translations: Record<string, TranslationEntry> = {
   "translation.historyPerfect": { vi: "Không lỗi", en: "No mistakes" },
   "translation.historyErrors": { vi: "{n} lỗi", en: "{n} mistakes" },
   "translation.newWordTitle": { vi: "Từ mới đã thêm vào bộ sưu tập", en: "New word added to your collection" },
+  "translation.historyDetail": { vi: "Chi tiết lần dịch", en: "Attempt detail" },
+  "translation.yourAnswer": { vi: "Bản dịch của bạn", en: "Your translation" },
+  "common.prev": { vi: "Trước", en: "Previous" },
+  "common.next": { vi: "Sau", en: "Next" },
+  "common.pageOf": { vi: "Trang {n}/{total}", en: "Page {n}/{total}" },
+
   "translation.waitingResult": { vi: "Kết quả chấm sẽ hiện ở đây.", en: "Your graded result will appear here." },
   "translation.noErrors": { vi: "Bản dịch rất chính xác. Làm tốt lắm!", en: "Great translation. Well done!" },
 
