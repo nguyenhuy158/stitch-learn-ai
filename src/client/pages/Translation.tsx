@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ArrowRightIcon, CheckIcon } from "../components/icons";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
@@ -110,13 +111,13 @@ export default function Translation() {
             disabled={!exercise}
           />
           <div className="mt-1.5 text-right text-xs text-fg-muted">{translation.length}/500</div>
-          <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting || !exercise}>
+          <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting || !exercise} leftIcon={<CheckIcon size={16} />}>
             {t("translation.submit")}
           </Button>
           {result && (
-            <Button block variant="secondary" className="mt-2" onClick={loadExercise}>
-              {t("translation.next")}
-            </Button>
+            <Button block variant="secondary" className="mt-2" onClick={loadExercise} leftIcon={<ArrowRightIcon size={16} />}>
+            {t("translation.next")}
+          </Button>
           )}
           {state && (
             <div
@@ -161,7 +162,7 @@ export default function Translation() {
                   <Card key={i} className="p-4">
                     <div className="flex flex-wrap items-baseline gap-2 text-sm">
                       <span className="text-danger line-through">{c.original}</span>
-                      <span>→</span>
+                      <ArrowRightIcon size={14} className="text-fg-muted" aria-hidden="true" />
                       <span className="font-bold text-primary">{c.suggestion}</span>
                     </div>
                     <div className="text-xs text-fg-muted">{c.explanation}</div>

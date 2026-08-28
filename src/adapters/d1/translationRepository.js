@@ -11,6 +11,19 @@ export function createD1TranslationRepository(db) {
         .bind(userId, vietnamese, translation, corrected, feedback, correctionCount, createdAt)
         .run();
     },
+    /** Cau de on lai: uu tien cau tung dich sai, con lai random. */
+    async pickAttemptsForReview(userId, limit) {
+      const { results } = await db
+        .prepare(
+          `SELECT id, vietnamese, corrected FROM translation_attempts
+           WHERE user_id = ?
+           ORDER BY (correction_count > 0) DESC, RANDOM()
+           LIMIT ?`
+        )
+        .bind(userId, limit)
+        .all();
+      return results;
+    },
     async listAttempts(userId, limit) {
       const { results } = await db
         .prepare(

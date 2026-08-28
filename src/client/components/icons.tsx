@@ -29,4 +29,12 @@ export {
   Plus as PlusIcon,
   Settings as SettingsIcon,
   Languages as TranslateIcon,
+  ArrowLeft as ArrowLeftIcon,
+  ArrowRight as ArrowRightIcon,
+  RotateCcw as ReplayIcon,
+  SlidersHorizontal as SlidersIcon,
+  Undo2 as UndoIcon,
+  LogOut as LogOutIcon,
+  Play as PlayIcon,
+  Eye as EyeIcon,
 } from "lucide-react";

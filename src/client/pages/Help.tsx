@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SendIcon } from "../components/icons";
 import { api } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
 import { Card } from "../ui/Card";
@@ -59,9 +60,9 @@ export default function Help() {
           placeholder={t("help.placeholder")}
           className="min-h-[100px] w-full"
         />
-        <Button block className="mt-3" onClick={submit} loading={submitting} disabled={submitting}>
-          {t("help.sendFeedback")}
-        </Button>
+        <Button block className="mt-3" onClick={submit} loading={submitting} disabled={submitting} leftIcon={<SendIcon size={16} />}>
+            {t("help.sendFeedback")}
+          </Button>
         {state && (
           <div
             role={state.tone === "error" ? "alert" : "status"}

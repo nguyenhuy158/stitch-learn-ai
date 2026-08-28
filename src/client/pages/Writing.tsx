@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ArrowRightIcon, CheckIcon } from "../components/icons";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader } from "../components/PageHeader";
@@ -52,7 +53,7 @@ export default function Writing() {
             className="min-h-[140px] w-full"
           />
           <div className="mt-1.5 text-right text-xs text-fg-muted">{text.length}/2000</div>
-          <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting}>
+          <Button block className="mt-3.5" onClick={submit} loading={submitting} disabled={submitting} leftIcon={<CheckIcon size={16} />}>
             {t("writing.submit")}
           </Button>
           {state && (
@@ -92,7 +93,7 @@ export default function Writing() {
                   <Card key={i} className="p-4">
                     <div className="flex flex-wrap items-baseline gap-2 text-sm">
                       <span className="text-danger line-through">{c.original}</span>
-                      <span>→</span>
+                      <ArrowRightIcon size={14} className="text-fg-muted" aria-hidden="true" />
                       <span className="font-bold text-primary">
                         {c.suggestion}
                       </span>

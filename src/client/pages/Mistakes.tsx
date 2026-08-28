@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ArrowRightIcon } from "../components/icons";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
@@ -63,7 +64,7 @@ export default function Mistakes() {
                 <Card key={i} className="p-4">
                   <div className="flex flex-wrap items-baseline gap-2 text-sm">
                     {c.original && <span className="text-danger line-through">{c.original}</span>}
-                    {c.original && c.suggestion && <span>→</span>}
+                    {c.original && c.suggestion && <ArrowRightIcon size={14} className="text-fg-muted" aria-hidden="true" />}
                     {c.suggestion && <span className="font-bold text-primary">{c.suggestion}</span>}
                   </div>
                   {c.explanation && <div className="text-xs text-fg-muted">{c.explanation}</div>}

@@ -64,6 +64,7 @@ export const api = {
   reviewWriting: (text) => request("/api/writing/review", { method: "POST", body: JSON.stringify({ text }) }),
   translationExercise: () => request("/api/translation/today"),
   translationHistory: () => request("/api/translation/history"),
+  translationRecall: (count) => request(`/api/translation/recall?count=${count}`),
   reviewTranslation: (vietnamese, translation) =>
     request("/api/translation/review", { method: "POST", body: JSON.stringify({ vietnamese, translation }) }),
 

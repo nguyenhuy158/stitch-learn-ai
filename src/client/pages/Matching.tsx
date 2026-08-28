@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ReplayIcon, SlidersIcon } from "../components/icons";
 import { useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
 import { PageHeader, PageState } from "../components/PageHeader";
@@ -218,7 +219,7 @@ export default function Matching() {
               </div>
             )}
             <div className="mt-4 flex gap-3">
-              <Button
+              <Button leftIcon={<SlidersIcon size={16} />}
                 block
                 variant="outline"
                 onClick={() => {
@@ -228,9 +229,9 @@ export default function Matching() {
               >
                 {t("game.changeDifficulty")}
               </Button>
-              <Button block onClick={() => load(difficulty)}>
-                {t("game.playAgain")}
-              </Button>
+              <Button block onClick={() => load(difficulty)} leftIcon={<ReplayIcon size={16} />}>
+            {t("game.playAgain")}
+          </Button>
             </div>
           </Card>
         )}

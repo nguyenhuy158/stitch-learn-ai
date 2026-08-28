@@ -8,6 +8,7 @@ import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
 import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
+import { getTranslationRecallRound } from "../../domain/usecases/getTranslationRecallRound.js";
 import { getTranslationHistory } from "../../domain/usecases/getTranslationHistory.js";
 import { getTranslationExercise } from "../../domain/usecases/getTranslationExercise.js";
 import { reviewTranslation } from "../../domain/usecases/reviewTranslation.js";
@@ -233,6 +234,13 @@ export async function handleRequest(request, url, deps) {
       const result = await getTranslationHistory({ userId }, deps);
       return json(result);
     }, { label: "Translation history error:", fallbackMessage: "Failed to load translation history" })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/translation/recall" && request.method === "GET") {
+    return requireAuth(async (userId) => {
+      const result = await getTranslationRecallRound({ userId, count: url.searchParams.get("count") }, deps);
+      return json(result);
+    }, { label: "Translation recall error:", fallbackMessage: "Failed to load recall round" })(request, url, deps);
   }
 
   if (url.pathname === "/api/translation/review" && request.method === "POST") {

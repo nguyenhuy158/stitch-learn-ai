@@ -6,7 +6,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Spinner } from "../ui/Spinner";
 import { LoadingState, ErrorState } from "../ui/states";
-import { SendIcon, PlusIcon } from "../components/icons";
+import { PlusIcon, SendIcon } from "../components/icons";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -90,7 +90,7 @@ export default function Chat() {
           <h1 className="m-0 text-lg font-bold">Mochi</h1>
           <p className="m-0 text-xs text-fg-muted">{t("chat.subtitle")}</p>
         </div>
-        <Button
+        <Button leftIcon={<PlusIcon size={16} />}
           variant="outline"
           size="sm"
           onClick={clearChat}

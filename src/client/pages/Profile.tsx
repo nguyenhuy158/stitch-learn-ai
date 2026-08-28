@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LogOutIcon } from "../components/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Avatar } from "../ui/Avatar";
@@ -152,8 +153,9 @@ export default function Profile() {
       <button
         type="button"
         onClick={() => setConfirmLogout(true)}
-        className="w-full rounded-ui border border-danger py-3 text-sm font-semibold text-danger"
+        className="flex w-full items-center justify-center gap-2 rounded-ui border border-danger py-3 text-sm font-semibold text-danger"
       >
+        <LogOutIcon size={16} />
         {t("profile.logout")}
       </button>
 

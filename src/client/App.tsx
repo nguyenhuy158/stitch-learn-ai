@@ -12,6 +12,7 @@ import Listening from "./pages/Listening";
 import Matching from "./pages/Matching";
 import Spelling from "./pages/Spelling";
 import Scramble from "./pages/Scramble";
+import TranslationRecall from "./pages/TranslationRecall";
 import WordRace from "./pages/WordRace";
 import GamesLeaderboard from "./pages/GamesLeaderboard";
 import Challenge from "./pages/Challenge";
@@ -28,12 +29,13 @@ import Appearance from "./pages/Appearance";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
-// Pages that keep the 5-tab shell (the 5 "new" screens described in the migration brief).
-const SHELL_ROUTES = new Set(["/", "/lessons", "/chat", "/history", "/profile"]);
+// Trang dang nhap dung mot minh; moi trang con lai deu nam trong shell de tren
+// PC luon co sidebar dieu huong (truoc day chi 5 trang co, vao game la mat nav).
+const BARE_ROUTES = new Set(["/login"]);
 
 export default function App() {
   const location = useLocation();
-  const useShell = SHELL_ROUTES.has(location.pathname);
+  const useShell = !BARE_ROUTES.has(location.pathname);
 
   const routes = (
     <Routes>
@@ -50,6 +52,7 @@ export default function App() {
       <Route path="/spelling-game" element={<Spelling />} />
       <Route path="/word-race" element={<WordRace />} />
       <Route path="/scramble-game" element={<Scramble />} />
+      <Route path="/translation-recall" element={<TranslationRecall />} />
       <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/picture-vocab" element={<PictureVocab />} />
