@@ -19,7 +19,9 @@ export function createMochiClient({ ai, model, gateway }) {
     try {
       result = await ai.run(
         model,
-        { messages, response_format: { type: "json_schema", json_schema: schema } },
+        // max_tokens mac dinh cua Workers AI qua nho: JSON bi cat giua chung roi
+        // parse loi (bai chua nhieu correction + giai thich tieng Viet la dinh).
+        { messages, max_tokens: 2048, response_format: { type: "json_schema", json_schema: schema } },
         gateway ? { gateway: { id: gateway } } : undefined
       );
     } catch (err) {
