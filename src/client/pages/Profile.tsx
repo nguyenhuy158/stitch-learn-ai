@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { LogOutIcon } from "../components/icons";
+import { CheckIcon, ChevronDownIcon, LogOutIcon } from "../components/icons";
+import { Menu } from "../ui/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { Avatar } from "../ui/Avatar";
@@ -161,17 +162,24 @@ export default function Profile() {
             <div className="text-sm">{t("profile.aiModelLabel")}</div>
             <div className="mt-0.5 text-xs text-fg-muted">{t("profile.aiModelDesc")}</div>
           </div>
-          <select
-            value={aiConfig.model}
-            onChange={(e) => saveAiConfig({ model: e.target.value })}
-            className="shrink-0 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold"
-          >
-            {AI_MODELS.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.label}
-              </option>
-            ))}
-          </select>
+          <Menu
+            className="shrink-0"
+            items={AI_MODELS.map((m) => ({
+              label: m.label,
+              icon: <CheckIcon size={16} className={aiConfig.model === m.id ? "" : "invisible"} />,
+              onSelect: () => saveAiConfig({ model: m.id })
+            }))}
+            trigger={(props) => (
+              <button
+                type="button"
+                {...props}
+                className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold"
+              >
+                {AI_MODELS.find((m) => m.id === aiConfig.model)?.label ?? AI_MODELS[0].label}
+                <ChevronDownIcon size={14} className="text-fg-muted" />
+              </button>
+            )}
+          />
         </div>
         <div className="flex items-center justify-between gap-3 p-4">
           <div>

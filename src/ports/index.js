@@ -64,6 +64,10 @@
  * @typedef {Object} WordLookupPort
  * @property {(input: {term: string, context?: string|null}) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}>} lookup
  *
+ * @typedef {Object} WordLookupCacheRepository
+ * @property {(term: string) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}|null>} get
+ * @property {(word: object, createdAt: string) => Promise<void>} put
+ *
  * @typedef {Object} FeedbackRepository
  * @property {(userId: string, message: string) => Promise<void>} create
  *

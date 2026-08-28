@@ -5,6 +5,7 @@ import { createD1TranslationRepository } from "./adapters/d1/translationReposito
 import { createD1FeedbackRepository } from "./adapters/d1/feedbackRepository.js";
 import { createD1SavedVocabRepository } from "./adapters/d1/savedVocabRepository.js";
 import { createD1VocabReviewRepository } from "./adapters/d1/vocabReviewRepository.js";
+import { createD1WordLookupCacheRepository } from "./adapters/d1/wordLookupCacheRepository.js";
 import { createD1DailyChallengeRepository } from "./adapters/d1/dailyChallengeRepository.js";
 import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js";
 import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.js";
@@ -38,6 +39,7 @@ function buildDeps(env) {
     translationRepository: createD1TranslationRepository(env.DB),
     savedVocabRepository: createD1SavedVocabRepository(env.DB),
     vocabReviewRepository: createD1VocabReviewRepository(env.DB),
+    wordLookupCacheRepository: createD1WordLookupCacheRepository(env.DB),
     dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),
     wordGameRepository: createD1WordGameRepository(env.DB),
     gameScoreRepository: createD1GameScoreRepository(env.DB),

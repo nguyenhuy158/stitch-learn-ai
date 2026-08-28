@@ -37,4 +37,5 @@ export {
   LogOut as LogOutIcon,
   Play as PlayIcon,
   Eye as EyeIcon,
+  ChevronDown as ChevronDownIcon,
 } from "lucide-react";
