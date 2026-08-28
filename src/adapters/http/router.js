@@ -4,7 +4,7 @@ import { startSsoLogin } from "../../domain/usecases/startSsoLogin.js";
 import { getCurrentUser } from "../../domain/usecases/getCurrentUser.js";
 import { updateProfile } from "../../domain/usecases/updateProfile.js";
 import { sendChatMessage } from "../../domain/usecases/sendChatMessage.js";
-import { getChatHistory } from "../../domain/usecases/getChatHistory.js";
+import { getChatHistory, listConversations } from "../../domain/usecases/getChatHistory.js";
 import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
@@ -334,21 +334,29 @@ export async function handleRequest(request, url, deps) {
 
   if (url.pathname === "/api/chat" && request.method === "POST") {
     return requireAuth(async (userId) => {
-      const { message } = await request.json();
-      const reply = await sendChatMessage({ userId, message }, deps);
+      const { message, conversationId } = await request.json();
+      const reply = await sendChatMessage({ userId, message, conversationId }, deps);
       return json(reply);
     }, { label: "Chat API Error:", passthroughMessage: true })(request, url, deps);
   }
 
-  if (url.pathname === "/api/chat/history") {
-    return requireAuth(async (userId) => json(await getChatHistory({ userId }, deps)), {
+  if (url.pathname === "/api/chat/conversations") {
+    return requireAuth(async (userId) => json(await listConversations({ userId }, deps)), {
       passthroughMessage: true
     })(request, url, deps);
   }
 
+  if (url.pathname === "/api/chat/history") {
+    return requireAuth(
+      async (userId) => json(await getChatHistory({ userId, conversationId: url.searchParams.get("c") }, deps)),
+      { passthroughMessage: true }
+    )(request, url, deps);
+  }
+
   if (url.pathname === "/api/chat/clear" && request.method === "POST") {
     return requireAuth(async (userId) => {
-      await clearChatHistory({ userId }, deps);
+      const { conversationId } = await request.json();
+      await clearChatHistory({ userId, conversationId }, deps);
       return json({ success: true });
     }, { label: "Clear chat history error:", fallbackMessage: "Failed to clear chat history" })(request, url, deps);
   }

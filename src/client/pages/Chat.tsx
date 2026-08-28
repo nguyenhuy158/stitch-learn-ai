@@ -1,42 +1,57 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { api, isUnauthorized } from "../lib/api";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { Menu } from "../ui/Menu";
 import { Spinner } from "../ui/Spinner";
 import { LoadingState, ErrorState } from "../ui/states";
-import { PlusIcon, SendIcon } from "../components/icons";
+import { CheckIcon, HistoryIcon, PlusIcon, SendIcon } from "../components/icons";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type Message = { role: "user" | "model"; content: string; created_at?: string };
+type Conversation = { id: string; title: string | null; last_at: string; message_count: number };
+
+/** Cuoc tro chuyen dang mo duoc nho lai de F5 khong nhay ve cuoc khac. */
+const STORAGE_KEY = "mochi.conversation";
+const newConversationId = () => crypto.randomUUID();
 
 export default function Chat() {
   const navigate = useNavigate();
+  const [conversationId, setConversationId] = useState(
+    () => localStorage.getItem(STORAGE_KEY) || newConversationId()
+  );
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [clearing, setClearing] = useState(false);
   const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
 
-  function loadHistory() {
+  const loadHistory = useCallback(() => {
     setError("");
+    setMessages(null);
     api
-      .chatHistory()
-      .then((data) => setMessages(Array.isArray(data) ? data : []))
-      .catch((err) => {
+      .chatHistory(conversationId)
+      .then((data: Message[]) => setMessages(Array.isArray(data) ? data : []))
+      .catch((err: any) => {
         if (isUnauthorized(err)) return navigate("/login");
         setError(err.message);
       });
-  }
+  }, [conversationId, navigate]);
+
+  const loadConversations = useCallback(() => {
+    api.chatConversations().then(setConversations).catch(() => {});
+  }, []);
 
   useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, conversationId);
     loadHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
+  }, [conversationId, loadHistory]);
+
+  useEffect(loadConversations, [loadConversations]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,8 +64,9 @@ export default function Chat() {
     setMessages((prev) => [...(prev || []), { role: "user", content: text }]);
     setSending(true);
     try {
-      const reply = await api.sendChat(text);
+      const reply = await api.sendChat(text, conversationId);
       setMessages((prev) => [...(prev || []), { role: "model", content: reply.message ?? "" }]);
+      loadConversations();
     } catch (err: any) {
       if (isUnauthorized(err)) return navigate("/login");
       setError(err.message);
@@ -59,47 +75,41 @@ export default function Chat() {
     }
   }
 
-  async function doClearChat() {
-    setClearing(true);
-    try {
-      await api.clearChat();
-      setMessages([]);
-      toast.success(t("chat.cleared"));
-    } catch (err: any) {
-      if (isUnauthorized(err)) return navigate("/login");
-      toast.error(err.message);
-    } finally {
-      setClearing(false);
-    }
-  }
-
-  function clearChat() {
-    if (clearing) return;
-    // Xac nhan qua toast action/cancel thay window.confirm — dialog native chan
-    // toan bo event loop cua trang (vd. browser automation timeout khi test).
-    toast(t("chat.confirmClear"), {
-      action: { label: t("common.confirm"), onClick: doClearChat },
-      cancel: { label: t("common.cancel"), onClick: () => {} }
-    });
+  /** Cuoc tro chuyen cu van nam nguyen trong D1, chi mo mot id moi. */
+  function startNewChat() {
+    setConversationId(newConversationId());
   }
 
   return (
     <div className="mx-auto flex h-dvh max-w-3xl flex-col">
-      <header className="flex items-center justify-between border-b border-border px-5 py-4">
-        <div>
+      <header className="flex items-center justify-between gap-2 border-b border-border px-5 py-4">
+        <div className="min-w-0">
           <h1 className="m-0 text-lg font-bold">Mochi</h1>
-          <p className="m-0 text-xs text-fg-muted">{t("chat.subtitle")}</p>
+          <p className="m-0 truncate text-xs text-fg-muted">{t("chat.subtitle")}</p>
         </div>
-        <Button leftIcon={<PlusIcon size={16} />}
-          variant="outline"
-          size="sm"
-          onClick={clearChat}
-          disabled={clearing || !messages || messages.length === 0}
-          aria-label={t("chat.newChat")}
-        >
-          <PlusIcon size={16} />
-          {t("chat.newChat")}
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Menu
+            align="right"
+            items={
+              conversations.length
+                ? conversations.map((c) => ({
+                    label: c.title?.slice(0, 40) || t("chat.untitled"),
+                    icon: <CheckIcon size={16} className={c.id === conversationId ? "" : "invisible"} />,
+                    onSelect: () => setConversationId(c.id)
+                  }))
+                : [{ label: t("chat.noConversations"), onSelect: () => {}, disabled: true }]
+            }
+            trigger={(props) => (
+              <Button {...props} variant="outline" size="sm" aria-label={t("chat.conversations")}>
+                <HistoryIcon size={16} />
+              </Button>
+            )}
+          />
+          <Button variant="outline" size="sm" onClick={startNewChat} aria-label={t("chat.newChat")}>
+            <PlusIcon size={16} />
+            {t("chat.newChat")}
+          </Button>
+        </div>
       </header>
 
       <div className="flex-1 overflow-y-auto p-5">

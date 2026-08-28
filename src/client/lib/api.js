@@ -74,7 +74,11 @@ export const api = {
 
   sendFeedback: (message) => request("/api/feedback", { method: "POST", body: JSON.stringify({ message }) }),
 
-  chatHistory: () => request("/api/chat/history"),
-  sendChat: (message) => request("/api/chat", { method: "POST", body: JSON.stringify({ message }) }),
-  clearChat: () => request("/api/chat/clear", { method: "POST" }),
+  chatHistory: (conversationId) =>
+    request(conversationId ? `/api/chat/history?c=${encodeURIComponent(conversationId)}` : "/api/chat/history"),
+  chatConversations: () => request("/api/chat/conversations"),
+  sendChat: (message, conversationId) =>
+    request("/api/chat", { method: "POST", body: JSON.stringify({ message, conversationId }) }),
+  clearChat: (conversationId) =>
+    request("/api/chat/clear", { method: "POST", body: JSON.stringify({ conversationId }) }),
 };

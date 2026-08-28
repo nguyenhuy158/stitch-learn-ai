@@ -1,12 +1,15 @@
 import { recordLearningActivity } from "./recordLearningActivity.js";
 import { localDate } from "../streak.js";
+import { assertConversationId } from "../conversation.js";
 
-export async function sendChatMessage({ userId, message }, { userRepository, chatRepository, aiTutorPort }, now = new Date()) {
+export async function sendChatMessage({ userId, message, conversationId }, { userRepository, chatRepository, aiTutorPort }, now = new Date()) {
+  const convo = assertConversationId(conversationId);
   const user = await userRepository.findById(userId);
   const level = user?.level || "B1";
-  const history = await chatRepository.listRecent(userId, 10);
+  // Chi lay lich su cua dung cuoc tro chuyen nay, khong tron sang cuoc khac.
+  const history = await chatRepository.listRecent(userId, convo, 10);
   const reply = await aiTutorPort.reply({ level, history, message, config: user?.gemini_config });
-  await chatRepository.appendExchange(userId, message, reply.message, {
+  await chatRepository.appendExchange(userId, convo, message, reply.message, {
     feedback: reply.feedback,
     corrections: reply.corrections
   });
