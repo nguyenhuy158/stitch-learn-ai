@@ -31,8 +31,9 @@ export default function Flashcards() {
   const [error, setError] = useState("");
   const [grading, setGrading] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
-  const [level, setLevel] = useState<string | null>(null);
-  const [lessonId, setLessonId] = useState<number | null>(null);
+  // Nho lua chon giua cac phien — localStorage du, khong can dong bo server.
+  const [level, setLevel] = useState<string | null>(() => localStorage.getItem("flashcards.level") || null);
+  const [lessonId, setLessonId] = useState<number | null>(() => Number(localStorage.getItem("flashcards.lessonId")) || null);
   const [lessons, setLessons] = useState<{ id: number; title: string }[]>([]);
   const { t } = useLanguage();
   const toast = useToast();
@@ -53,9 +54,21 @@ export default function Flashcards() {
     })();
   }, [navigate, t, level, lessonId]);
 
+  useEffect(() => {
+    if (level) localStorage.setItem("flashcards.level", level);
+    else localStorage.removeItem("flashcards.level");
+    if (lessonId) localStorage.setItem("flashcards.lessonId", String(lessonId));
+    else localStorage.removeItem("flashcards.lessonId");
+  }, [level, lessonId]);
+
   // Danh sach goi tu vung de chon — chi tai 1 lan.
   useEffect(() => {
-    api.lessons().then((rows: any) => setLessons(Array.isArray(rows) ? rows.filter((l: any) => l.type === "vocab" && !l.is_locked) : [])).catch(() => {});
+    api.lessons().then((rows: any) => {
+      const list = Array.isArray(rows) ? rows.filter((l: any) => l.type === "vocab" && !l.is_locked) : [];
+      setLessons(list);
+      // Goi da nho co the bi xoa/khoa -> quay ve tat ca thay vi list rong.
+      setLessonId((id) => (id && !list.some((l: any) => l.id === id) ? null : id));
+    }).catch(() => {});
   }, []);
 
   const current = cards && cards.length ? cards[0] : null;
