@@ -3,7 +3,7 @@ export function createD1VocabReviewRepository(db) {
   return {
     // Only vocab attached to an unlocked lesson, same restriction
     // lessonRepository.listAllVocab() applied before spaced repetition existed.
-    async listDue(userId, today, limit, level = null) {
+    async listDue(userId, today, limit, level = null, lessonId = null) {
       const { results } = await db
         .prepare(
           `SELECT v.id, v.term, v.meaning, v.example, v.word_family, v.level, v.image_key,
@@ -15,11 +15,12 @@ export function createD1VocabReviewRepository(db) {
            LEFT JOIN vocab_review r ON r.vocab_id = v.id AND r.user_id = ?
            WHERE l.is_locked = 0 AND (r.vocab_id IS NULL OR r.due_date <= ?)
              AND (?3 IS NULL OR v.level = ?3)
+             AND (?5 IS NULL OR l.id = ?5)
            GROUP BY v.id
            ORDER BY (r.due_date IS NOT NULL) DESC, r.due_date ASC, RANDOM()
            LIMIT ?4`
         )
-        .bind(userId, today, level, limit)
+        .bind(userId, today, level, limit, lessonId)
         .all();
       return results;
     },

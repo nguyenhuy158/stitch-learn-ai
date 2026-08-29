@@ -41,7 +41,12 @@ export const api = {
   lessons: () => request("/api/lessons"),
   lessonDetail: (id) => request(`/api/lessons/${id}`),
 
-  vocab: (level) => request(`/api/vocab${level ? `?level=${level}` : ""}`),
+  vocab: (level, lessonId) => {
+    const q = new URLSearchParams();
+    if (level) q.set("level", level);
+    if (lessonId) q.set("lessonId", String(lessonId));
+    return request(`/api/vocab${q.toString() ? `?${q}` : ""}`);
+  },
   savedVocab: () => request("/api/vocab/saved"),
   saveVocab: (id, save) => request(`/api/vocab/${id}/save`, { method: "POST", body: JSON.stringify({ save }) }),
   reviewVocab: (id, quality) => request(`/api/vocab/${id}/review`, { method: "POST", body: JSON.stringify({ quality }) }),

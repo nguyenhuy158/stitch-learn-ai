@@ -32,6 +32,8 @@ export default function Flashcards() {
   const [grading, setGrading] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
   const [level, setLevel] = useState<string | null>(null);
+  const [lessonId, setLessonId] = useState<number | null>(null);
+  const [lessons, setLessons] = useState<{ id: number; title: string }[]>([]);
   const { t } = useLanguage();
   const toast = useToast();
 
@@ -39,7 +41,7 @@ export default function Flashcards() {
     setCards(null);
     (async () => {
       try {
-        const [vocab, saved, me] = await Promise.all([api.vocab(level), api.savedVocab(), api.me()]);
+        const [vocab, saved, me] = await Promise.all([api.vocab(level, lessonId), api.savedVocab(), api.me()]);
         const sessionSize = me.user?.flashcard_session_size || 10;
         setCards(Array.isArray(vocab) ? vocab.slice(0, sessionSize) : []);
         setSavedIds(new Set((Array.isArray(saved) ? saved : []).map((s: any) => s.id)));
@@ -49,7 +51,12 @@ export default function Flashcards() {
         setError(t("flashcards.loadError") + err.message);
       }
     })();
-  }, [navigate, t, level]);
+  }, [navigate, t, level, lessonId]);
+
+  // Danh sach goi tu vung de chon — chi tai 1 lan.
+  useEffect(() => {
+    api.lessons().then((rows: any) => setLessons(Array.isArray(rows) ? rows.filter((l: any) => l.type === "vocab" && !l.is_locked) : [])).catch(() => {});
+  }, []);
 
   const current = cards && cards.length ? cards[0] : null;
 
@@ -169,6 +176,18 @@ export default function Flashcards() {
               {lv ?? t("flashcards.levelAll")}
             </button>
           ))}
+        </div>
+        <div className="mb-4 flex justify-center">
+          <select
+            value={lessonId ?? ""}
+            onChange={(e) => setLessonId(e.target.value ? Number(e.target.value) : null)}
+            className="max-w-full rounded-ui bg-surface px-3 py-1.5 text-xs font-semibold text-fg-muted shadow-sm"
+          >
+            <option value="">{t("flashcards.levelAll")}</option>
+            {lessons.map((l) => (
+              <option key={l.id} value={l.id}>{l.title}</option>
+            ))}
+          </select>
         </div>
         {error && <PageState tone="error">{error}</PageState>}
         {!error && cards === null && <LoadingState />}
