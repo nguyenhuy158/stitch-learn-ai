@@ -11,14 +11,15 @@ export function createD1WordLookupCacheRepository(db) {
         example: row.example,
         // Danh sach ngan nen luu chuoi ngan cach bang dau phay cho gon.
         synonyms: row.synonyms ? row.synonyms.split(",") : [],
-        antonyms: row.antonyms ? row.antonyms.split(",") : []
+        antonyms: row.antonyms ? row.antonyms.split(",") : [],
+        audioUrl: row.audio_url || ""
       };
     },
     async put(key, word, createdAt) {
       await db
         .prepare(
-          `INSERT INTO word_lookups (term, base_term, type, meaning, example, synonyms, antonyms, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(term) DO NOTHING`
+          `INSERT INTO word_lookups (term, base_term, type, meaning, example, synonyms, antonyms, audio_url, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(term) DO NOTHING`
         )
         .bind(
           key,
@@ -28,6 +29,7 @@ export function createD1WordLookupCacheRepository(db) {
           word.example ?? "",
           (word.synonyms ?? []).join(","),
           (word.antonyms ?? []).join(","),
+          word.audioUrl ?? "",
           createdAt
         )
         .run();

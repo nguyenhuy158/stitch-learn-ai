@@ -15,6 +15,7 @@ type WordInfo = {
   example: string;
   synonyms: string[];
   antonyms: string[];
+  audioUrl?: string;
 };
 
 /**
@@ -106,7 +107,7 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
       {picked && (
         <Card className="mt-2 p-4">
           <div className="flex items-center gap-2">
-            <SpeakButton text={info?.term ?? picked} size="sm" />
+            <SpeakButton text={info?.term ?? picked} audioUrl={info?.audioUrl} size="sm" />
             <div className="flex-1">
               <span className="text-base font-bold text-primary-hover">{info?.term ?? picked}</span>
               {info?.type && <span className="ml-2 text-xs italic text-fg-muted">{info.type}</span>}

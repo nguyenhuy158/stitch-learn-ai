@@ -70,6 +70,9 @@
  * @property {(term: string) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}|null>} get
  * @property {(key: string, word: object, createdAt: string) => Promise<void>} put
  *
+ * @typedef {Object} DictionaryPort
+ * @property {(term: string) => Promise<{audioUrl: string, synonyms: string[], antonyms: string[]}>} lookup
+ *
  * @typedef {Object} ExampleSentencesPort
  * @property {(term: string) => Promise<Array<{en: string, vi: string}>>} search
  *

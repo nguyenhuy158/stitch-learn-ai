@@ -17,11 +17,14 @@ export function SpeakButton({
   size = "md",
   label,
   className,
+  audioUrl,
 }: {
   text: string;
   size?: keyof typeof SIZE;
   label?: string;
   className?: string;
+  /** mp3 doc tu that (dictionaryapi.dev); loi thi rot ve speechSynthesis. */
+  audioUrl?: string;
 }) {
   const { t } = useLanguage();
   const accessibleLabel = label ?? t("audio.speak");
@@ -29,7 +32,7 @@ export function SpeakButton({
   return (
     <button
       type="button"
-      onClick={() => speak(text)}
+      onClick={() => (audioUrl ? new Audio(audioUrl).play().catch(() => speak(text)) : speak(text))}
       title={accessibleLabel}
       aria-label={accessibleLabel}
       className={cn(

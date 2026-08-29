@@ -12,12 +12,12 @@ không được làm hỏng tính năng.
   của `ClickableSentence` (EN + nghĩa Việt).
 - Sau này: dùng câu Tatoeba làm câu hỏi cho games (scramble, translation) thay câu AI bịa.
 
-## 2. freeDictionaryAPI (dictionaryapi.dev) — definition + audio phát âm
+## 2. freeDictionaryAPI (dictionaryapi.dev) — definition + audio phát âm ✅ (đã làm)
 
 - https://github.com/meetDeveloper/freeDictionaryAPI — `GET https://api.dictionaryapi.dev/api/v2/entries/en/<word>`, không cần key.
-- Kế hoạch: gọi trong `lookupWord` trước/bổ sung Mochi: lấy `phonetics[].audio`
-  (URL mp3 đọc từ thật) + definitions/synonyms. Thêm cột `audio_url` vào `word_lookups`,
-  popup tra từ phát audio thật thay speechSynthesis khi có.
+- Tích hợp: adapter `src/adapters/dictionaryapi/dictionary.js`, gọi song song với Mochi
+  trong `lookupWord`: audio mp3 đọc từ thật (cột `audio_url`, migration 0022) + synonyms/antonyms
+  bổ sung khi Mochi trả rỗng. `SpeakButton` nhận `audioUrl`, phát mp3 thật, lỗi rớt về speechSynthesis.
 
 ## 3. Oxford 5000 + CEFR level — mở rộng kho từ đang có (Oxford 3000 đã seed)
 

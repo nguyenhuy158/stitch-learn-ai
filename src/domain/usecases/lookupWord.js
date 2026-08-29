@@ -8,7 +8,7 @@ export const LOOKUP_WORD_TAG = "ai-lookup";
  * lan hoi AI mat vai giay. Cache theo tu goc nguoi hoc bam (khong theo cau),
  * chap nhan mat sac thai ngu canh de doi lay tra loi tuc thi.
  */
-export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository }) {
+export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository, dictionaryPort }) {
   const key = term.trim().toLowerCase();
   // Cache loi (vd chua chay migration) thi cu hoi AI, dung de hong tinh nang.
   const cached = await wordLookupCacheRepository.get(key).catch((err) => {
@@ -17,7 +17,18 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   });
   if (cached) return cached;
 
-  const word = await wordLookupPort.lookup({ term, context });
+  // Hoi AI va tu dien mien phi song song: AI cho nghia Viet, tu dien cho audio
+  // mp3 doc tu that + dong nghia bo sung. Tu dien loi thi bo qua, khong hong lookup.
+  const [word, dict] = await Promise.all([
+    wordLookupPort.lookup({ term, context }),
+    Promise.resolve(dictionaryPort?.lookup(key) ?? { audioUrl: "", synonyms: [], antonyms: [] }).catch((err) => {
+      console.error("Dictionary API error:", err);
+      return { audioUrl: "", synonyms: [], antonyms: [] };
+    })
+  ]);
+  word.audioUrl = dict.audioUrl;
+  if (word.synonyms.length === 0) word.synonyms = dict.synonyms;
+  if (word.antonyms.length === 0) word.antonyms = dict.antonyms;
   // Cache hong khong duoc lam hong ket qua da co.
   try {
     await wordLookupCacheRepository.put(key, word, new Date().toISOString());
