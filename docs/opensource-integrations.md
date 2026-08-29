@@ -23,8 +23,10 @@ không được làm hỏng tính năng.
 
 - https://github.com/ittuann/The-Oxford-5000-Word-Lists (TXT theo CEFR)
 - https://github.com/winterdl/oxford-5000-vocabulary-audio-definition (JSON/CSV kèm definition, audio, example)
-- ✅ Đã làm (migration 0023 + 0024, nguồn winterdl): backfill `vocab.level` (cột có sẵn từ 0011)
-  cho 2963 từ Oxford 3000, seed 1991 từ mới (nghĩa tiếng Anh + level) vào lesson "Oxford 5000",
+- ✅ Đã làm (nguồn winterdl): backfill `vocab.level` (cột có sẵn từ 0011)
+  cho từ Oxford 3000, seed 1990 từ mới vào lesson "Oxford 5000",
+  Migration đã chạy remote là **0026_seed_oxford5000_vi.sql** (nghĩa tiếng Việt tự soạn + level chính thức);
+  0023_oxford5000_cefr_backfill / 0024_seed_oxford5000 (nghĩa tiếng Anh) chưa chạy remote, để tham khảo — 0024 toàn ON CONFLICT DO NOTHING nên chạy cũng vô hại.
   badge level trong popup tra từ (`getTermLevel` ở savedVocabRepository, gắn vào lookupWord).
   ✅ Lọc theo level: games qua DIFFICULTY_LEVELS, flashcards có chip lọc A1–C2 + badge level trên thẻ.
 
