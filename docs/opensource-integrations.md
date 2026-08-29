@@ -23,8 +23,10 @@ không được làm hỏng tính năng.
 
 - https://github.com/ittuann/The-Oxford-5000-Word-Lists (TXT theo CEFR)
 - https://github.com/winterdl/oxford-5000-vocabulary-audio-definition (JSON/CSV kèm definition, audio, example)
-- Kế hoạch: script sinh migration seed như 0002–0006, thêm cột `cefr_level` vào bảng vocab.
-  Mở khóa: lọc flashcards/games theo level A1–C1, hiện badge level khi tra từ.
+- ✅ Đã làm (migration 0023 + 0024, nguồn winterdl): backfill `vocab.level` (cột có sẵn từ 0011)
+  cho 2963 từ Oxford 3000, seed 1991 từ mới (nghĩa tiếng Anh + level) vào lesson "Oxford 5000",
+  badge level trong popup tra từ (`getTermLevel` ở savedVocabRepository, gắn vào lookupWord).
+  Còn mở: lọc flashcards/games theo level A1–C1 (games đã dùng `vocab.level` qua DIFFICULTY_LEVELS).
 
 ## 4. ipa-dict / cmudict-ipa — IPA offline cho trang phiên âm
 
@@ -42,7 +44,7 @@ không được làm hỏng tính năng.
 ## Thứ tự làm
 
 1. ✅ Tatoeba (câu ví dụ trong popup tra từ)
-2. freeDictionaryAPI (audio + definition thật cho lookup)
-3. Oxford 5000 seed + cefr_level
+2. ✅ freeDictionaryAPI (audio + definition thật cho lookup)
+3. ✅ Oxford 5000 seed + level CEFR
 4. ipa-dict seed
 5. CEFR dataset chấm độ khó
