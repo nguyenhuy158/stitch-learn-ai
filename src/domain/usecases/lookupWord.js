@@ -8,14 +8,16 @@ export const LOOKUP_WORD_TAG = "ai-lookup";
  * lan hoi AI mat vai giay. Cache theo tu goc nguoi hoc bam (khong theo cau),
  * chap nhan mat sac thai ngu canh de doi lay tra loi tuc thi.
  */
-export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository, dictionaryPort }) {
+export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository, dictionaryPort, savedVocabRepository }) {
   const key = term.trim().toLowerCase();
+  // Level CEFR lay tu kho vocab (Oxford 3000/5000), khong cache theo lookup.
+  const levelPromise = Promise.resolve(savedVocabRepository?.getTermLevel(key)).catch(() => null);
   // Cache loi (vd chua chay migration) thi cu hoi AI, dung de hong tinh nang.
   const cached = await wordLookupCacheRepository.get(key).catch((err) => {
     console.error("Read word lookup cache error:", err);
     return null;
   });
-  if (cached) return cached;
+  if (cached) return { ...cached, level: await levelPromise };
 
   // Hoi AI va tu dien mien phi song song: AI cho nghia Viet, tu dien cho audio
   // mp3 doc tu that + dong nghia bo sung. Tu dien loi thi bo qua, khong hong lookup.
@@ -35,7 +37,7 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   } catch (err) {
     console.error("Cache word lookup error:", err);
   }
-  return word;
+  return { ...word, level: await levelPromise };
 }
 
 /**

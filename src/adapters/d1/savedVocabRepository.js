@@ -33,6 +33,14 @@ export function createD1SavedVocabRepository(db) {
         .run();
       return vocab.id;
     },
+    /** Level CEFR (A1-C2) cua tu trong kho vocab, null neu chua co. */
+    async getTermLevel(term) {
+      const row = await db
+        .prepare("SELECT level FROM vocab WHERE term = ? COLLATE NOCASE")
+        .bind(term)
+        .first();
+      return row?.level ?? null;
+    },
     /** Tu nay da co trong bo suu tap cua nguoi hoc chua (so khop term, khong phan biet hoa thuong). */
     async isTermSaved(userId, term) {
       const row = await db

@@ -16,6 +16,7 @@ type WordInfo = {
   synonyms: string[];
   antonyms: string[];
   audioUrl?: string;
+  level?: string | null;
 };
 
 /**
@@ -110,6 +111,11 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
             <SpeakButton text={info?.term ?? picked} audioUrl={info?.audioUrl} size="sm" />
             <div className="flex-1">
               <span className="text-base font-bold text-primary-hover">{info?.term ?? picked}</span>
+              {info?.level && (
+                <span className="ml-2 rounded bg-primary-soft px-1.5 py-0.5 text-xs font-semibold text-primary-hover">
+                  {info.level}
+                </span>
+              )}
               {info?.type && <span className="ml-2 text-xs italic text-fg-muted">{info.type}</span>}
               {ipa && <span className="ml-2 text-xs text-fg-muted">/{ipa}/</span>}
             </div>
