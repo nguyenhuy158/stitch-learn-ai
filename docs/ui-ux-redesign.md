@@ -14,7 +14,23 @@ Scope: full read-through of `src/client` (tokens, theme, layout, all 17 `ui/` co
 
 **The core finding this whole audit hangs on: the design system is not missing, it is ~50% unadopted.** Verified by grep — zero page imports `Input`, `Textarea`, `Field`, `Modal`, `Sheet`, `Menu`, `Badge`, `HeaderBar`, or `Fab`. `LoadingState`/`Skeleton` have zero call sites. `EmptyState` has exactly one (`Lessons.tsx:58`). `Progress` has zero real usages (the one grep hit in `WordRace.tsx` is a local `progress` state variable, not the component). `ToastProvider` is mounted at `main.tsx:14` but `useToast()` is never called anywhere. Every symptom below — hardcoded `red-500`/`green-500`, inconsistent focus rings, radius drift, 12 duplicated spinner blocks — is downstream of pages hand-rolling what the kit already provides.
 
----
+### 2.6.1 Emoji usage (deliberate, not drift)
+
+Decorative emoji used in 3 deliberate spots, NOT drift:
+- `Home.tsx:37 👋` — greeting wave (warm tone, brand voice)
+- `Home.tsx:44 🔥` — streak counter (visual reward)
+- `Flashcards.tsx:19 EMOJI_POOL` — 20 emoji rotate as random card icon
+  (decoration, not interactive control)
+- `History.tsx:61 💬` — chat conversation icon
+
+Tool grid (Home.tsx) uses lucide-react SVG icons (TutorIcon, CardsIcon,
+etc.) from `navItems.ts TOOL_KEYS`, not emoji. Plan §2.6 was outdated
+(cited lines 97/107/118 which no longer exist after refactor).
+
+Decision: keep emoji as deliberate decorative elements. SVG icons
+(lucide-react) for interactive controls. Document any new emoji as
+`aria-hidden` since they convey no semantic info beyond what the
+adjacent text already says.
 
 ## 2. Design system gaps
 
