@@ -9,7 +9,7 @@
     "directory": "./public"
   },
   "build": {
-    "command": "node scripts/build-info.mjs"
+    "command": "pnpm install --frozen-lockfile && pnpm build"
   },
   "d1_databases": [
     {
