@@ -322,8 +322,9 @@ export async function handleRequest(request, url, deps) {
   // Lan thu o "Dich lai cau cu" cung vao chung lich su dich (khong goi AI).
   if (url.pathname === "/api/translation/recall/attempt" && request.method === "POST") {
     return requireAuth(async (userId) => {
-      const body = await request.json().catch(() => ({}));
-      await saveRecallAttempt({ userId, ...body }, deps);
+      // Chi lay dung cac field mong doi — spread ca body se cho client ghi de userId (IDOR).
+      const { vietnamese, translation, corrected, correctionCount } = await request.json().catch(() => ({}));
+      await saveRecallAttempt({ userId, vietnamese, translation, corrected, correctionCount }, deps);
       return json({ success: true });
     }, { label: "Save recall attempt error:", fallbackMessage: "Failed to save recall attempt" })(request, url, deps);
   }
