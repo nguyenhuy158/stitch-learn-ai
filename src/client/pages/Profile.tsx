@@ -11,6 +11,7 @@ import { ConfirmDialog } from "../ui/Modal";
 import { useToast } from "../ui/Toast";
 import { useTheme } from "../theme/ThemeProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { ActivityHeatmap } from "../components/ActivityHeatmap";
 
 // Phai trung allowlist trong src/domain/aiConfig.js — server tu loc lai neu lech.
 const AI_MODELS = [
@@ -76,6 +77,8 @@ export default function Profile() {
           <div className="text-xs text-fg-muted">{t("profile.level")}</div>
         </Card>
       </div>
+
+      <ActivityHeatmap />
 
       <div className="mb-2 text-sm font-bold text-fg-muted">{t("profile.settingsTitle")}</div>
       <Card padded={false} className="mb-6 divide-y divide-border overflow-hidden">

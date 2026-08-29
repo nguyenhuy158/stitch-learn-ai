@@ -79,9 +79,11 @@
  * @property {(userId: string, word: {term: string, meaning: string, type?: string, example?: string}, tag: string) => Promise<number|null>} saveGeneratedWord
  * @property {(userId: string, term: string) => Promise<boolean>} isTermSaved
  * @property {(userId: string) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string}>>} listForUser
+ * @property {(userId: string) => Promise<number>} countForUser
  *
  * @typedef {Object} VocabReviewRepository
  * @property {(userId: string, today: string, limit: number) => Promise<Array<{id: number, term: string, meaning: string, example: string|null, lesson_id: number, lesson_title: string, interval_days: number|null, repetitions: number|null}>>} listDue - cards due today or never reviewed, due-soonest first
+ * @property {(userId: string, today: string) => Promise<number>} countDue - reviewed cards whose due_date has passed
  * @property {(userId: string, vocabId: number) => Promise<{ease_factor: number, interval_days: number, repetitions: number, due_date: string}|null>} get
  * @property {(userId: string, vocabId: number, fields: {easeFactor: number, intervalDays: number, repetitions: number, dueDate: string, reviewedAt: string}) => Promise<void>} upsert
  *

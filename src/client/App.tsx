@@ -25,6 +25,7 @@ import Mistakes from "./pages/Mistakes";
 import Writing from "./pages/Writing";
 import Translation from "./pages/Translation";
 import Reading from "./pages/Reading";
+import Dictation from "./pages/Dictation";
 import Help from "./pages/Help";
 import Appearance from "./pages/Appearance";
 import Login from "./pages/Login";
@@ -54,6 +55,7 @@ export default function App() {
       <Route path="/word-race" element={<WordRace />} />
       <Route path="/scramble-game" element={<Scramble />} />
       <Route path="/translation-recall" element={<TranslationRecall />} />
+      <Route path="/dictation" element={<Dictation />} />
       <Route path="/games-leaderboard" element={<GamesLeaderboard />} />
       <Route path="/challenge" element={<Challenge />} />
       <Route path="/picture-vocab" element={<PictureVocab />} />

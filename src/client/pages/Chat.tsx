@@ -6,7 +6,8 @@ import { Input } from "../ui/Input";
 import { Menu } from "../ui/Menu";
 import { Spinner } from "../ui/Spinner";
 import { LoadingState, ErrorState } from "../ui/states";
-import { CheckIcon, HistoryIcon, PlusIcon, SendIcon } from "../components/icons";
+import { CheckIcon, HistoryIcon, MicIcon, PlusIcon, SendIcon } from "../components/icons";
+import { listenOnce, speechInputSupported } from "../lib/speechInput";
 import { cn } from "../ui/cn";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { ClickableSentence } from "../components/ClickableSentence";
@@ -45,6 +46,19 @@ export default function Chat() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [input, setInput] = useState("");
+  const [listening, setListening] = useState(false);
+  const micStopRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => () => micStopRef.current?.(), []);
+
+  function micToggle() {
+    if (listening) return micStopRef.current?.();
+    setListening(true);
+    micStopRef.current = listenOnce(
+      (transcript) => setInput((v) => (v ? `${v} ${transcript}` : transcript)),
+      () => setListening(false)
+    );
+  }
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -202,6 +216,17 @@ export default function Chat() {
           placeholder={t("chat.placeholder")}
           className="flex-1"
         />
+        {speechInputSupported() && (
+          <Button
+            size="icon"
+            variant={listening ? "danger" : "outline"}
+            onClick={micToggle}
+            aria-label={t("chat.mic")}
+            className={listening ? "animate-pulse" : undefined}
+          >
+            <MicIcon size={18} />
+          </Button>
+        )}
         <Button size="icon" onClick={send} disabled={sending || !input.trim()} aria-label={t("chat.send")}>
           <SendIcon size={18} />
         </Button>

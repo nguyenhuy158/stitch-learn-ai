@@ -22,6 +22,14 @@ export function createD1VocabReviewRepository(db) {
         .all();
       return results;
     },
+    // Chi dem the DA hoc va den han (khong tinh tu moi chua hoc, keo badge luon max).
+    async countDue(userId, today) {
+      const row = await db
+        .prepare("SELECT COUNT(*) AS n FROM vocab_review WHERE user_id = ? AND due_date <= ?")
+        .bind(userId, today)
+        .first();
+      return row?.n ?? 0;
+    },
     async get(userId, vocabId) {
       return db
         .prepare("SELECT * FROM vocab_review WHERE user_id = ? AND vocab_id = ?")

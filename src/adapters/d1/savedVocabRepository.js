@@ -43,6 +43,10 @@ export function createD1SavedVocabRepository(db) {
         .first();
       return !!row;
     },
+    async countForUser(userId) {
+      const row = await db.prepare("SELECT COUNT(*) AS n FROM saved_vocab WHERE user_id = ?").bind(userId).first();
+      return row?.n ?? 0;
+    },
     async listForUser(userId) {
       const { results } = await db
         .prepare(

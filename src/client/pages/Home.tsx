@@ -18,6 +18,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [lessons, setLessons] = useState<Lesson[] | null>(null);
   const [toolTab, setToolTab] = useState<(typeof TOOL_TABS)[number]>("core");
+  const [dueCount, setDueCount] = useState(0);
 
   useEffect(() => {
     api.me().then((data) => {
@@ -25,6 +26,7 @@ export default function Home() {
       setUser(data.user);
     });
     api.lessons().then((data) => setLessons(Array.isArray(data) ? data.slice(0, 3) : []));
+    api.flashcardsDueCount().then((res: { count: number }) => setDueCount(res.count)).catch(() => {});
   }, [navigate]);
 
   const continueLesson = lessons?.find((l) => l.status === "active") || lessons?.[0];
@@ -108,8 +110,16 @@ export default function Home() {
               to={tool.to} 
               className="group flex flex-col items-center rounded-ui border border-border bg-surface p-5 transition-all hover:border-primary/30 hover:shadow-sm no-underline"
             >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${tool.color} group-hover:scale-110 transition-transform`}>
+              <div className={`relative flex h-12 w-12 items-center justify-center rounded-2xl ${tool.color} group-hover:scale-110 transition-transform`}>
                 <Icon size={24} />
+                {tool.key === "flashcards" && dueCount > 0 && (
+                  <span
+                    title={t("flashcards.dueBadge", { n: dueCount })}
+                    className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-bold text-white"
+                  >
+                    {dueCount > 99 ? "99+" : dueCount}
+                  </span>
+                )}
               </div>
               <div className="mt-3 text-center text-sm font-bold text-fg leading-tight">{t(`home.tool.${tool.key}`)}</div>
             </Link>

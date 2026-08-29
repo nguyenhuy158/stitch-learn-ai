@@ -13,7 +13,8 @@ import { getTranslationHistory } from "../../domain/usecases/getTranslationHisto
 import { getTranslationExercise } from "../../domain/usecases/getTranslationExercise.js";
 import { reviewTranslation } from "../../domain/usecases/reviewTranslation.js";
 import { submitFeedback } from "../../domain/usecases/submitFeedback.js";
-import { getFlashcards } from "../../domain/usecases/getFlashcards.js";
+import { getDueCount, getFlashcards } from "../../domain/usecases/getFlashcards.js";
+import { getLearningStats } from "../../domain/usecases/getLearningStats.js";
 import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
@@ -113,6 +114,20 @@ export async function handleRequest(request, url, deps) {
       const detail = await getLessonDetail({ lessonId: Number(lessonMatch[1]), userId }, deps);
       return json(detail);
     }, { label: "Lesson detail error:", fallbackMessage: "Failed to load lesson", validationStatus: 404 })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/stats" && request.method === "GET") {
+    return requireAuth(async (userId) => json(await getLearningStats({ userId }, deps)), {
+      label: "Stats error:",
+      fallbackMessage: "Failed to load stats"
+    })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/flashcards/due-count" && request.method === "GET") {
+    return requireAuth(async (userId) => json(await getDueCount({ userId }, deps)), {
+      label: "Due count error:",
+      fallbackMessage: "Failed to load due count"
+    })(request, url, deps);
   }
 
   if (url.pathname === "/api/vocab" && request.method === "GET") {
