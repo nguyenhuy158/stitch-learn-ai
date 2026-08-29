@@ -76,7 +76,7 @@ export const api = {
     request("/api/reading/quiz-attempts", { method: "POST", body: JSON.stringify({ guid, correct, total }) }),
   flashcardsDueCount: () => request("/api/flashcards/due-count"),
   learningStats: () => request("/api/stats"),
-  translationExercise: () => request("/api/translation/today"),
+  translationExercise: (topic) => request(`/api/translation/today${topic ? `?topic=${encodeURIComponent(topic)}` : ""}`),
   translationHistory: () => request("/api/translation/history"),
   saveRecallAttempt: (attempt) => request("/api/translation/recall/attempt", { method: "POST", body: JSON.stringify(attempt) }),
   translationRecall: (count) => request(`/api/translation/recall?count=${count}`),

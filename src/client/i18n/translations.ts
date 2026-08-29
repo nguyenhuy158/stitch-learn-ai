@@ -208,6 +208,10 @@ export const translations: Record<string, TranslationEntry> = {
 
   "translation.waitingResult": { vi: "Kết quả chấm sẽ hiện ở đây.", en: "Your graded result will appear here." },
   "translation.noErrors": { vi: "Bản dịch rất chính xác. Làm tốt lắm!", en: "Great translation. Well done!" },
+  "translation.topicLabel": { vi: "Chủ đề", en: "Topic" },
+  "translation.topicAll": { vi: "Tất cả", en: "All topics" },
+  "translation.topicHint": { vi: "Chọn chủ đề để Mochi đặt câu theo ngữ cảnh — có thể đổi trước hoặc trong khi luyện.", en: "Pick a topic so Mochi writes the sentence in that context. Change it before or during practice." },
+  "translation.topicLoadError": { vi: "Không tải được danh sách chủ đề.", en: "Couldn't load topics." },
 
   "challenge.title": { vi: "Thử thách hôm nay", en: "Today's Challenge" },
   "challenge.subtitle": { vi: "5 câu trắc nghiệm, đổi ngày lại được.", en: "5 multiple-choice questions, refreshes every day." },

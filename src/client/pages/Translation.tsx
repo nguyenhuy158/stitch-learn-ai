@@ -25,7 +25,7 @@ const PAGE_SIZE = 5;
 
 type NewWord = { term: string; type: string; meaning: string; example: string };
 type Exercise = { vietnamese: string; term: string; newWord?: NewWord | null };
-
+type TopicOption = { topic: string; lesson: string; slug: string };
 export default function Translation() {
   const navigate = useNavigate();
   const [exercise, setExercise] = useState<Exercise | null>(null);
@@ -38,6 +38,14 @@ export default function Translation() {
   const [state, setState] = useState<{ tone: "info" | "error"; text: string } | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Topic hien tai nguoi dung chon (slug tu picture-vocab, null = tat ca).
+  // Mac dinh "Tat ca" de khong pha hanh vi cu.
+  const [topic, setTopic] = useState<string | null>(null);
+  const [topics, setTopics] = useState<TopicOption[] | null>(null);
+  const [topicError, setTopicError] = useState("");
+  // Track topic cua bai prefetch de khong dung nham khi nguoi dung da doi topic.
+  const nextExerciseTopic = useRef<string | null>(null);
   const { t } = useLanguage();
   // Gom cac lan thu cua cung mot cau (ke ca lan thu o "Dich lai cau cu") vao
   // mot nhom, de thay ngay cau nay da thu may lan. Nhom sap theo lan thu moi nhat.
@@ -58,15 +66,22 @@ export default function Translation() {
     setResult(null);
     setTranslation("");
     setState(null);
-    const pending = nextExercise.current ?? api.translationExercise();
+    // Chi dung bai prefetch neu no cung topic voi lua chon hien tai (nguoi dung co the
+    // da doi topic sau khi prefetch duoc tao).
+    const pending =
+      nextExercise.current && nextExerciseTopic.current === topic
+        ? nextExercise.current
+        : api.translationExercise(topic ?? undefined);
     nextExercise.current = null;
+    nextExerciseTopic.current = null;
     pending
       .then((data: Exercise) => {
         setExercise(data);
-        // Ngay sau khi co cau hien tai, tai truoc cau ke tiep.
-        const prefetch = api.translationExercise();
+        // Ngay sau khi co cau hien tai, tai truoc cau ke tiep cho cung topic.
+        const prefetch = api.translationExercise(topic ?? undefined);
         prefetch.catch(() => {}); // giu im lang, loi se hien khi that su dung toi
         nextExercise.current = prefetch;
+        nextExerciseTopic.current = topic;
       })
       .catch((err) => {
         if (isUnauthorized(err)) return navigate("/login");
@@ -74,7 +89,22 @@ export default function Translation() {
       });
   }
 
-  useEffect(loadExercise, [navigate]);
+  useEffect(loadExercise, [navigate, topic]);
+
+  useEffect(() => {
+    // Tai danh sach topic mot lan; chip picker se loi dung de loc bai dich.
+    api
+      .pictureVocab()
+      .then((data: { topics: TopicOption[] }) => setTopics(data.topics))
+      .catch(() => setTopicError(t("translation.topicLoadError")));
+  }, [t]);
+
+  function changeTopic(next: string | null) {
+    // Bo prefetch cu (khac topic) va reset de loadExercise fetch bai moi.
+    nextExercise.current = null;
+    nextExerciseTopic.current = null;
+    setTopic(next);
+  }
 
   useEffect(() => {
     api.translationHistory().then((res: { attempts: Attempt[] }) => setHistory(res.attempts)).catch(() => {});
@@ -109,6 +139,42 @@ export default function Translation() {
   return (
     <div className="mx-auto max-w-5xl">
       <PageHeader backTo="/lessons" backLabel={t("lessonDetail.backToList")} title={t("translation.title")} subtitle={t("translation.subtitle")} />
+      <section className="px-5 pt-1 sm:px-9" aria-label={t("translation.topicLabel")}>
+        <div className="mb-1 flex items-baseline justify-between gap-2">
+          <div className="text-xs font-bold uppercase text-primary-hover">{t("translation.topicLabel")}</div>
+          {topicError && <div className="text-xs text-danger" role="alert">{topicError}</div>}
+        </div>
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+          <button
+            type="button"
+            onClick={() => changeTopic(null)}
+            className={
+              "shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold " +
+              (topic === null
+                ? "border-primary bg-primary text-white"
+                : "border-border bg-surface text-fg-muted")
+            }
+          >
+            {t("translation.topicAll")}
+          </button>
+          {(topics ?? []).map((opt) => (
+            <button
+              key={opt.slug}
+              type="button"
+              onClick={() => changeTopic(opt.slug)}
+              className={
+                "shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold " +
+                (topic === opt.slug
+                  ? "border-primary bg-primary text-white"
+                  : "border-border bg-surface text-fg-muted")
+              }
+            >
+              {opt.lesson}
+            </button>
+          ))}
+        </div>
+        <p className="mt-1 text-xs text-fg-muted">{t("translation.topicHint")}</p>
+      </section>
       <main className="grid gap-8 p-5 sm:p-9 lg:grid-cols-2">
         <div>
           {exercise ? (

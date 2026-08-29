@@ -27,9 +27,13 @@ const REVIEW_SCHEMA = {
 export function createMochiTranslationExercise({ askJson }) {
   const label = "Mochi translation exercise error:";
   return {
-    async generate({ term, meaning, example }) {
+    async generate({ term, meaning, example, topic }) {
+      const topicLine = topic
+        ? `The sentence should fit the topic "${topic}" so the learner practises vocabulary in a real context.`
+        : "";
       const prompt = `You are creating a Vietnamese-to-English translation exercise for a Vietnamese learner of English.
 The learner has studied this English word: "${term}" (meaning: "${meaning}"${example ? `, example: "${example}"` : ""}).
+${topicLine}
 
 Write ONE natural, everyday Vietnamese sentence that a Vietnamese learner would translate into English, using the meaning of this word naturally in context. Keep it short (under 20 words).
 

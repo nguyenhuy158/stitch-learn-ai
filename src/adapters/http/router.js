@@ -19,8 +19,8 @@ import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
-import { getWordExamples, isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
-import { listReadingStories, getReadingArticle, getReadingQuiz, saveReadingQuizAttempt, getReadingQuizAttempts } from "../../domain/usecases/getReading.js";
+import { getWordExamples, getWordFrequency, isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
+
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
@@ -182,6 +182,15 @@ export async function handleRequest(request, url, deps) {
       if (!term) throw new ValidationError("Missing term");
       return json(await getWordExamples({ term }, deps));
     }, { label: "Word examples error:", fallbackMessage: "Failed to load examples" })(request, url, deps);
+  }
+  // Frequency rank theo SUBTLEX-US (74k tu pho bien nhat tieng Anh noi).
+  // Tra ve null neu tu khong co trong database (tu hiem, proper noun, typo).
+  if (url.pathname === "/api/word/frequency" && request.method === "GET") {
+    return requireAuth(async () => {
+      const term = (url.searchParams.get("term") || "").trim();
+      if (!term) throw new ValidationError("Missing term");
+      return json(await getWordFrequency({ term }, deps));
+    }, { label: "Word frequency error:", fallbackMessage: "Failed to load frequency" })(request, url, deps);
   }
 
   // Tu nay da co trong bo suu tap chua (de nut luu hien dung trang thai).

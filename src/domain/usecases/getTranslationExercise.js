@@ -2,14 +2,17 @@
 export const AI_WORD_TAG = "ai-translation";
 
 export async function getTranslationExercise(
-  { userId },
+  { userId, topic },
   { dailyChallengeRepository, translationExercisePort, savedVocabRepository }
 ) {
   const [vocab] = await dailyChallengeRepository.pickRandomVocab(1);
   const { vietnamese, newWord } = await translationExercisePort.generate({
     term: vocab.term,
     meaning: vocab.meaning,
-    example: vocab.example ?? null
+    example: vocab.example ?? null,
+    // Topic la chu de ngu canh (vd. "Food", "Travel") — de AI dat cau cho khop.
+    // Rong/khong xac dinh thi bo qua, AI se tu chon ngu canh phu hop voi tu.
+    topic: topic ?? null
   });
   // Tu moi AI goi y duoc them thang vao bo suu tap, gan tag de phan biet voi
   // tu cua bai hoc. Loi o buoc nay khong duoc lam hong bai tap dang cho.
