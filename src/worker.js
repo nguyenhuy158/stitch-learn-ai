@@ -32,7 +32,7 @@ import { createD1WikipediaEtymologyRepository } from "./adapters/d1/wikipediaEty
 import { createD1ExampleSentencesRepository } from "./adapters/d1/exampleSentencesRepository.js";
 import { createMochiReadingQuiz } from "./adapters/mochi/readingQuiz.js";
 import { createMochiArticleTranslator } from "./adapters/mochi/articleTranslator.js";
-import { listReadingStories, translateReadingArticles } from "./domain/usecases/getReading.js";
+import { refreshReadingFeed, translateReadingArticles } from "./domain/usecases/getReading.js";
 import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
 
@@ -102,8 +102,8 @@ export default {
     const deps = buildDeps(env);
     const result = await sendStreakReminders({}, deps);
     console.log(`Streak reminders: ${result.sent}/${result.checked} sent`);
-    // Fetch bai doc moi tu feed (listReadingStories tu refresh khi stale) roi dien song ngu.
-    await listReadingStories({}, deps).catch((e) => console.log(`News refresh failed: ${e.message}`));
+    // Fetch bai doc moi tu feed roi dien song ngu.
+    await refreshReadingFeed({}, deps).catch((e) => console.log(`News refresh failed: ${e.message}`));
     // Dien song ngu cho cac bai chua co ban dich (moi bai da mo cung tu dich on-demand).
     const t = await translateReadingArticles({}, deps);
     console.log(`Article translations: ${t.translated}/${t.pending} translated`);

@@ -14,6 +14,7 @@ import { getLessonDetail } from "./getLessonDetail.js";
 import { getRankings, getWeeklyRankings } from "./getRankings.js";
 import {
   listReadingStories,
+  refreshReadingFeed,
   getReadingArticle,
   getReadingQuiz,
   translateReadingArticles,
@@ -266,35 +267,30 @@ const ROWS = [
   { guid: "g1", story: "S", category: "News", published_at: "p", image_url: "https://img", level: 1 }
 ];
 
-test("listReadingStories: cache moi thi khong goi feed, gom story + sort level + lay anh dau tien", async () => {
-  let fetched = 0;
-  const d = {
-    readingRepository: { latestFetchedAt: async () => NOW.toISOString(), listArticles: async () => ROWS },
-    newsFeedPort: { fetchArticles: async () => { fetched++; return []; } }
-  };
-  const { stories } = await listReadingStories({}, d, NOW);
-  assert.equal(fetched, 0);
+test("listReadingStories: chi doc cache, gom story + sort level + lay anh dau tien", async () => {
+  const d = { readingRepository: { listArticles: async () => ROWS } };
+  const { stories } = await listReadingStories({}, d);
   assert.equal(stories.length, 1);
   assert.equal(stories[0].imageUrl, "https://img");
   assert.deepEqual(stories[0].levels.map((l) => l.level), [1, 2]);
 });
 
-test("listReadingStories: cache cu thi refresh, feed loi van tra cache", async () => {
+test("refreshReadingFeed: cache moi thi bo qua, cache cu thi fetch + upsert", async () => {
   const upserts = [];
+  let fetched = 0;
   const d = {
     readingRepository: {
-      latestFetchedAt: async () => "2026-08-01T00:00:00Z",
-      upsertArticles: async (a, at) => upserts.push([a, at]),
-      listArticles: async () => ROWS
+      latestFetchedAt: async () => NOW.toISOString(),
+      upsertArticles: async (a, at) => upserts.push([a, at])
     },
-    newsFeedPort: { fetchArticles: async () => [{ guid: "g3" }] }
+    newsFeedPort: { fetchArticles: async () => { fetched++; return [{ guid: "g3" }]; } }
   };
-  await listReadingStories({}, d, NOW);
-  assert.deepEqual(upserts, [[[{ guid: "g3" }], NOW.toISOString()]]);
+  await refreshReadingFeed({}, d, NOW);
+  assert.equal(fetched, 0);
 
-  d.newsFeedPort.fetchArticles = async () => { throw new Error("down"); };
-  const { stories } = await listReadingStories({}, d, NOW);
-  assert.equal(stories.length, 1);
+  d.readingRepository.latestFetchedAt = async () => "2026-08-01T00:00:00Z";
+  await refreshReadingFeed({}, d, NOW);
+  assert.deepEqual(upserts, [[[{ guid: "g3" }], NOW.toISOString()]]);
 });
 
 test("getReadingArticle: map day du field, thieu guid / khong co bai thi throw", async () => {

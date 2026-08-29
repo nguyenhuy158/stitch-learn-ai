@@ -4,17 +4,20 @@ import { recordLearningActivity } from "./recordLearningActivity.js";
 /** Feed ra tin moi vai lan/ngay; 6 tieng refresh mot lan la du. */
 const STALE_MS = 6 * 60 * 60 * 1000;
 
-/** Danh sach tin, moi tin gom 3 level. Feed hong thi van tra cache cu. */
-export async function listReadingStories(_, { readingRepository, newsFeedPort }, now = new Date()) {
+/**
+ * Refresh feed — chi goi tu cron. Feed fetch ~30 trang bai, cham tran subrequest
+ * cua 1 request HTTP nen moi I/O sau do (ke ca D1) hong => 500.
+ */
+export async function refreshReadingFeed(_, { readingRepository, newsFeedPort }, now = new Date()) {
   const latest = await readingRepository.latestFetchedAt();
-  if (!latest || now.getTime() - new Date(latest).getTime() > STALE_MS) {
-    try {
-      const articles = await newsFeedPort.fetchArticles();
-      await readingRepository.upsertArticles(articles, now.toISOString());
-    } catch (err) {
-      console.error("News feed refresh error:", err);
-    }
-  }
+  if (latest && now.getTime() - new Date(latest).getTime() <= STALE_MS) return { refreshed: 0 };
+  const articles = await newsFeedPort.fetchArticles();
+  await readingRepository.upsertArticles(articles, now.toISOString());
+  return { refreshed: articles.length };
+}
+
+/** Danh sach tin, moi tin gom 3 level. Chi doc cache D1 — refresh do cron lo. */
+export async function listReadingStories(_, { readingRepository }) {
   const rows = await readingRepository.listArticles(90);
   const byStory = new Map();
   for (const row of rows) {
