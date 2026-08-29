@@ -115,6 +115,11 @@
  * @property {(articles: NewsArticle[], fetchedAt: string) => Promise<void>} upsertArticles
  * @property {(limit: number) => Promise<Array<{guid: string, story: string, level: number, category: string, published_at: string}>>} listArticles
  * @property {(guid: string) => Promise<object|null>} getArticle
+ * @property {(limit: number) => Promise<Array<{guid: string, story: string, paragraphs: string[]}>>} listUntranslated
+ * @property {(guid: string, translations: string[]) => Promise<void>} saveTranslations
+ *
+ * @typedef {Object} ArticleTranslatorPort
+ * @property {(input: {story: string, paragraphs: string[]}) => Promise<string[]>} translate
  *
  * @typedef {{question: string, choices: string[], answer: number, explanation: string}} QuizQuestion
  *
@@ -124,5 +129,7 @@
  * @typedef {Object} ReadingQuizRepository
  * @property {(guid: string) => Promise<QuizQuestion[]|null>} get
  * @property {(guid: string, questions: QuizQuestion[], createdAt: string) => Promise<void>} put
+ * @property {(userId: number, guid: string, correct: number, total: number, createdAt: string) => Promise<void>} saveAttempt
+ * @property {(userId: number, guid: string, limit: number) => Promise<Array<{correct: number, total: number, created_at: string}>>} listAttempts
  */
 export {};

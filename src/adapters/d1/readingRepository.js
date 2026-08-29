@@ -29,7 +29,17 @@ export function createD1ReadingRepository(db) {
     async getArticle(guid) {
       const row = await db.prepare("SELECT * FROM reading_articles WHERE guid = ?").bind(guid).first();
       if (!row) return null;
-      return { ...row, paragraphs: JSON.parse(row.paragraphs) };
+      return { ...row, paragraphs: JSON.parse(row.paragraphs), translations: row.translations ? JSON.parse(row.translations) : [] };
+    },
+    async listUntranslated(limit) {
+      const { results } = await db.prepare(
+        "SELECT guid, story, paragraphs FROM reading_articles WHERE translations = '' ORDER BY published_at DESC LIMIT ?"
+      ).bind(limit).all();
+      return results.map((r) => ({ ...r, paragraphs: JSON.parse(r.paragraphs) }));
+    },
+    async saveTranslations(guid, translations) {
+      await db.prepare("UPDATE reading_articles SET translations = ? WHERE guid = ?")
+        .bind(JSON.stringify(translations), guid).run();
     }
   };
 }

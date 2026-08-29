@@ -1,4 +1,5 @@
 import { ValidationError } from "../errors.js";
+import { recordLearningActivity } from "./recordLearningActivity.js";
 
 /** Feed ra tin moi vai lan/ngay; 6 tieng refresh mot lan la du. */
 const STALE_MS = 6 * 60 * 60 * 1000;
@@ -54,10 +55,39 @@ export async function getReadingQuiz({ guid }, { readingRepository, readingQuizR
   return { questions };
 }
 
-export async function getReadingArticle({ guid }, { readingRepository }) {
+/**
+ * Dien ban dich Viet cho cac bai chua co (goi tu cron va sau khi refresh feed).
+ * Moi bai loi rieng, khong chan bai khac.
+ */
+export async function translateReadingArticles(_, { readingRepository, articleTranslatorPort }, limit = 10) {
+  const pending = await readingRepository.listUntranslated(limit);
+  let translated = 0;
+  for (const article of pending) {
+    try {
+      const translations = await articleTranslatorPort.translate(article);
+      await readingRepository.saveTranslations(article.guid, translations);
+      translated++;
+    } catch (err) {
+      console.error(`Translate article ${article.guid} error:`, err);
+    }
+  }
+  return { pending: pending.length, translated };
+}
+
+export async function getReadingArticle({ guid }, { readingRepository, articleTranslatorPort }) {
   if (!guid) throw new ValidationError("Missing article id");
   const article = await readingRepository.getArticle(guid);
   if (!article) throw new ValidationError("Article not found");
+  // Bai cu chua kip dich qua cron thi dich ngay luc mo (1 lan, cache vao D1).
+  if (!article.translations?.length && articleTranslatorPort) {
+    try {
+      article.translations = await articleTranslatorPort.translate(article);
+      await readingRepository.saveTranslations(guid, article.translations);
+    } catch (err) {
+      console.error("Translate on demand error:", err);
+      article.translations = [];
+    }
+  }
   return {
     guid: article.guid,
     story: article.story,
@@ -67,6 +97,25 @@ export async function getReadingArticle({ guid }, { readingRepository }) {
     sourceUrl: article.source_url,
     imageUrl: article.image_url || "",
     audioUrl: article.audio_url || "",
-    paragraphs: article.paragraphs
+    paragraphs: article.paragraphs,
+    translations: article.translations || []
   };
+}
+
+/** Luu ket qua 1 lan lam quiz doc hieu — lam quiz cung tinh la hoc. */
+export async function saveReadingQuizAttempt({ userId, guid, correct, total }, deps, now = new Date()) {
+  if (!guid) throw new ValidationError("Missing article id");
+  const c = Math.floor(Number(correct));
+  const t = Math.floor(Number(total));
+  if (!Number.isInteger(c) || !Number.isInteger(t) || t < 1 || t > 20 || c < 0 || c > t) {
+    throw new ValidationError("Invalid quiz result");
+  }
+  await deps.readingQuizRepository.saveAttempt(userId, guid, c, t, now.toISOString());
+  await recordLearningActivity({ userId }, deps, now);
+  return { correct: c, total: t };
+}
+
+export async function getReadingQuizAttempts({ userId, guid }, { readingQuizRepository }) {
+  if (!guid) throw new ValidationError("Missing article id");
+  return { attempts: await readingQuizRepository.listAttempts(userId, guid, 5) };
 }

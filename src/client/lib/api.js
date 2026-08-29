@@ -71,6 +71,9 @@ export const api = {
   readingStories: () => request("/api/reading"),
   readingArticle: (guid) => request(`/api/reading/article?g=${encodeURIComponent(guid)}`),
   readingQuiz: (guid) => request(`/api/reading/quiz?g=${encodeURIComponent(guid)}`),
+  readingQuizAttempts: (guid) => request(`/api/reading/quiz-attempts?g=${encodeURIComponent(guid)}`),
+  saveReadingQuizAttempt: (guid, correct, total) =>
+    request("/api/reading/quiz-attempts", { method: "POST", body: JSON.stringify({ guid, correct, total }) }),
   flashcardsDueCount: () => request("/api/flashcards/due-count"),
   learningStats: () => request("/api/stats"),
   translationExercise: () => request("/api/translation/today"),

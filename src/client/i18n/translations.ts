@@ -116,6 +116,7 @@ export const translations: Record<string, TranslationEntry> = {
   "reading.empty": { vi: "Chưa có bài đọc nào, quay lại sau nhé.", en: "No articles yet, check back later." },
   "reading.backToList": { vi: "Danh sách bài đọc", en: "Article list" },
   "reading.source": { vi: "Xem bài gốc trên News in Levels", en: "View original on News in Levels" },
+  "reading.bilingual": { vi: "Song ngữ", en: "Bilingual" },
   "home.tool.reading": { vi: "Đọc tin tức", en: "News reading" },
 
   "quiz.title": { vi: "Quiz đọc hiểu", en: "Comprehension quiz" },
@@ -128,6 +129,7 @@ export const translations: Record<string, TranslationEntry> = {
   "quiz.next": { vi: "Câu tiếp theo", en: "Next question" },
   "quiz.done": { vi: "Hoàn thành quiz! Đọc lại bài để hiểu sâu hơn nhé.", en: "Quiz done! Re-read the article to go deeper." },
   "quiz.retry": { vi: "Làm lại", en: "Try again" },
+  "quiz.history": { vi: "Lần làm trước:", en: "Past attempts:" },
 
   "shadow.button": { vi: "Đọc lại câu này (chấm phát âm)", en: "Read this sentence aloud (get scored)" },
   "shadow.result": { vi: "Kết quả đọc", en: "Your reading" },

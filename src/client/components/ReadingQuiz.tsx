@@ -7,6 +7,7 @@ import { CheckIcon, PuzzleIcon, ReplayIcon } from "./icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
 type QuizQuestion = { question: string; choices: string[]; answer: number; explanation: string };
+type QuizAttempt = { correct: number; total: number; created_at: string };
 
 /**
  * Quiz doc hieu 4 cau cho 1 bai reading. Bam "Lam quiz" moi goi AI (co cache DB).
@@ -20,13 +21,21 @@ export function ReadingQuiz({ guid }: { guid: string }) {
   // picked[i] = index dap an nguoi hoc chon (undefined = chua tra loi)
   const [picked, setPicked] = useState<Record<number, number>>({});
   const [current, setCurrent] = useState(0);
+  const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
+  const [saved, setSaved] = useState(false);
 
-  // Bai khac -> quiz khac
+  // Bai khac -> quiz khac + lich su lam quiz cua bai do
   useEffect(() => {
     setQuestions(null);
     setPicked({});
     setCurrent(0);
     setError("");
+    setSaved(false);
+    setAttempts([]);
+    api
+      .readingQuizAttempts(guid)
+      .then((res: { attempts: QuizAttempt[] }) => setAttempts(res.attempts))
+      .catch(() => {});
   }, [guid]);
 
   function start() {
@@ -43,6 +52,16 @@ export function ReadingQuiz({ guid }: { guid: string }) {
   const answered = q ? picked[current] !== undefined : false;
   const done = questions ? Object.keys(picked).length === questions.length : false;
   const correctCount = questions ? questions.filter((qq, i) => picked[i] === qq.answer).length : 0;
+
+  // Lam xong thi luu ket qua vao lich su (1 lan cho moi luot lam)
+  useEffect(() => {
+    if (!done || saved || !questions) return;
+    setSaved(true);
+    api
+      .saveReadingQuizAttempt(guid, correctCount, questions.length)
+      .then(() => setAttempts((a) => [{ correct: correctCount, total: questions.length, created_at: new Date().toISOString() }, ...a].slice(0, 5)))
+      .catch(() => {});
+  }, [done, saved, questions, guid, correctCount]);
 
   function choose(idx: number) {
     if (!q || answered) return;
@@ -67,6 +86,17 @@ export function ReadingQuiz({ guid }: { guid: string }) {
         <PuzzleIcon size={28} className="text-primary" />
         <div className="text-sm font-semibold">{t("quiz.title")}</div>
         <div className="text-xs text-fg-muted">{t("quiz.subtitle")}</div>
+        {attempts.length > 0 && (
+          <div className="text-xs text-fg-muted">
+            {t("quiz.history")}{" "}
+            {attempts.map((a, i) => (
+              <span key={i} className="font-semibold">
+                {i > 0 && " · "}
+                {a.correct}/{a.total}
+              </span>
+            ))}
+          </div>
+        )}
         {error && <div className="text-sm text-danger">{error}</div>}
         <Button className="mt-2" onClick={start} loading={loading} disabled={loading}>
           {loading ? t("quiz.generating") : t("quiz.start")}
@@ -167,6 +197,7 @@ export function ReadingQuiz({ guid }: { guid: string }) {
             onClick={() => {
               setPicked({});
               setCurrent(0);
+              setSaved(false);
             }}
           >
             {t("quiz.retry")}

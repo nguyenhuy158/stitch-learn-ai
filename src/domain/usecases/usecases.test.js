@@ -12,7 +12,14 @@ import { getGameLeaderboard } from "./getGameLeaderboard.js";
 import { getLearningStats } from "./getLearningStats.js";
 import { getLessonDetail } from "./getLessonDetail.js";
 import { getRankings, getWeeklyRankings } from "./getRankings.js";
-import { listReadingStories, getReadingArticle, getReadingQuiz } from "./getReading.js";
+import {
+  listReadingStories,
+  getReadingArticle,
+  getReadingQuiz,
+  translateReadingArticles,
+  saveReadingQuizAttempt,
+  getReadingQuizAttempts
+} from "./getReading.js";
 import { getSavedVocab } from "./getSavedVocab.js";
 import { getTranslationHistory } from "./getTranslationHistory.js";
 import { getTranslationRecallRound, saveRecallAttempt } from "./getTranslationRecallRound.js";
@@ -295,13 +302,72 @@ test("getReadingArticle: map day du field, thieu guid / khong co bai thi throw",
     guid: "g1", story: "S", level: 1, category: "News", published_at: "p",
     source_url: "u", image_url: null, audio_url: null, paragraphs: ["a"]
   };
-  const d = { readingRepository: { getArticle: async (g) => (g === "g1" ? article : null) } };
+  const d = { readingRepository: { getArticle: async (g) => (g === "g1" ? { ...article, translations: ["â"] } : null) } };
   assert.deepEqual(await getReadingArticle({ guid: "g1" }, d), {
     guid: "g1", story: "S", level: 1, category: "News", publishedAt: "p",
-    sourceUrl: "u", imageUrl: "", audioUrl: "", paragraphs: ["a"]
+    sourceUrl: "u", imageUrl: "", audioUrl: "", paragraphs: ["a"], translations: ["â"]
   });
   await assert.rejects(() => getReadingArticle({}, d), /Missing article id/);
   await assert.rejects(() => getReadingArticle({ guid: "nope" }, d), /Article not found/);
+});
+
+test("getReadingArticle: chua co ban dich thi dich on-demand va luu, dich loi thi tra rong", async () => {
+  const saves = [];
+  const d = {
+    readingRepository: {
+      getArticle: async () => ({ guid: "g1", story: "S", level: 1, paragraphs: ["a"], translations: [] }),
+      saveTranslations: async (g, tr) => saves.push([g, tr])
+    },
+    articleTranslatorPort: { translate: async () => ["â"] }
+  };
+  assert.deepEqual((await getReadingArticle({ guid: "g1" }, d)).translations, ["â"]);
+  assert.deepEqual(saves, [["g1", ["â"]]]);
+
+  d.articleTranslatorPort.translate = async () => { throw new Error("ai down"); };
+  assert.deepEqual((await getReadingArticle({ guid: "g1" }, d)).translations, []);
+});
+
+test("translateReadingArticles: dich cac bai chua co, 1 bai loi khong chan bai khac", async () => {
+  const saves = [];
+  const d = {
+    readingRepository: {
+      listUntranslated: async () => [
+        { guid: "g1", story: "S", paragraphs: ["a"] },
+        { guid: "g2", story: "S", paragraphs: ["b"] }
+      ],
+      saveTranslations: async (g, tr) => saves.push([g, tr])
+    },
+    articleTranslatorPort: {
+      translate: async ({ paragraphs }) => {
+        if (paragraphs[0] === "b") throw new Error("ai down");
+        return ["â"];
+      }
+    }
+  };
+  assert.deepEqual(await translateReadingArticles({}, d), { pending: 2, translated: 1 });
+  assert.deepEqual(saves, [["g1", ["â"]]]);
+});
+
+test("saveReadingQuizAttempt: validate roi luu + tinh hoat dong hoc", async () => {
+  const userRepository = fakeUserRepo();
+  const saved = [];
+  const d = {
+    userRepository,
+    readingQuizRepository: { saveAttempt: async (...a) => saved.push(a) }
+  };
+  assert.deepEqual(await saveReadingQuizAttempt({ userId: "u1", guid: "g1", correct: 3, total: 4 }, d, NOW), { correct: 3, total: 4 });
+  assert.deepEqual(saved, [["u1", "g1", 3, 4, NOW.toISOString()]]);
+  assert.equal(userRepository.calls.activityDays.length, 1);
+  await assert.rejects(() => saveReadingQuizAttempt({ userId: "u1", correct: 3, total: 4 }, d, NOW), /Missing article id/);
+  await assert.rejects(() => saveReadingQuizAttempt({ userId: "u1", guid: "g1", correct: 5, total: 4 }, d, NOW), /Invalid quiz result/);
+  await assert.rejects(() => saveReadingQuizAttempt({ userId: "u1", guid: "g1", correct: -1, total: 4 }, d, NOW), /Invalid quiz result/);
+  await assert.rejects(() => saveReadingQuizAttempt({ userId: "u1", guid: "g1", correct: 1, total: 99 }, d, NOW), /Invalid quiz result/);
+});
+
+test("getReadingQuizAttempts: lay 5 lan gan nhat", async () => {
+  const d = { readingQuizRepository: { listAttempts: async (u, g, limit) => [{ u, g, limit }] } };
+  assert.deepEqual(await getReadingQuizAttempts({ userId: "u1", guid: "g1" }, d), { attempts: [{ u: "u1", g: "g1", limit: 5 }] });
+  await assert.rejects(() => getReadingQuizAttempts({ userId: "u1" }, d), /Missing article id/);
 });
 
 test("getReadingQuiz: cache hit tra ngay, miss thi generate + cache, cache loi khong hong", async () => {

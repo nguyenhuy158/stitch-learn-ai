@@ -21,6 +21,7 @@ type Article = {
   imageUrl: string;
   audioUrl: string;
   paragraphs: string[];
+  translations: string[];
 };
 
 export default function Reading() {
@@ -30,6 +31,7 @@ export default function Reading() {
   const [stories, setStories] = useState<Story[] | null>(null);
   const [article, setArticle] = useState<Article | null>(null);
   const [error, setError] = useState("");
+  const [showVi, setShowVi] = useState(false);
   const { t, lang } = useLanguage();
 
   useEffect(() => {
@@ -120,7 +122,16 @@ export default function Reading() {
                 </span>
               </div>
               {/* Doi level ngay trong bai */}
-              <div className="mb-4 flex gap-2">
+              <div className="mb-4 flex flex-wrap gap-2">
+                {article.translations.length > 0 && (
+                  <Button
+                    variant={showVi ? "primary" : "outline"}
+                    size="sm"
+                    onClick={() => setShowVi((v) => !v)}
+                  >
+                    {t("reading.bilingual")}
+                  </Button>
+                )}
                 {(stories?.find((s) => s.story === article.story)?.levels ?? []).map((l) => (
                   <Button
                     key={l.guid}
@@ -150,7 +161,12 @@ export default function Reading() {
               )}
               <div className="flex flex-col gap-3">
                 {article.paragraphs.map((p, i) => (
-                  <ClickableSentence key={i} text={p} />
+                  <div key={i}>
+                    <ClickableSentence text={p} />
+                    {showVi && article.translations[i] && (
+                      <p className="mt-1 text-sm italic leading-relaxed text-fg-muted">{article.translations[i]}</p>
+                    )}
+                  </div>
                 ))}
               </div>
               <ReadingQuiz guid={article.guid} />

@@ -28,6 +28,8 @@ import { createD1ExampleSentencesRepository } from "./adapters/d1/exampleSentenc
 import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
 import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
 import { createMochiReadingQuiz } from "./adapters/mochi/readingQuiz.js";
+import { createMochiArticleTranslator } from "./adapters/mochi/articleTranslator.js";
+import { translateReadingArticles } from "./domain/usecases/getReading.js";
 import { handleRequest } from "./adapters/http/router.js";
 import { sendStreakReminders } from "./domain/usecases/sendStreakReminders.js";
 
@@ -67,6 +69,7 @@ function buildDeps(env) {
     readingRepository: createD1ReadingRepository(env.DB),
     readingQuizRepository: createD1ReadingQuizRepository(env.DB),
     readingQuizPort: createMochiReadingQuiz(mochi),
+    articleTranslatorPort: createMochiArticleTranslator(mochi),
     exampleSentencesPort: createTatoebaExamples(),
     dictionaryPort: createFreeDictionary(),
     exampleSentencesRepository: createD1ExampleSentencesRepository(env.DB)
@@ -90,7 +93,11 @@ export default {
   },
 
   async scheduled(_event, env) {
-    const result = await sendStreakReminders({}, buildDeps(env));
+    const deps = buildDeps(env);
+    const result = await sendStreakReminders({}, deps);
     console.log(`Streak reminders: ${result.sent}/${result.checked} sent`);
+    // Dien song ngu cho cac bai chua co ban dich (moi bai da mo cung tu dich on-demand).
+    const t = await translateReadingArticles({}, deps);
+    console.log(`Article translations: ${t.translated}/${t.pending} translated`);
   }
 };

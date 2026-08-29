@@ -20,7 +20,7 @@ import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
 import { getWordExamples, isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
-import { listReadingStories, getReadingArticle, getReadingQuiz } from "../../domain/usecases/getReading.js";
+import { listReadingStories, getReadingArticle, getReadingQuiz, saveReadingQuizAttempt, getReadingQuizAttempts } from "../../domain/usecases/getReading.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
 import { getWordGameRound } from "../../domain/usecases/getWordGameRound.js";
@@ -219,6 +219,20 @@ export async function handleRequest(request, url, deps) {
       label: "Reading quiz error:",
       fallbackMessage: "Failed to load quiz"
     })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/reading/quiz-attempts" && request.method === "GET") {
+    return requireAuth(async (userId) => json(await getReadingQuizAttempts({ userId, guid: url.searchParams.get("g") }, deps)), {
+      label: "Reading quiz attempts error:",
+      fallbackMessage: "Failed to load quiz history"
+    })(request, url, deps);
+  }
+
+  if (url.pathname === "/api/reading/quiz-attempts" && request.method === "POST") {
+    return requireAuth(async (userId) => {
+      const { guid, correct, total } = await request.json().catch(() => ({}));
+      return json(await saveReadingQuizAttempt({ userId, guid, correct, total }, deps));
+    }, { label: "Save quiz attempt error:", fallbackMessage: "Failed to save quiz result" })(request, url, deps);
   }
 
   if (url.pathname === "/api/challenge/today" && request.method === "GET") {
