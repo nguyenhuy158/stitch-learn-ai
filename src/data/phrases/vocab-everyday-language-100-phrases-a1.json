@@ -1,0 +1,910 @@
+{
+  "topic": "Everyday Language",
+  "lesson": "100 Common Phrases for Pre-A1 and A1",
+  "source": "Quizlet (Ngọc Anh Quicklish) — extracted from PDF",
+  "source_url": "https://quizlet.com/vn/1024044824",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "everyday-language-100-phrases-a1/",
+  "items": [
+    {
+      "phrase": "get up",
+      "meaning_vi": "thức dậy",
+      "example_en": "I .......... at 7",
+      "example_vi": "Tôi thức dậy lúc 7 giờ",
+      "image": "phrases/everyday-language-100-phrases-a1/01-get-up.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/01-get-up.png"
+    },
+    {
+      "phrase": "go to bed",
+      "meaning_vi": "đi ngủ",
+      "example_en": "She ..................... at 10",
+      "example_vi": "Cô ấy đi ngủ lúc 10 giờ",
+      "image": "phrases/everyday-language-100-phrases-a1/02-go-to-bed.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/02-go-to-bed.png"
+    },
+    {
+      "phrase": "take a shower",
+      "meaning_vi": "tắm vòi sen",
+      "example_en": "I ....................... every day",
+      "example_vi": "Tôi tắm mỗi ngày",
+      "image": "phrases/everyday-language-100-phrases-a1/03-take-a-shower.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/03-take-a-shower.png"
+    },
+    {
+      "phrase": "brush my teeth",
+      "meaning_vi": "đánh răng",
+      "example_en": "I ..................... after lunch",
+      "example_vi": "Tôi đánh răng sau bữa trưa",
+      "image": "phrases/everyday-language-100-phrases-a1/04-brush-my-teeth.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/04-brush-my-teeth.png"
+    },
+    {
+      "phrase": "have breakfast",
+      "meaning_vi": "ăn sáng",
+      "example_en": "We....................... at 8",
+      "example_vi": "Chúng tôi ăn sáng lúc 8 giờ",
+      "image": "phrases/everyday-language-100-phrases-a1/05-have-breakfast.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/05-have-breakfast.png"
+    },
+    {
+      "phrase": "go to school",
+      "meaning_vi": "đi ho :c",
+      "example_en": "They ...................... by bus",
+      "example_vi": "Ho : đi ho:c bằng xe buýt",
+      "image": "phrases/everyday-language-100-phrases-a1/06-go-to-school.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/06-go-to-school.png"
+    },
+    {
+      "phrase": "do homework",
+      "meaning_vi": "làm bài tập về nhà",
+      "example_en": "He .................. in the evening",
+      "example_vi": "Cậu ấy làm bài tập vào buổi tối",
+      "image": "phrases/everyday-language-100-phrases-a1/07-do-homework.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/07-do-homework.png"
+    },
+    {
+      "phrase": "watch TV",
+      "meaning_vi": "xem tivi",
+      "example_en": "I ................ with my dad",
+      "example_vi": "Tôi xem tivi với bố",
+      "image": "phrases/everyday-language-100-phrases-a1/08-watch-tv.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/08-watch-tv.png"
+    },
+    {
+      "phrase": "listen to music",
+      "meaning_vi": "nghe nhạc",
+      "example_en": "She ....................... every night",
+      "example_vi": "Cô ấy nghe nhạc mỗi tối",
+      "image": "phrases/everyday-language-100-phrases-a1/09-listen-to-music.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/09-listen-to-music.png"
+    },
+    {
+      "phrase": "play games",
+      "meaning_vi": "chơi trò chơi",
+      "example_en": "They .................. after dinner",
+      "example_vi": "Ho : chơi game sau bữa tối",
+      "image": "phrases/everyday-language-100-phrases-a1/10-play-games.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/10-play-games.png"
+    },
+    {
+      "phrase": "go home",
+      "meaning_vi": "về nhà",
+      "example_en": "I .............. at 5",
+      "example_vi": "Tôi về nhà lúc 5 giờ",
+      "image": "phrases/everyday-language-100-phrases-a1/11-go-home.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/11-go-home.png"
+    },
+    {
+      "phrase": "read a book",
+      "meaning_vi": "đo :c sách",
+      "example_en": "She ..................... in bed",
+      "example_vi": "Cô ấy đo :c sách trên giường",
+      "image": "phrases/everyday-language-100-phrases-a1/12-read-a-book.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/12-read-a-book.png"
+    },
+    {
+      "phrase": "have lunch",
+      "meaning_vi": "ăn trưa",
+      "example_en": "We ............... at school",
+      "example_vi": "Chúng tôi ăn trưa ở trường",
+      "image": "phrases/everyday-language-100-phrases-a1/13-have-lunch.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/13-have-lunch.png"
+    },
+    {
+      "phrase": "have dinner",
+      "meaning_vi": "ăn tối",
+      "example_en": "He ................... with his family",
+      "example_vi": "Anh ấy ăn tối với gia đình",
+      "image": "phrases/everyday-language-100-phrases-a1/14-have-dinner.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/14-have-dinner.png"
+    },
+    {
+      "phrase": "go shopping",
+      "meaning_vi": "đi mua sắm",
+      "example_en": "My mom ....................... on Saturday",
+      "example_vi": "Me : tôi đi mua sắm vào thứ Bảy",
+      "image": "phrases/everyday-language-100-phrases-a1/15-go-shopping.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/15-go-shopping.png"
+    },
+    {
+      "phrase": "play soccer",
+      "meaning_vi": "chơi bóng đá",
+      "example_en": "They ..................... at the park",
+      "example_vi": "Ho : chơi bóng đá ở công viên",
+      "image": "phrases/everyday-language-100-phrases-a1/16-play-soccer.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/16-play-soccer.png"
+    },
+    {
+      "phrase": "go for a walk",
+      "meaning_vi": "đi dạo",
+      "example_en": "I ......................... after school",
+      "example_vi": "Tôi đi dạo sau giờ ho :c",
+      "image": "phrases/everyday-language-100-phrases-a1/17-go-for-a-walk.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/17-go-for-a-walk.png"
+    },
+    {
+      "phrase": "ride a bike",
+      "meaning_vi": "đi xe đạp",
+      "example_en": "She ...................... to school",
+      "example_vi": "Cô ấy đạp xe đến trường",
+      "image": "phrases/everyday-language-100-phrases-a1/18-ride-a-bike.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/18-ride-a-bike.png"
+    },
+    {
+      "phrase": "go to the park",
+      "meaning_vi": "uống nước",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/19-go-to-the-park.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/19-go-to-the-park.png"
+    },
+    {
+      "phrase": "drink water",
+      "meaning_vi": "uống nước",
+      "example_en": "I ................... when I'm hot",
+      "example_vi": "Tôi uống nước khi nóng",
+      "image": "phrases/everyday-language-100-phrases-a1/20-drink-water.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/20-drink-water.png"
+    },
+    {
+      "phrase": "eat fruit",
+      "meaning_vi": "ăn trái cây",
+      "example_en": "He ................... after lunch",
+      "example_vi": "Cậu ấy ăn trái cây sau bữa trưa",
+      "image": "phrases/everyday-language-100-phrases-a1/21-eat-fruit.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/21-eat-fruit.png"
+    },
+    {
+      "phrase": "draw a picture",
+      "meaning_vi": "vẽ tranh",
+      "example_en": "I ........................... of my cat",
+      "example_vi": "Tôi vẽ một bức tranh con mèo của mình",
+      "image": "phrases/everyday-language-100-phrases-a1/22-draw-a-picture.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/22-draw-a-picture.png"
+    },
+    {
+      "phrase": "clean my room",
+      "meaning_vi": "do :n phòng",
+      "example_en": "She ......................... every Friday",
+      "example_vi": "Cô ấy do :n phòng mỗi thứ Sáu",
+      "image": "phrases/everyday-language-100-phrases-a1/23-clean-my-room.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/23-clean-my-room.png"
+    },
+    {
+      "phrase": "go to the zoo",
+      "meaning_vi": "đi sở thú",
+      "example_en": "They ................................ on week-",
+      "example_vi": "ends",
+      "image": "phrases/everyday-language-100-phrases-a1/24-go-to-the-zoo.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/24-go-to-the-zoo.png"
+    },
+    {
+      "phrase": "open the door",
+      "meaning_vi": "mở cửa",
+      "example_en": "I ........................... for my dog",
+      "example_vi": "Tôi mở cửa cho con chó của tôi",
+      "image": "phrases/everyday-language-100-phrases-a1/25-open-the-door.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/25-open-the-door.png"
+    },
+    {
+      "phrase": "close the window",
+      "meaning_vi": "đóng cửa sổ",
+      "example_en": "She ........................ at night",
+      "example_vi": "Cô ấy đóng cửa sổ vào ban đêm",
+      "image": "phrases/everyday-language-100-phrases-a1/26-close-the-window.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/26-close-the-window.png"
+    },
+    {
+      "phrase": "feed the dog",
+      "meaning_vi": "cho chó ăn",
+      "example_en": "I ....................... in the morning",
+      "example_vi": "Tôi cho chó ăn vào buổi sáng",
+      "image": "phrases/everyday-language-100-phrases-a1/27-feed-the-dog.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/27-feed-the-dog.png"
+    },
+    {
+      "phrase": "wash my hands",
+      "meaning_vi": "rửa tay",
+      "example_en": "I ......................... before lunch",
+      "example_vi": "Tôi rửa tay trước bữa trưa",
+      "image": "phrases/everyday-language-100-phrases-a1/28-wash-my-hands.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/28-wash-my-hands.png"
+    },
+    {
+      "phrase": "wash my hands",
+      "meaning_vi": "mang giày",
+      "example_en": "I ............................ and go out",
+      "example_vi": "Tôi put on my shoes",
+      "image": "phrases/everyday-language-100-phrases-a1/29-wash-my-hands.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/29-wash-my-hands.png"
+    },
+    {
+      "phrase": "take off my jacket",
+      "meaning_vi": "cởi áo khoác",
+      "example_en": "He ............................ at home",
+      "example_vi": "Anh ấy cởi áo khoác ở nhà",
+      "image": "phrases/everyday-language-100-phrases-a1/30-take-off-my-jacket.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/30-take-off-my-jacket.png"
+    },
+    {
+      "phrase": "make the bed",
+      "meaning_vi": "do :n giường/gấp chăn màn",
+      "example_en": "I ......................... in the morning",
+      "example_vi": "Tôi do :n giường vào buổi sáng",
+      "image": "phrases/everyday-language-100-phrases-a1/31-make-the-bed.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/31-make-the-bed.png"
+    },
+    {
+      "phrase": "wash the dishes",
+      "meaning_vi": "rửa chén",
+      "example_en": "She .............................. after dinner",
+      "example_vi": "Cô ấy rửa chén sau bữa tối bật đèn",
+      "image": "phrases/everyday-language-100-phrases-a1/32-wash-the-dishes.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/32-wash-the-dishes.png"
+    },
+    {
+      "phrase": "turn on the light",
+      "meaning_vi": "do :n bàn ăn",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/33-turn-on-the-light.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/33-turn-on-the-light.png"
+    },
+    {
+      "phrase": "set the table",
+      "meaning_vi": "do :n bàn ăn",
+      "example_en": "We ...................... before dinner-",
+      "example_vi": "Chúng tôi do :n bàn trước bữa tối",
+      "image": "phrases/everyday-language-100-phrases-a1/34-set-the-table.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/34-set-the-table.png"
+    },
+    {
+      "phrase": "turn off the fan",
+      "meaning_vi": "tắt quạt",
+      "example_en": "He................................ before sleep",
+      "example_vi": "Anh ấy tắt quạt trước khi ngủ",
+      "image": "phrases/everyday-language-100-phrases-a1/35-turn-off-the-fan.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/35-turn-off-the-fan.png"
+    },
+    {
+      "phrase": "sit on a chair",
+      "meaning_vi": "ngồi lên ghế",
+      "example_en": "I ............................ and read",
+      "example_vi": "Tôi ngồi lên ghế và đo :c sách",
+      "image": "phrases/everyday-language-100-phrases-a1/36-sit-on-a-chair.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/36-sit-on-a-chair.png"
+    },
+    {
+      "phrase": "stand up",
+      "meaning_vi": "đứng dậy",
+      "example_en": "The students ...................",
+      "example_vi": "Các ho :c sinh đứng dậy",
+      "image": "phrases/everyday-language-100-phrases-a1/37-stand-up.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/37-stand-up.png"
+    },
+    {
+      "phrase": "open the book",
+      "meaning_vi": "mở sách",
+      "example_en": ".............................. , please",
+      "example_vi": "Làm ơn mở sách ra",
+      "image": "phrases/everyday-language-100-phrases-a1/38-open-the-book.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/38-open-the-book.png"
+    },
+    {
+      "phrase": "close the book",
+      "meaning_vi": "đóng sách",
+      "example_en": "........................ , please",
+      "example_vi": "Làm ơn đóng sách lại",
+      "image": "phrases/everyday-language-100-phrases-a1/39-close-the-book.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/39-close-the-book.png"
+    },
+    {
+      "phrase": "go upstairs",
+      "meaning_vi": "đi lên lầu",
+      "example_en": "I ...................... to my room",
+      "example_vi": "Tôi đi lên lầu về phòng của mình",
+      "image": "phrases/everyday-language-100-phrases-a1/40-go-upstairs.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/40-go-upstairs.png"
+    },
+    {
+      "phrase": "go downstairs",
+      "meaning_vi": "đi xuống lầu",
+      "example_en": "She .......................... to eat",
+      "example_vi": "Cô ấy đi xuống lầu để đi ăn",
+      "image": "phrases/everyday-language-100-phrases-a1/41-go-downstairs.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/41-go-downstairs.png"
+    },
+    {
+      "phrase": "sleep well",
+      "meaning_vi": "ngủ ngon ’",
+      "example_en": "I ....................... at night",
+      "example_vi": "Tôi ngủ ngon vào ban đêm",
+      "image": "phrases/everyday-language-100-phrases-a1/42-sleep-well.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/42-sleep-well.png"
+    },
+    {
+      "phrase": "wake up early",
+      "meaning_vi": "thức dậy sớm",
+      "example_en": "They ......................... on Monday",
+      "example_vi": "Ho : dậy sớm vào thứ Hai = get up early",
+      "image": "phrases/everyday-language-100-phrases-a1/43-wake-up-early.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/43-wake-up-early.png"
+    },
+    {
+      "phrase": "eat rice",
+      "meaning_vi": "ăn cơm",
+      "example_en": "I ................. with chicken",
+      "example_vi": "Tôi ăn cơm với thi :t gà",
+      "image": "phrases/everyday-language-100-phrases-a1/44-eat-rice.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/44-eat-rice.png"
+    },
+    {
+      "phrase": "drink milk",
+      "meaning_vi": "uống sữa",
+      "example_en": "He .................. in the morning",
+      "example_vi": "Cậu ấy uống sữa vào buổi sáng",
+      "image": "phrases/everyday-language-100-phrases-a1/45-drink-milk.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/45-drink-milk.png"
+    },
+    {
+      "phrase": "drink milk",
+      "meaning_vi": "làm bánh",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/46-drink-milk.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/46-drink-milk.png"
+    },
+    {
+      "phrase": "make a cake",
+      "meaning_vi": "làm bánh",
+      "example_en": "We ........................ for mom",
+      "example_vi": "Chúng tôi làm bánh cho me",
+      "image": "phrases/everyday-language-100-phrases-a1/47-make-a-cake.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/47-make-a-cake.png"
+    },
+    {
+      "phrase": "cut the fruit",
+      "meaning_vi": "cắt trái cây",
+      "example_en": "I ...................... with a knife",
+      "example_vi": "Tôi cắt trái cây bằng dao",
+      "image": "phrases/everyday-language-100-phrases-a1/48-cut-the-fruit.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/48-cut-the-fruit.png"
+    },
+    {
+      "phrase": "cook lunch",
+      "meaning_vi": "nấu bữa trưa",
+      "example_en": "Mom ................... for us",
+      "example_vi": "Me : nấu bữa trưa cho chúng tôi",
+      "image": "phrases/everyday-language-100-phrases-a1/49-cook-lunch.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/49-cook-lunch.png"
+    },
+    {
+      "phrase": "eat dinner together",
+      "meaning_vi": "ăn tối cùng nhau",
+      "example_en": "We ......................................... every",
+      "example_vi": "day ngày vào lớp",
+      "image": "phrases/everyday-language-100-phrases-a1/50-eat-dinner-together.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/50-eat-dinner-together.png"
+    },
+    {
+      "phrase": "go to class",
+      "meaning_vi": "giơ tay",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/51-go-to-class.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/51-go-to-class.png"
+    },
+    {
+      "phrase": "raise your hand",
+      "meaning_vi": "giơ tay",
+      "example_en": ".................................. to speak",
+      "example_vi": "Hãy giơ tay để phát biểu",
+      "image": "phrases/everyday-language-100-phrases-a1/52-raise-your-hand.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/52-raise-your-hand.png"
+    },
+    {
+      "phrase": "write my name",
+      "meaning_vi": "viết tên ’ I ......................... on the pa-",
+      "example_en": "per",
+      "example_vi": "Tôi viết tên mình lên giấy",
+      "image": "phrases/everyday-language-100-phrases-a1/53-write-my-name.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/53-write-my-name.png"
+    },
+    {
+      "phrase": "draw a line",
+      "meaning_vi": "vẽ đường thẳng",
+      "example_en": "............................. on the board",
+      "example_vi": "Vẽ một đường thẳng lên bảng",
+      "image": "phrases/everyday-language-100-phrases-a1/54-draw-a-line.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/54-draw-a-line.png"
+    },
+    {
+      "phrase": "draw a line",
+      "meaning_vi": "đo :c to",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/55-draw-a-line.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/55-draw-a-line.png"
+    },
+    {
+      "phrase": "read aloud",
+      "meaning_vi": "đo :c to",
+      "example_en": "We ..................... in class",
+      "example_vi": "Chúng tôi đo :c to trong lớp",
+      "image": "phrases/everyday-language-100-phrases-a1/56-read-aloud.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/56-read-aloud.png"
+    },
+    {
+      "phrase": "color the picture",
+      "meaning_vi": "tô màu bức tranh",
+      "example_en": "She ............................ red",
+      "example_vi": "Cô ấy tô bức tranh thành màu đỏ",
+      "image": "phrases/everyday-language-100-phrases-a1/57-color-the-picture.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/57-color-the-picture.png"
+    },
+    {
+      "phrase": "play with friends",
+      "meaning_vi": "chơi với bạn",
+      "example_en": "I ............................... at school",
+      "example_vi": "Tôi chơi với bạn ở trường",
+      "image": "phrases/everyday-language-100-phrases-a1/58-play-with-friends.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/58-play-with-friends.png"
+    },
+    {
+      "phrase": "clean the board",
+      "meaning_vi": "nhảy dây",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/59-clean-the-board.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/59-clean-the-board.png"
+    },
+    {
+      "phrase": "jump rope",
+      "meaning_vi": "nhảy dây",
+      "example_en": "I ................. with my sister",
+      "example_vi": "Tôi nhảy dây với em gái",
+      "image": "phrases/everyday-language-100-phrases-a1/60-jump-rope.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/60-jump-rope.png"
+    },
+    {
+      "phrase": "play with toys",
+      "meaning_vi": "chơi đồ chơi",
+      "example_en": "The kids ........................",
+      "example_vi": "Lũ trẻ chơi đồ chơi",
+      "image": "phrases/everyday-language-100-phrases-a1/61-play-with-toys.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/61-play-with-toys.png"
+    },
+    {
+      "phrase": "draw animals",
+      "meaning_vi": "vẽ con vật",
+      "example_en": "I .......................... on the wall",
+      "example_vi": "Tôi vẽ con vật lên tường",
+      "image": "phrases/everyday-language-100-phrases-a1/62-draw-animals.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/62-draw-animals.png"
+    },
+    {
+      "phrase": "sing a song",
+      "meaning_vi": "hát một bài hát",
+      "example_en": "She ...............................",
+      "example_vi": "Cô ấy hát một bài hát tên",
+      "image": "phrases/everyday-language-100-phrases-a1/63-sing-a-song.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/63-sing-a-song.png"
+    },
+    {
+      "phrase": "watch cartoons",
+      "meaning_vi": "xem hoạt hình",
+      "example_en": "I ............................... on TV",
+      "example_vi": "Tôi xem hoạt hình trên tivi",
+      "image": "phrases/everyday-language-100-phrases-a1/64-watch-cartoons.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/64-watch-cartoons.png"
+    },
+    {
+      "phrase": "play outside",
+      "meaning_vi": "chơi ngoài trời",
+      "example_en": "They ....................... after lunch",
+      "example_vi": "Ho : chơi ngoài trời sau bữa trưa đi biển",
+      "image": "phrases/everyday-language-100-phrases-a1/65-play-outside.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/65-play-outside.png"
+    },
+    {
+      "phrase": "go to the beach",
+      "meaning_vi": "làm người tuyết",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/66-go-to-the-beach.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/66-go-to-the-beach.png"
+    },
+    {
+      "phrase": "make a snowman",
+      "meaning_vi": "làm người tuyết",
+      "example_en": "He .............................. in winter",
+      "example_vi": "Cậu ấy làm người tuyết vào mùa đông",
+      "image": "phrases/everyday-language-100-phrases-a1/67-make-a-snowman.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/67-make-a-snowman.png"
+    },
+    {
+      "phrase": "fly a kite",
+      "meaning_vi": "thả diều",
+      "example_en": "I .................. in the park",
+      "example_vi": "Tôi thả diều ở công viên",
+      "image": "phrases/everyday-language-100-phrases-a1/68-fly-a-kite.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/68-fly-a-kite.png"
+    },
+    {
+      "phrase": "ride a horse",
+      "meaning_vi": "cưỡi ngựa",
+      "example_en": "She .......................... on the farm",
+      "example_vi": "Cô ấy cưỡi ngựa ở nông trại",
+      "image": "phrases/everyday-language-100-phrases-a1/69-ride-a-horse.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/69-ride-a-horse.png"
+    },
+    {
+      "phrase": "say hello",
+      "meaning_vi": "chào",
+      "example_en": "I ..................... to my teacher",
+      "example_vi": "Tôi chào cô giáo của tôi",
+      "image": "phrases/everyday-language-100-phrases-a1/70-say-hello.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/70-say-hello.png"
+    },
+    {
+      "phrase": "say goodbye",
+      "meaning_vi": "tạm biệt",
+      "example_en": "We ....................... after class",
+      "example_vi": "Chúng tôi tạm biệt sau giờ ho :c",
+      "image": "phrases/everyday-language-100-phrases-a1/71-say-goodbye.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/71-say-goodbye.png"
+    },
+    {
+      "phrase": "feel happy",
+      "meaning_vi": "cảm thấy vui",
+      "example_en": "cảm thấy vui",
+      "example_vi": "I ....................... with my cat",
+      "image": "phrases/everyday-language-100-phrases-a1/72-feel-happy.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/72-feel-happy.png"
+    },
+    {
+      "phrase": "feel sad",
+      "meaning_vi": "cảm thấy buồn",
+      "example_en": "She ................... today",
+      "example_vi": "Cô ấy thấy buồn hôm nay",
+      "image": "phrases/everyday-language-100-phrases-a1/73-feel-sad.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/73-feel-sad.png"
+    },
+    {
+      "phrase": "laugh out loud",
+      "meaning_vi": "cười to",
+      "example_en": "He ............................... at the joke",
+      "example_vi": "Cậu ấy cười to vì câu đùa",
+      "image": "phrases/everyday-language-100-phrases-a1/74-laugh-out-loud.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/74-laugh-out-loud.png"
+    },
+    {
+      "phrase": "cry a little",
+      "meaning_vi": "khóc một chút",
+      "example_en": "The baby ........................",
+      "example_vi": "Em bé khóc một chút",
+      "image": "phrases/everyday-language-100-phrases-a1/75-cry-a-little.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/75-cry-a-little.png"
+    },
+    {
+      "phrase": "say thank you",
+      "meaning_vi": "nói cảm ơn",
+      "example_en": "I ........................ to grandma",
+      "example_vi": "Tôi nói cảm ơn bà",
+      "image": "phrases/everyday-language-100-phrases-a1/76-say-thank-you.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/76-say-thank-you.png"
+    },
+    {
+      "phrase": "say sorry",
+      "meaning_vi": "xin lỗi",
+      "example_en": "He ...................... to his mom",
+      "example_vi": "Cậu ấy xin lỗi me",
+      "image": "phrases/everyday-language-100-phrases-a1/77-say-sorry.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/77-say-sorry.png"
+    },
+    {
+      "phrase": "hug my old friend tight",
+      "meaning_vi": "mỉm cười với tôi",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/78-hug-my-old-friend-tight.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/78-hug-my-old-friend-tight.png"
+    },
+    {
+      "phrase": "smile at me",
+      "meaning_vi": "mỉm cười với tôi",
+      "example_en": "She ...................... every day",
+      "example_vi": "Cô ấy mỉm cười với tôi mỗi ngày",
+      "image": "phrases/everyday-language-100-phrases-a1/79-smile-at-me.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/79-smile-at-me.png"
+    },
+    {
+      "phrase": "go to the market",
+      "meaning_vi": "đi chợ",
+      "example_en": "I .................................. with mom",
+      "example_vi": "Tôi đi chợ với me",
+      "image": "phrases/everyday-language-100-phrases-a1/80-go-to-the-market.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/80-go-to-the-market.png"
+    },
+    {
+      "phrase": "take the bus",
+      "meaning_vi": "đi xe buýt",
+      "example_en": "She ....................... to school",
+      "example_vi": "Cô ấy đi xe buýt đến trường",
+      "image": "phrases/everyday-language-100-phrases-a1/81-take-the-bus.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/81-take-the-bus.png"
+    },
+    {
+      "phrase": "wait for the bus",
+      "meaning_vi": "đợi xe buýt",
+      "example_en": "We ................................ every morn-",
+      "example_vi": "ing",
+      "image": "phrases/everyday-language-100-phrases-a1/82-wait-for-the-bus.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/82-wait-for-the-bus.png"
+    },
+    {
+      "phrase": "cross the street",
+      "meaning_vi": "băng qua đường",
+      "example_en": "I .......................... with my dad",
+      "example_vi": "Tôi băng qua đường cùng bố",
+      "image": "phrases/everyday-language-100-phrases-a1/83-cross-the-street.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/83-cross-the-street.png"
+    },
+    {
+      "phrase": "stop at the red light",
+      "meaning_vi": "dừng đèn đỏ",
+      "example_en": "He .........................................",
+      "example_vi": "Cậu ấy dừng lại khi đèn đỏ",
+      "image": "phrases/everyday-language-100-phrases-a1/84-stop-at-the-red-light.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/84-stop-at-the-red-light.png"
+    },
+    {
+      "phrase": "go to the doctor",
+      "meaning_vi": "đi bác sĩ",
+      "example_en": "i bác sĩ",
+      "example_vi": "She ....................................... on Monday",
+      "image": "phrases/everyday-language-100-phrases-a1/85-go-to-the-doctor.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/85-go-to-the-doctor.png"
+    },
+    {
+      "phrase": "visit my grandma",
+      "meaning_vi": "thăm bà",
+      "example_en": "I .................................. every week-",
+      "example_vi": "end",
+      "image": "phrases/everyday-language-100-phrases-a1/86-visit-my-grandma.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/86-visit-my-grandma.png"
+    },
+    {
+      "phrase": "go to church",
+      "meaning_vi": "đi nhà thờ",
+      "example_en": "They ................................ on Sunday",
+      "example_vi": "Ho : đi nhà thờ vào Chủ nhật",
+      "image": "phrases/everyday-language-100-phrases-a1/87-go-to-church.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/87-go-to-church.png"
+    },
+    {
+      "phrase": "go to the bank",
+      "meaning_vi": "đi ngân hàng",
+      "example_en": "Dad .................................... in the",
+      "example_vi": "morning sáng",
+      "image": "phrases/everyday-language-100-phrases-a1/88-go-to-the-bank.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/88-go-to-the-bank.png"
+    },
+    {
+      "phrase": "go to the library",
+      "meaning_vi": "đi thư viện",
+      "example_en": "I ................................... after school",
+      "example_vi": "Tôi đi thư viện sau giờ ho :c",
+      "image": "phrases/everyday-language-100-phrases-a1/89-go-to-the-library.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/89-go-to-the-library.png"
+    },
+    {
+      "phrase": "use the phone",
+      "meaning_vi": "dùng điện thoại",
+      "example_en": "Mom ................................. at home",
+      "example_vi": "Me : dùng điện thoại ở nhà",
+      "image": "phrases/everyday-language-100-phrases-a1/90-use-the-phone.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/90-use-the-phone.png"
+    },
+    {
+      "phrase": "turn on the TV",
+      "meaning_vi": "bật tivi",
+      "example_en": "I .................................. to watch car-",
+      "example_vi": "toons",
+      "image": "phrases/everyday-language-100-phrases-a1/91-turn-on-the-tv.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/91-turn-on-the-tv.png"
+    },
+    {
+      "phrase": "turn off the TV",
+      "meaning_vi": "tắt tivi",
+      "example_en": "He .................................... at night",
+      "example_vi": "Cậu ấy tắt tivi vào ban đêm",
+      "image": "phrases/everyday-language-100-phrases-a1/92-turn-off-the-tv.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/92-turn-off-the-tv.png"
+    },
+    {
+      "phrase": "play on the computer",
+      "meaning_vi": "chơi máy tính",
+      "example_en": "We ............................................... to-",
+      "example_vi": "gether nhau",
+      "image": "phrases/everyday-language-100-phrases-a1/93-play-on-the-computer.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/93-play-on-the-computer.png"
+    },
+    {
+      "phrase": "take a photo",
+      "meaning_vi": "chu :p hình",
+      "example_en": "I ............................... of my dog",
+      "example_vi": "Tôi chu :p hình con chó của mình",
+      "image": "phrases/everyday-language-100-phrases-a1/94-take-a-photo.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/94-take-a-photo.png"
+    },
+    {
+      "phrase": "look at the clock",
+      "meaning_vi": "nhìn đồng hồ ’ She",
+      "example_en": ".................................. and smiles",
+      "example_vi": "Cô ấy nhìn đồng hồ và mỉm cười",
+      "image": "phrases/everyday-language-100-phrases-a1/95-look-at-the-clock.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/95-look-at-the-clock.png"
+    },
+    {
+      "phrase": "open the fridge",
+      "meaning_vi": "mở tủ lạnh",
+      "example_en": "I ................................... for a snack",
+      "example_vi": "Tôi mở tủ lạnh để lấy đồ ăn nhe",
+      "image": "phrases/everyday-language-100-phrases-a1/96-open-the-fridge.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/96-open-the-fridge.png"
+    },
+    {
+      "phrase": "close the door",
+      "meaning_vi": "đóng cửa",
+      "example_en": "He ............................. when it rains",
+      "example_vi": "Cậu ấy đóng cửa khi trời mưa rửa xe",
+      "image": "phrases/everyday-language-100-phrases-a1/97-close-the-door.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/97-close-the-door.png"
+    },
+    {
+      "phrase": "wash the car",
+      "meaning_vi": "bật quạt",
+      "example_en": "",
+      "example_vi": "",
+      "image": "phrases/everyday-language-100-phrases-a1/98-wash-the-car.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/98-wash-the-car.png"
+    },
+    {
+      "phrase": "turn on the fan",
+      "meaning_vi": "bật quạt",
+      "example_en": "I .................................. because it's",
+      "example_vi": "hot lướt điện thoại",
+      "image": "phrases/everyday-language-100-phrases-a1/99-turn-on-the-fan.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/99-turn-on-the-fan.png"
+    },
+    {
+      "phrase": "scroll through my phone",
+      "meaning_vi": "> I usually........................... every",
+      "example_en": "",
+      "example_vi": "night after work. Tôi thường lướt điện thoại vào mỗi tối sau khi đi làm về",
+      "image": "phrases/everyday-language-100-phrases-a1/100-scroll-through-my-phone.png",
+      "level": "A1",
+      "r2_key": "everyday-language-100-phrases-a1/100-scroll-through-my-phone.png"
+    }
+  ]
+}
