@@ -31,20 +31,22 @@ không được làm hỏng tính năng.
 ## 4. ipa-dict / cmudict-ipa — IPA offline cho trang phiên âm
 
 - https://github.com/open-dict-data/ipa-dict (US + UK, JSON/CSV), https://github.com/menelik3/cmudict-ipa (134k từ US).
-- Kế hoạch: seed bảng `ipa_entries(word, ipa_us, ipa_uk)` vào D1 (~vài MB, chia nhiều migration
-  hoặc import bằng `wrangler d1 execute --file`). Trang IPA transcribe tra D1 trước, chỉ từ
-  không có mới hỏi AI. Client `lookupIpa` giữ nguyên, đổi backend.
+- ✅ Đã có sẵn từ trước, không cần D1: full en_US dataset (~126k từ, 4.9MB) serve làm static asset
+  `public/data/ipa-dictionary.json`, client `lookupIpa`/`transcribeToIpa` tra offline hoàn toàn.
 
 ## 5. Words-CEFR-Dataset / olp-en-cefrj — chấm độ khó
 
 - https://github.com/Maximax67/Words-CEFR-Dataset, https://github.com/openlanguageprofiles/olp-en-cefrj
-- Kế hoạch (sau cùng): map từ → CEFR + tần suất để (a) gắn nhãn level từ user tra,
-  (b) ước lượng độ khó bài đọc News in Levels, (c) ưu tiên từ hay gặp khi sinh flashcards.
+- ✅ Đã làm phần (a): `public/data/word-cefr.json` (172k từ → A1–C2, 2.7MB, sinh từ Maximax67
+  words.csv + word_pos.csv, lấy level thấp nhất giữa các POS, làm tròn 1–6 → A1–C2). Client
+  `lookupCefr` (src/client/lib/cefr.ts) cùng pattern ipa-dictionary; popup tra từ fallback sang
+  map này khi kho vocab chưa có level. (b) độ khó bài đọc News in Levels đã có level 1–3 từ nguồn,
+  (c) ưu tiên tần suất khi sinh flashcards — bỏ, chưa cần.
 
 ## Thứ tự làm
 
 1. ✅ Tatoeba (câu ví dụ trong popup tra từ)
 2. ✅ freeDictionaryAPI (audio + definition thật cho lookup)
 3. ✅ Oxford 5000 seed + level CEFR
-4. ipa-dict seed
-5. CEFR dataset chấm độ khó
+4. ✅ ipa-dict (đã có sẵn dạng static asset, không cần seed D1)
+5. ✅ CEFR dataset chấm độ khó (word-cefr.json + lookupCefr, badge level cho mọi từ)

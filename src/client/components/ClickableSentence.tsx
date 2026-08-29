@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, isUnauthorized } from "../lib/api";
 import { cleanIpaToken, lookupIpa } from "../lib/ipa";
+import { lookupCefr } from "../lib/cefr";
 import { SpeakButton } from "./SpeakButton";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
@@ -52,6 +53,10 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
       .then((res: WordInfo) => {
         if (stale) return;
         setInfo(res);
+        // Kho vocab chua co level thi tra dataset CEFR offline (172k tu).
+        if (!res.level) {
+          lookupCefr(res.term).then((lv) => !stale && lv && setInfo((cur) => (cur ? { ...cur, level: lv } : cur))).catch(() => {});
+        }
         // Tu da co trong bo suu tap thi nut luu hien "da luu" ngay, khong cho luu trung.
         api.isWordSaved(res.term).then((r: { saved: boolean }) => !stale && r.saved && setSaved(true)).catch(() => {});
       })
