@@ -19,6 +19,8 @@
     }
   ],
   "ai": { "binding": "AI" },
+  // Log 500 cua Worker len dashboard (wrangler tail bi chan o mang nay).
+  "observability": { "enabled": true },
   "services": [{ "binding": "MAILER", "service": "mailer" }],
   "r2_buckets": [
     { "binding": "VOCAB_IMAGES", "bucket_name": "ai-english-vocab" }
