@@ -317,6 +317,8 @@ export const translations: Record<string, TranslationEntry> = {
   "flashcards.loadError": { vi: "Không tải được flashcards: ", en: "Couldn't load flashcards: " },
   "flashcards.empty": { vi: "Chưa có flashcard nào. Vào một bài học để tạo từ vựng trước.", en: "No flashcards yet. Go through a lesson to build vocabulary first." },
   "flashcards.remaining": { vi: "Còn {n} thẻ cần ôn", en: "{n} cards left to review" },
+  "flashcards.levelAll": { vi: "Tất cả", en: "All" },
+  "flashcards.levelEmpty": { vi: "Không có thẻ nào ở level này.", en: "No cards at this level." },
   "flashcards.save": { vi: "Lưu từ này", en: "Save this word" },
   "flashcards.tapHint": { vi: "Chạm để lật, vuốt trái/phải hoặc chấm điểm bên dưới", en: "Tap to flip, swipe left/right or rate below" },
   "flashcards.forgot": { vi: "Quên rồi", en: "Forgot" },

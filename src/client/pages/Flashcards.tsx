@@ -12,7 +12,9 @@ import { StarIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { SpeakButton } from "../components/SpeakButton";
 
-type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string };
+type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string; level?: string | null };
+
+const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 const EMOJI_POOL = ["📘", "✨", "🌱", "🔑", "🎯", "💡", "🧩", "🚀", "🌟", "🍀", "🎈", "🧭", "🌈", "🔥", "🌻", "🎵", "🧠", "🌊", "⭐", "🍃"];
 function emojiFor(term: string) {
@@ -29,13 +31,15 @@ export default function Flashcards() {
   const [error, setError] = useState("");
   const [grading, setGrading] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
+  const [level, setLevel] = useState<string | null>(null);
   const { t } = useLanguage();
   const toast = useToast();
 
   useEffect(() => {
+    setCards(null);
     (async () => {
       try {
-        const [vocab, saved, me] = await Promise.all([api.vocab(), api.savedVocab(), api.me()]);
+        const [vocab, saved, me] = await Promise.all([api.vocab(level), api.savedVocab(), api.me()]);
         const sessionSize = me.user?.flashcard_session_size || 10;
         setCards(Array.isArray(vocab) ? vocab.slice(0, sessionSize) : []);
         setSavedIds(new Set((Array.isArray(saved) ? saved : []).map((s: any) => s.id)));
@@ -45,7 +49,7 @@ export default function Flashcards() {
         setError(t("flashcards.loadError") + err.message);
       }
     })();
-  }, [navigate, t]);
+  }, [navigate, t, level]);
 
   const current = cards && cards.length ? cards[0] : null;
 
@@ -151,9 +155,26 @@ export default function Flashcards() {
     <div className="mx-auto max-w-xl">
       <PageHeader backTo="/" title={t("flashcards.title")} />
       <main className="p-5 sm:p-9">
+        <div className="mb-4 flex flex-wrap justify-center gap-1.5">
+          {[null, ...CEFR_LEVELS].map((lv) => (
+            <button
+              key={lv ?? "all"}
+              type="button"
+              onClick={() => setLevel(lv)}
+              className={cn(
+                "rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition",
+                level === lv ? "bg-primary-hover text-white" : "bg-surface text-fg-muted hover:bg-primary-soft"
+              )}
+            >
+              {lv ?? t("flashcards.levelAll")}
+            </button>
+          ))}
+        </div>
         {error && <PageState tone="error">{error}</PageState>}
         {!error && cards === null && <LoadingState />}
-        {!error && cards && cards.length === 0 && <PageState>{t("flashcards.empty")}</PageState>}
+        {!error && cards && cards.length === 0 && (
+          <PageState>{level ? t("flashcards.levelEmpty") : t("flashcards.empty")}</PageState>
+        )}
         {!error && current && (
           <>
             <div className="mb-3 text-center text-xs text-fg-muted">
@@ -209,6 +230,11 @@ export default function Flashcards() {
                     <div aria-hidden="true" className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
                     <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
                     {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
+                    {current.level && (
+                      <div className="mt-2 rounded bg-primary-soft px-1.5 py-0.5 text-xs font-semibold text-primary-hover">
+                        {current.level}
+                      </div>
+                    )}
                   </div>
                   <div
                     className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-primary-hover p-6 text-center text-white shadow-lg"

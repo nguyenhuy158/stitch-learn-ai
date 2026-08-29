@@ -41,7 +41,7 @@ export const api = {
   lessons: () => request("/api/lessons"),
   lessonDetail: (id) => request(`/api/lessons/${id}`),
 
-  vocab: () => request("/api/vocab"),
+  vocab: (level) => request(`/api/vocab${level ? `?level=${level}` : ""}`),
   savedVocab: () => request("/api/vocab/saved"),
   saveVocab: (id, save) => request(`/api/vocab/${id}/save`, { method: "POST", body: JSON.stringify({ save }) }),
   reviewVocab: (id, quality) => request(`/api/vocab/${id}/review`, { method: "POST", body: JSON.stringify({ quality }) }),

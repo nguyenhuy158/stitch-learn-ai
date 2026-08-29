@@ -131,7 +131,10 @@ export async function handleRequest(request, url, deps) {
   }
 
   if (url.pathname === "/api/vocab" && request.method === "GET") {
-    return requireAuth(async (userId) => json(await getFlashcards({ userId }, deps)), {
+    return requireAuth(async (userId) => {
+      const level = url.searchParams.get("level");
+      return json(await getFlashcards({ userId, level }, deps));
+    }, {
       label: "Flashcards error:",
       fallbackMessage: "Failed to load flashcards"
     })(request, url, deps);
