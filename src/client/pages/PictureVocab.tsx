@@ -5,7 +5,16 @@ import { Card } from "../ui/Card";
 import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
-type Item = { word: string; meaning_vi: string; level: string; word_form: string; image_url: string };
+type Item = {
+  word: string;
+  meaning_vi: string;
+  level: string;
+  word_form?: string;
+  example_en?: string;
+  example_vi?: string;
+  kind?: "word" | "phrase";
+  image_url: string;
+};
 type Topic = { topic: string; lesson: string; slug: string; items: Item[] };
 
 export default function PictureVocab() {
@@ -21,7 +30,10 @@ export default function PictureVocab() {
         setTopics(data.topics);
         setActive(data.topics[0]?.slug ?? null);
       })
-      .catch((err: any) => setError(t("pictureVocab.loadError") + err.message));
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        setError(t("pictureVocab.loadError") + message);
+      });
   }, [t]);
 
   const current = topics?.find((topic) => topic.slug === active);
@@ -70,8 +82,15 @@ export default function PictureVocab() {
                 <div className="p-3">
                   <div className="text-sm font-bold text-primary-hover">{item.word}</div>
                   <div className="mt-0.5 text-xs font-semibold text-fg">{item.meaning_vi}</div>
+                  {item.kind === "phrase" && item.example_en && (
+                    <div className="mt-1.5 text-[11px] leading-snug text-fg-muted">
+                      <div className="italic">{item.example_en}</div>
+                      <div>{item.example_vi}</div>
+                    </div>
+                  )}
                   <div className="mt-1.5 text-xs uppercase text-fg-muted">
-                    {item.level} · {item.word_form}
+                    {item.level}
+                    {item.kind === "word" && item.word_form ? ` · ${item.word_form}` : ""}
                   </div>
                 </div>
               </Card>
