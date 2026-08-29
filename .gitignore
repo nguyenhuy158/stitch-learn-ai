@@ -2,8 +2,4 @@ node_modules/
 .wrangler/
 
 # Dau vet build sinh tu git moi lan build (scripts/build-info.mjs)
-# Build artifacts tu Vite (regen moi lan pnpm build, Cloudflare Workers
-# Builds chay build.command o wrangler.jsonc nen khong can commit)
-public/assets/*.js
-public/assets/*.css
-public/assets/*.map
+src/shared/build-info.generated.js
