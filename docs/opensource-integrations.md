@@ -26,7 +26,7 @@ không được làm hỏng tính năng.
 - ✅ Đã làm (migration 0023 + 0024, nguồn winterdl): backfill `vocab.level` (cột có sẵn từ 0011)
   cho 2963 từ Oxford 3000, seed 1991 từ mới (nghĩa tiếng Anh + level) vào lesson "Oxford 5000",
   badge level trong popup tra từ (`getTermLevel` ở savedVocabRepository, gắn vào lookupWord).
-  Còn mở: lọc flashcards/games theo level A1–C1 (games đã dùng `vocab.level` qua DIFFICULTY_LEVELS).
+  ✅ Lọc theo level: games qua DIFFICULTY_LEVELS, flashcards có chip lọc A1–C2 + badge level trên thẻ.
 
 ## 4. ipa-dict / cmudict-ipa — IPA offline cho trang phiên âm
 
