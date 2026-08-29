@@ -8,16 +8,25 @@ export const LOOKUP_WORD_TAG = "ai-lookup";
  * lan hoi AI mat vai giay. Cache theo tu goc nguoi hoc bam (khong theo cau),
  * chap nhan mat sac thai ngu canh de doi lay tra loi tuc thi.
  */
-export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository, dictionaryPort, savedVocabRepository }) {
+export async function lookupWord({ term, context }, { wordLookupPort, wordLookupCacheRepository, dictionaryPort, savedVocabRepository, wordFrequencyRepository, wikipediaEtymologyPort, wikipediaEtymologyRepository }) {
   const key = term.trim().toLowerCase();
-  // Level CEFR lay tu kho vocab (Oxford 3000/5000), khong cache theo lookup.
+  // Level CEFR (Oxford), frequency (SUBTLEX), etymology (Wikipedia) lay song song tu D1/cache.
+  // Loi cache (vd chua chay migration) thi fallback null, khong hong lookup.
   const levelPromise = Promise.resolve(savedVocabRepository?.getTermLevel(key)).catch(() => null);
+  const frequencyPromise = Promise.resolve(wordFrequencyRepository?.getByTerm(key)).catch(() => null);
+  const etymologyPromise = loadEtymology(key, wikipediaEtymologyRepository, wikipediaEtymologyPort).catch((err) => {
+    console.error("Etymology error:", err);
+    return { etymology: "", sectionTitle: "" };
+  });
   // Cache loi (vd chua chay migration) thi cu hoi AI, dung de hong tinh nang.
   const cached = await wordLookupCacheRepository.get(key).catch((err) => {
     console.error("Read word lookup cache error:", err);
     return null;
   });
-  if (cached) return { ...cached, level: await levelPromise };
+  if (cached) {
+    const [level, frequency, etymology] = await Promise.all([levelPromise, frequencyPromise, etymologyPromise]);
+    return { ...cached, level, frequency, etymology };
+  }
 
   // Hoi AI va tu dien mien phi song song: AI cho nghia Viet, tu dien cho audio
   // mp3 doc tu that + dong nghia bo sung. Tu dien loi thi bo qua, khong hong lookup.
@@ -37,7 +46,28 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   } catch (err) {
     console.error("Cache word lookup error:", err);
   }
-  return { ...word, level: await levelPromise };
+  const [level, frequency, etymology] = await Promise.all([levelPromise, frequencyPromise, etymologyPromise]);
+  return { ...word, level, frequency, etymology };
+}
+
+/**
+ * Lay etymology tu Wikipedia, co cache D1 30 ngay.
+ * Neu cache con han -> dung cache. Neu khong/chua co -> goi API, cache lai (async, khong block).
+ * Tra ve object {etymology, sectionTitle} (rong neu that bai).
+ */
+async function loadEtymology(key, repository, port) {
+  if (!repository || !port) return { etymology: "", sectionTitle: "" };
+  const cached = await repository.getByTerm(key);
+  if (cached) return { etymology: cached.etymology, sectionTitle: cached.sectionTitle };
+  const fresh = await port.lookup(key);
+  if (!fresh || !fresh.etymology) return { etymology: "", sectionTitle: "" };
+  repository.upsert({
+    term: key,
+    etymology: fresh.etymology,
+    sectionTitle: fresh.sectionTitle,
+    fetchedAt: new Date().toISOString()
+  }).catch((err) => console.error("Cache etymology error:", err));
+  return fresh;
 }
 
 /**

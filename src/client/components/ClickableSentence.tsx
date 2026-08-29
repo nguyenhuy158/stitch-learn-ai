@@ -19,6 +19,7 @@ type WordInfo = {
   audioUrl?: string;
   level?: string | null;
   frequency?: { rank: number; freqCount: number } | null;
+  etymology?: { etymology: string; sectionTitle: string } | null;
 };
 
 /**
@@ -150,6 +151,12 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
             <>
               <div className="mt-2 text-sm">{info.meaning}</div>
               {info.example && <div className="mt-0.5 text-xs italic text-fg-muted">"{info.example}"</div>}
+              {info.etymology?.etymology && (
+                <div className="mt-2 rounded-ui border-l-3 border-accent bg-warning-soft p-2.5 text-xs leading-relaxed text-fg-muted">
+                  <div className="mb-0.5 font-bold uppercase text-fg">{info.etymology.sectionTitle || "Etymology"}</div>
+                  {info.etymology.etymology}
+                </div>
+              )}
               {info.synonyms.length > 0 && (
                 <div className="mt-2 text-xs text-fg-muted">
                   <span className="font-semibold uppercase">{t("word.synonyms")}</span> {info.synonyms.join(", ")}

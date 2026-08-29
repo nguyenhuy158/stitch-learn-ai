@@ -53,16 +53,29 @@ không được làm hỏng tính năng.
 - Tại sao nên: file nhỏ (1MB CSV), seed 1 phát ~30s, cache vĩnh viễn. Không cần API runtime, không tốn AI.
 - Effort: 15-30 phút (1 commit).
 
-## 7. Open Library Definitions — etymology + cross-references 🎯 Tier 1 (chưa làm)
+## 7. Wikipedia Etymology — nguồn gốc từ + cross-references 🎯 Tier 1 (chưa làm)
 
-- Nguồn: https://openlibrary.org/dev/docs/api/search — `GET https://openlibrary.org/search.json?q=<word>&fields=key,definition,etymology,subject` không cần key.
-- Tích hợp dự kiến: adapter `src/adapters/openlibrary/search.js`, gọi song song với Mochi trong `lookupWord` (giống pattern dictionaryapi). Cache D1 `openlibrary_cache (term PRIMARY KEY, definitions_json TEXT, etymology TEXT, fetched_at INTEGER)`, TTL 30 ngày. Khi Mochi trả etymology mơ hồ, fallback Open Library.
-- Dùng cho: popup tra từ thêm section "Etymology" (gốc Latin/Greek/Old English), "Cross-references" (hyperlink tới các từ liên quan cùng root: `bene-`, `mal-`, `-tion`...). Khác với Mochi ở chỗ: Open Library lấy từ WordNet + Wiktionary đã được cộng đồng verify, Mochi hay bịa etymology.
-- Tại sao nên: API miễn phí, không cần đăng ký, response time ~200ms, rate limit hào phóng.
-- Trade-off: Open Library chỉ có definition tiếng Anh (không có tiếng Việt) → vẫn cần Mochi/dictionaryapi cho nghĩa Việt.
+- **Quyết định thay thế Open Library**: Wiktionary REST API (đã thử `/api/rest_v1/page/summary/...`,
+  `/w/rest.php/v1/page/...`) trả về `Domain not allowed` ngay cả khi gọi từ Cloudflare Worker.
+  Open Library `/works/...json` chỉ trả book metadata, không có etymology. Wiktionary `/w/api.php`
+  work nhưng structure section cực kỳ phức tạp, fragile. **Wikipedia `/w/api.php?action=parse&page=...&section=...`**
+  là lựa chọn clean nhất: có section "Etymology" rõ ràng cho mọi từ, free, không rate limit,
+  CORS-friendly khi gọi từ Worker.
+- Nguồn: `https://en.wikipedia.org/w/api.php?action=parse&page=<term>&prop=sections&format=json`
+  → list sections, tìm "Etymology" section number
+  → `https://en.wikipedia.org/w/api.php?action=parse&page=<term>&prop=wikitext&section=N&format=json`
+  → wikitext, strip wiki markup bằng regex (loại `[[link|text]]`, `{{template}}`, `<ref>...</ref>`).
+- Tích hợp dự kiến: adapter `src/adapters/wikipedia/etymology.js`, cache D1 `wikipedia_etymology
+  (term PRIMARY KEY, etymology TEXT, fetched_at INTEGER)`, TTL 30 ngày. Wire song song với
+  Mochi trong `lookupWord`: trả thêm field `etymology` (string Tiếng Anh đã strip wiki markup,
+  2-3 câu, tối đa 500 ký tự).
+- Dùng cho: popup tra từ thêm section "Etymology" — nguồn gốc Latin/Greek/Old English. Mochi hay
+  bịa etymology, Wikipedia/Wiktionary community-verified.
+- Tại sao nên: data chất lượng, không bịa, hiển thị bằng EN. Kết hợp Mochi (nghĩa Việt) + Wikipedia
+  (etymology EN) → user vừa hiểu nghĩa vừa hiểu gốc từ.
+- Trade-off: 1 HTTP call để list sections + 1 call để lấy etymology content. Worker → Wikipedia ~500ms
+  total. Cache 30 ngày giảm 99% cost.
 - Effort: 1-2 giờ (1 commit).
-
-## 8. LanguageTool — grammar check rule-based (EN + VI) 🎯 Tier 1 (chưa làm)
 
 - Nguồn: https://github.com/languagetool-org/languagetool — public API `POST https://api.languagetool.org/v2/check` (20 req/IP/min không cần key, license LGPL 2.1). Self-host Docker nếu cần scale.
 - Tích hợp dự kiến: adapter `src/adapters/languagetool/check.js`, gọi trước/song song với Mochi ở `/api/writing/review`. Response có cấu trúc `matches[]` chứa `offset, length, rule.id, rule.description, message, replacements[]` → render thẳng lỗi có category (GRAMMAR/SPELLING/TYPOGRAPHY/STYLE...), không phải parse JSON tự do của Mochi.

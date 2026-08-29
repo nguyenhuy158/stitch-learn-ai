@@ -136,5 +136,12 @@
  * @property {(term: string) => Promise<{term: string, freqCount: number, cdCount: number, log10wf: number, rank: number}|null>} getByTerm
  * @property {(terms: string[]) => Promise<Map<string, {freqCount: number, cdCount: number, log10wf: number, rank: number}>>} getByTerms
  * @property {(row: {term: string, freqCount: number, cdCount: number, log10wf: number, rank: number}) => Promise<void>} upsert
+ *
+ * @typedef {Object} WikipediaEtymologyPort
+ * @property {(term: string) => Promise<{etymology: string, sectionTitle: string}>} lookup
+ *
+ * @typedef {Object} WikipediaEtymologyRepository
+ * @property {(term: string) => Promise<{etymology: string, sectionTitle: string, fetchedAt: string}|null>} getByTerm
+ * @property {(row: {term: string, etymology: string, sectionTitle: string, fetchedAt: string}) => Promise<void>} upsert
   */
 export {};

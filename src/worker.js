@@ -25,9 +25,9 @@ import { createMailerPort } from "./adapters/mailer/mailerPort.js";
 import { createNewsInLevelsFeed } from "./adapters/newsinlevels/feed.js";
 import { createTatoebaExamples } from "./adapters/tatoeba/examples.js";
 import { createFreeDictionary } from "./adapters/dictionaryapi/dictionary.js";
+import { createWikipediaEtymology } from "./adapters/wikipedia/etymology.js";
+import { createD1WikipediaEtymologyRepository } from "./adapters/d1/wikipediaEtymologyRepository.js";
 import { createD1ExampleSentencesRepository } from "./adapters/d1/exampleSentencesRepository.js";
-import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
-import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
 import { createMochiReadingQuiz } from "./adapters/mochi/readingQuiz.js";
 import { createMochiArticleTranslator } from "./adapters/mochi/articleTranslator.js";
 import { listReadingStories, translateReadingArticles } from "./domain/usecases/getReading.js";
@@ -72,7 +72,8 @@ function buildDeps(env) {
     articleTranslatorPort: createMochiArticleTranslator(mochi),
     exampleSentencesPort: createTatoebaExamples(),
     dictionaryPort: createFreeDictionary(),
-    exampleSentencesRepository: createD1ExampleSentencesRepository(env.DB)
+    wikipediaEtymologyPort: createWikipediaEtymology(),
+    wikipediaEtymologyRepository: createD1WikipediaEtymologyRepository(env.DB)
   };
 }
 
