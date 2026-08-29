@@ -6,7 +6,7 @@ import { Card } from "../ui/Card";
 import { LoadingState } from "../ui/states";
 import { useLanguage } from "../i18n/LanguageProvider";
 
-type Vocab = { term: string; meaning: string; example?: string };
+type Vocab = { term: string; meaning: string; example?: string; image_key?: string | null };
 type Lesson = { title: string; sub_title?: string; type?: string };
 type GrammarContent = { summary: string; sections: Array<{ heading: string; explanation: string; examples: string[] }> };
 
@@ -80,6 +80,7 @@ export default function LessonDetail() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {vocab.map((item, i) => (
               <Card key={i} className="p-4 sm:p-5">
+                {item.image_key && <img src={`/api/vocab-image/${item.image_key}`} alt="" className="mb-2 h-28 w-full rounded-ui object-contain" />}
                 <div className="text-lg font-bold text-primary-hover">{item.term}</div>
                 <div className="mt-0.5 text-sm font-semibold text-fg">{item.meaning}</div>
                 {item.example && <div className="mt-2 text-sm italic leading-relaxed text-fg-muted">"{item.example}"</div>}

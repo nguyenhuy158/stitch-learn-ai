@@ -10,7 +10,7 @@ export function createD1LessonRepository(db) {
     },
     async listVocab(lessonId) {
       const { results } = await db.prepare(
-        `SELECT v.id, v.term, v.type, v.pronounce, v.meaning, v.example, v.word_family
+        `SELECT v.id, v.term, v.type, v.pronounce, v.meaning, v.example, v.word_family, v.image_key
          FROM lesson_vocab lv JOIN vocab v ON v.id = lv.vocab_id
          WHERE lv.lesson_id = ? ORDER BY lv.sort_order ASC`
       ).bind(lessonId).all();
@@ -37,7 +37,7 @@ export function createD1LessonRepository(db) {
     async listAllVocab() {
       const { results } = await db
         .prepare(
-          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, l.id AS lesson_id, l.title AS lesson_title
+          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, v.image_key, l.id AS lesson_id, l.title AS lesson_title
            FROM lesson_vocab lv
            JOIN vocab v ON v.id = lv.vocab_id
            JOIN lessons l ON l.id = lv.lesson_id

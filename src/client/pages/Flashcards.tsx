@@ -12,7 +12,7 @@ import { StarIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { SpeakButton } from "../components/SpeakButton";
 
-type Card = { id: number; term: string; meaning: string; example?: string; word_family?: string; lesson_title: string; level?: string | null };
+type Card = { id: number; term: string; meaning: string; example?: string; image_key?: string | null; word_family?: string; lesson_title: string; level?: string | null };
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
@@ -227,7 +227,9 @@ export default function Flashcards() {
                     style={{ backfaceVisibility: "hidden" }}
                   >
                     <div className="mb-3 text-xs uppercase text-fg-muted">{current.lesson_title}</div>
-                    <div aria-hidden="true" className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>
+                    {current.image_key
+                      ? <img src={`/api/vocab-image/${current.image_key}`} alt="" className="mx-auto mb-2.5 h-32 w-32 rounded-ui object-contain" />
+                      : <div aria-hidden="true" className="mb-2.5 text-5xl leading-none">{emojiFor(current.term)}</div>}
                     <div className="text-2xl font-extrabold text-primary-hover">{current.term}</div>
                     {ipa && <div className="mt-1 text-sm text-fg-muted">/{ipa}/</div>}
                     {current.level && (

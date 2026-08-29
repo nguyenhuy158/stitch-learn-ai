@@ -6,7 +6,7 @@ export function createD1VocabReviewRepository(db) {
     async listDue(userId, today, limit, level = null) {
       const { results } = await db
         .prepare(
-          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, v.level,
+          `SELECT v.id, v.term, v.meaning, v.example, v.word_family, v.level, v.image_key,
                   l.id AS lesson_id, l.title AS lesson_title,
                   r.interval_days, r.repetitions
            FROM lesson_vocab lv
