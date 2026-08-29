@@ -10,6 +10,8 @@ import { createD1WordFrequencyRepository } from "./adapters/d1/wordFrequencyRepo
 import { createD1DailyChallengeRepository } from "./adapters/d1/dailyChallengeRepository.js";
 import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js";
 import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.js";
+import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
+import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createMochiClient } from "./adapters/mochi/client.js";
