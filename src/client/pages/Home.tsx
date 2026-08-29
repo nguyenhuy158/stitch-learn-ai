@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
-import { Spinner } from "../ui/Spinner";
 import { Card } from "../ui/Card";
+import { LoadingState } from "../ui/states";
 import { Tabs } from "../ui/Tabs";
 import { AlphabetIcon, BookIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
@@ -62,7 +62,7 @@ export default function Home() {
         ) : (
           !lessons && (
             <div className="mt-3">
-              <Spinner size={16} />
+              <LoadingState />
             </div>
           )
         )}

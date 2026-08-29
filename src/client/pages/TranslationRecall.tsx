@@ -11,8 +11,7 @@ import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { matchTranslation } from "../../domain/translationMatch.js";
-import { Spinner } from "../ui/Spinner";
-
+import { LoadingState } from "../ui/states";
 type Sentence = { id: number; vietnamese: string; corrected: string };
 type Checked = { words: { word: string; ok: boolean }[]; exact: boolean; score: number };
 
@@ -113,10 +112,9 @@ export default function TranslationRecall() {
 
         {!sentences && !error && (
           <div className="flex justify-center py-10">
-            <Spinner />
+            <LoadingState />
           </div>
         )}
-
         {current && sentences && (
           <>
             <div className="mb-3 flex items-center justify-between text-sm text-fg-muted">
