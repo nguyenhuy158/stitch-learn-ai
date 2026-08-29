@@ -6,12 +6,16 @@ Dùng pnpm cho repo này (không npm/yarn).
 
 Không chạy `wrangler deploy` local. Push lên `origin/main` là Cloudflare tự build & deploy (Workers Builds CI/CD).
 
-## Build artifacts (public/assets/) — workflow
+## Build assets (public/assets/) — Vite build ở Cloudflare
 
-Mỗi lần `pnpm build`, Vite rewrite `public/index.html` để tham chiếu
-hash file mới (`index-XXX.css` + `index-YYY.js`). **Bắt buộc stage cả 3 file
-trong 1 commit**, nếu không Cloudflare sẽ deploy `index.html` trỏ tới
-asset không tồn tại → 500.
+### Vấn đề
+
+`pnpm build` (Vite) rewrite `public/index.html` để tham chiếu hash file
+mới trong `public/assets/`. Nếu commit `index.html` mà KHÔNG commit
+assets → Cloudflare deploy trang trỏ tới file không tồn tại → 500
+(đã xảy ra 2026-08-29, fix ở commit `03de124`).
+
+### Workflow hiện tại (Dashboard chưa bật auto-build)
 
 ```
 pnpm build
@@ -19,7 +23,35 @@ git add public/index.html public/assets/
 git commit -m "..."
 ```
 
-**Migration D1**: `pnpm dev` chỉ chạy local. Mỗi migration SQL mới
+### Cách bật auto-build ở Cloudflare (1 lần, làm thủ công trong Dashboard)
+
+1. Vào https://dash.cloudflare.com → Workers & Pages → chọn worker `ai-english`
+2. Tab **Settings** → **Builds** → **Build configuration**
+3. **Build command**: `pnpm install --frozen-lockfile && pnpm build`
+4. **Build output directory**: `./public` (giữ nguyên, vì wrangler.jsonc
+   `assets.directory = ./public`)
+5. Bật **Enable builds** nếu chưa
+6. Save
+
+Sau bước này, mỗi lần push:
+- Cloudflare chạy `pnpm install` (cache `.pnpm-store` 7 ngày, 10GB)
+- Cloudflare chạy `pnpm build` → Vite sinh `index.html` + `public/assets/`
+- Cloudflare deploy
+
+**Sau khi bật auto-build, chạy 1 lần để dọn git:**
+
+```
+git rm --cached -r public/assets/
+echo 'public/assets/' >> .gitignore
+git add .gitignore
+git commit -m "chore: untrack Vite output (Cloudflare builds now)"
+```
+
+Từ đó KHÔNG commit `public/assets/` nữa, chỉ commit `src/` + `public/index.html`.
+
+### Migration D1
+
+`pnpm dev` chỉ chạy local. Mỗi migration SQL mới
 (`data/migrations/00XX_*.sql`) **phải apply remote bằng tay**:
 
 ```
@@ -27,12 +59,8 @@ npx wrangler d1 execute stitch-db --remote --file=data/migrations/00XX_xxx.sql
 ```
 
 Không có bước này → code mới reference table chưa tồn tại → runtime error / 500.
-Repo không có CI tự apply migration.
+Cloudflare Workers Builds KHÔNG chạy D1 migration tự động.
 ## Tài liệu tham khảo (root, untracked)
-
-3 file PDF ở root repo (Mai Lan Hương ngữ pháp, Oxford Picture Dictionary, Grammar in Use - Murphy): dùng làm tham khảo nội dung cho app (ngữ pháp/từ vựng), không phải asset app đọc trực tiếp. Không push lên remote — giữ untracked, không thêm gitignore.
-
-### Cách đọc/trích ảnh+từ từ PDF (Oxford Picture Dictionary)
 
 Máy này NixOS, không có `apt`. Không cài global — dùng `nix-shell -p <pkg> --run "..."` cho từng lệnh cần.
 
