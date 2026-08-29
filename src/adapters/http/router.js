@@ -28,6 +28,13 @@ import { getWordPool, DIFFICULTY_LEVELS } from "../../domain/usecases/getWordPoo
 import { submitGameScore } from "../../domain/usecases/submitGameScore.js";
 import { getGameLeaderboard } from "../../domain/usecases/getGameLeaderboard.js";
 import { getPictureVocab } from "../../domain/usecases/getPictureVocab.js";
+import {
+  listReadingStories,
+  getReadingArticle,
+  getReadingQuiz,
+  saveReadingQuizAttempt,
+  getReadingQuizAttempts
+} from "../../domain/usecases/getReading.js";
 import { KNOWN_IMAGE_KEYS } from "../../data/pictureVocab.js";
 import { parseCookie, buildAuthCookie, buildLogoutCookie } from "./cookies.js";
 import { BUILD_INFO } from "../../shared/build-info.generated.js";
