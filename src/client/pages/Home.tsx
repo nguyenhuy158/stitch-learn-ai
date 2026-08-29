@@ -110,8 +110,7 @@ export default function Home() {
               to={tool.to} 
               className="group flex flex-col items-center rounded-ui border border-border bg-surface p-5 transition-all hover:border-primary/30 hover:shadow-sm no-underline"
             >
-              <div className={`relative flex h-12 w-12 items-center justify-center rounded-2xl ${tool.color} group-hover:scale-110 transition-transform`}>
-                <Icon size={24} />
+              <div className={`relative flex h-12 w-12 items-center justify-center rounded-ui ${tool.color} group-hover:scale-110 transition-transform`}>
                 {tool.key === "flashcards" && dueCount > 0 && (
                   <span
                     title={t("flashcards.dueBadge", { n: dueCount })}
