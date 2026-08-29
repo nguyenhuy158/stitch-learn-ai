@@ -53,7 +53,7 @@
     },
     {
       "phrase": "go to school",
-      "meaning_vi": "đi ho :c",
+      "meaning_vi": "đi học",
       "example_en": "They ...................... by bus",
       "example_vi": "Ho : đi ho:c bằng xe buýt",
       "image": "phrases/everyday-language-100-phrases-a1/06-go-to-school.png",
@@ -107,7 +107,7 @@
     },
     {
       "phrase": "read a book",
-      "meaning_vi": "đo :c sách",
+      "meaning_vi": "đọc sách",
       "example_en": "She ..................... in bed",
       "example_vi": "Cô ấy đo :c sách trên giường",
       "image": "phrases/everyday-language-100-phrases-a1/12-read-a-book.png",
@@ -170,7 +170,7 @@
     },
     {
       "phrase": "go to the park",
-      "meaning_vi": "uống nước",
+      "meaning_vi": "đi công viên",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/19-go-to-the-park.png",
@@ -206,7 +206,7 @@
     },
     {
       "phrase": "clean my room",
-      "meaning_vi": "do :n phòng",
+      "meaning_vi": "dọn phòng",
       "example_en": "She ......................... every Friday",
       "example_vi": "Cô ấy do :n phòng mỗi thứ Sáu",
       "image": "phrases/everyday-language-100-phrases-a1/23-clean-my-room.png",
@@ -278,7 +278,7 @@
     },
     {
       "phrase": "make the bed",
-      "meaning_vi": "do :n giường/gấp chăn màn",
+      "meaning_vi": "dọn giường / gấp chăn màn",
       "example_en": "I ......................... in the morning",
       "example_vi": "Tôi do :n giường vào buổi sáng",
       "image": "phrases/everyday-language-100-phrases-a1/31-make-the-bed.png",
@@ -296,7 +296,7 @@
     },
     {
       "phrase": "turn on the light",
-      "meaning_vi": "do :n bàn ăn",
+      "meaning_vi": "bật đèn",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/33-turn-on-the-light.png",
@@ -305,7 +305,7 @@
     },
     {
       "phrase": "set the table",
-      "meaning_vi": "do :n bàn ăn",
+      "meaning_vi": "dọn bàn ăn",
       "example_en": "We ...................... before dinner-",
       "example_vi": "Chúng tôi do :n bàn trước bữa tối",
       "image": "phrases/everyday-language-100-phrases-a1/34-set-the-table.png",
@@ -377,7 +377,7 @@
     },
     {
       "phrase": "sleep well",
-      "meaning_vi": "ngủ ngon ’",
+      "meaning_vi": "ngủ ngon",
       "example_en": "I ....................... at night",
       "example_vi": "Tôi ngủ ngon vào ban đêm",
       "image": "phrases/everyday-language-100-phrases-a1/42-sleep-well.png",
@@ -413,7 +413,7 @@
     },
     {
       "phrase": "drink milk",
-      "meaning_vi": "làm bánh",
+      "meaning_vi": "uống sữa",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/46-drink-milk.png",
@@ -458,7 +458,7 @@
     },
     {
       "phrase": "go to class",
-      "meaning_vi": "giơ tay",
+      "meaning_vi": "đi vào lớp",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/51-go-to-class.png",
@@ -476,7 +476,7 @@
     },
     {
       "phrase": "write my name",
-      "meaning_vi": "viết tên ’ I ......................... on the pa-",
+      "meaning_vi": "viết tên mình",
       "example_en": "per",
       "example_vi": "Tôi viết tên mình lên giấy",
       "image": "phrases/everyday-language-100-phrases-a1/53-write-my-name.png",
@@ -485,7 +485,7 @@
     },
     {
       "phrase": "draw a line",
-      "meaning_vi": "vẽ đường thẳng",
+      "meaning_vi": "vẽ một đường thẳng",
       "example_en": "............................. on the board",
       "example_vi": "Vẽ một đường thẳng lên bảng",
       "image": "phrases/everyday-language-100-phrases-a1/54-draw-a-line.png",
@@ -494,7 +494,7 @@
     },
     {
       "phrase": "draw a line",
-      "meaning_vi": "đo :c to",
+      "meaning_vi": "vẽ một đường thẳng",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/55-draw-a-line.png",
@@ -503,7 +503,7 @@
     },
     {
       "phrase": "read aloud",
-      "meaning_vi": "đo :c to",
+      "meaning_vi": "đọc to",
       "example_en": "We ..................... in class",
       "example_vi": "Chúng tôi đo :c to trong lớp",
       "image": "phrases/everyday-language-100-phrases-a1/56-read-aloud.png",
@@ -530,7 +530,7 @@
     },
     {
       "phrase": "clean the board",
-      "meaning_vi": "nhảy dây",
+      "meaning_vi": "lau bảng",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/59-clean-the-board.png",
@@ -593,7 +593,7 @@
     },
     {
       "phrase": "go to the beach",
-      "meaning_vi": "làm người tuyết",
+      "meaning_vi": "đi biển",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/66-go-to-the-beach.png",
@@ -701,7 +701,7 @@
     },
     {
       "phrase": "hug my old friend tight",
-      "meaning_vi": "mỉm cười với tôi",
+      "meaning_vi": "ôm chặt người bạn cũ",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/78-hug-my-old-friend-tight.png",
@@ -845,7 +845,7 @@
     },
     {
       "phrase": "take a photo",
-      "meaning_vi": "chu :p hình",
+      "meaning_vi": "chụp hình",
       "example_en": "I ............................... of my dog",
       "example_vi": "Tôi chu :p hình con chó của mình",
       "image": "phrases/everyday-language-100-phrases-a1/94-take-a-photo.png",
@@ -854,7 +854,7 @@
     },
     {
       "phrase": "look at the clock",
-      "meaning_vi": "nhìn đồng hồ ’ She",
+      "meaning_vi": "nhìn đồng hồ",
       "example_en": ".................................. and smiles",
       "example_vi": "Cô ấy nhìn đồng hồ và mỉm cười",
       "image": "phrases/everyday-language-100-phrases-a1/95-look-at-the-clock.png",
@@ -881,7 +881,7 @@
     },
     {
       "phrase": "wash the car",
-      "meaning_vi": "bật quạt",
+      "meaning_vi": "rửa xe",
       "example_en": "",
       "example_vi": "",
       "image": "phrases/everyday-language-100-phrases-a1/98-wash-the-car.png",
@@ -899,7 +899,7 @@
     },
     {
       "phrase": "scroll through my phone",
-      "meaning_vi": "> I usually........................... every",
+      "meaning_vi": "lướt điện thoại",
       "example_en": "",
       "example_vi": "night after work. Tôi thường lướt điện thoại vào mỗi tối sau khi đi làm về",
       "image": "phrases/everyday-language-100-phrases-a1/100-scroll-through-my-phone.png",
