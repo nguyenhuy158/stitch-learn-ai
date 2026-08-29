@@ -8,18 +8,46 @@ Không chạy `wrangler deploy` local. Push lên `origin/main` là Cloudflare t�
 
 ## Build assets (public/assets/) — Vite build ở Cloudflare
 
-Auto-build ĐÃ BẬT (Dashboard → worker `ai-english` → Settings → Builds,
-build command `pnpm install --frozen-lockfile && pnpm build`, output `./public`).
-Mỗi lần push `origin/main`, Cloudflare tự chạy Vite và deploy.
+### Vấn đề
 
-**Chỉ commit `src/`.** `public/assets/` đã untrack (`.gitignore`, commit
-`c00c533`); `public/index.html` trong git chỉ là seed — Vite ở CI rewrite nó
-theo hash mới nên đừng commit bản bị rewrite ở local.
+`pnpm build` (Vite) rewrite `public/index.html` để tham chiếu hash file
+mới trong `public/assets/`. Nếu commit `index.html` mà KHÔNG commit
+assets → Cloudflare deploy trang trỏ tới file không tồn tại → 500
+(đã xảy ra 2026-08-29, fix ở commit `03de124`).
 
-Cách kiểm chứng CI có build thật hay không (nếu sau này nghi ngờ): thêm một
-dòng code **thật** vào bundle (vd `document.documentElement.dataset.x = "..."`)
-rồi push, xem `curl -s https://en.huyab.click/ | grep assets/` có ra hash mới
-không. Đừng dùng comment — minify strip comment nên hash không đổi, test vô nghĩa.
+### Workflow hiện tại (Dashboard chưa bật auto-build)
+
+```
+pnpm build
+git add public/index.html public/assets/
+git commit -m "..."
+```
+
+### Cách bật auto-build ở Cloudflare (1 lần, làm thủ công trong Dashboard)
+
+1. Vào https://dash.cloudflare.com → Workers & Pages → chọn worker `ai-english`
+2. Tab **Settings** → **Builds** → **Build configuration**
+3. **Build command**: `pnpm install --frozen-lockfile && pnpm build`
+4. **Build output directory**: `./public` (giữ nguyên, vì wrangler.jsonc
+   `assets.directory = ./public`)
+5. Bật **Enable builds** nếu chưa
+6. Save
+
+Sau bước này, mỗi lần push:
+- Cloudflare chạy `pnpm install` (cache `.pnpm-store` 7 ngày, 10GB)
+- Cloudflare chạy `pnpm build` → Vite sinh `index.html` + `public/assets/`
+- Cloudflare deploy
+
+**Sau khi bật auto-build, chạy 1 lần để dọn git:**
+
+```
+git rm --cached -r public/assets/
+echo 'public/assets/' >> .gitignore
+git add .gitignore
+git commit -m "chore: untrack Vite output (Cloudflare builds now)"
+```
+
+Từ đó KHÔNG commit `public/assets/` nữa, chỉ commit `src/` + `public/index.html`.
 
 ### Migration D1
 
@@ -32,7 +60,6 @@ npx wrangler d1 execute stitch-db --remote --file=data/migrations/00XX_xxx.sql
 
 Không có bước này → code mới reference table chưa tồn tại → runtime error / 500.
 Cloudflare Workers Builds KHÔNG chạy D1 migration tự động.
-
 ## Tài liệu tham khảo (root, untracked)
 
 Máy này NixOS, không có `apt`. Không cài global — dùng `nix-shell -p <pkg> --run "..."` cho từng lệnh cần.
