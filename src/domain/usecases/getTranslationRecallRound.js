@@ -13,7 +13,9 @@ export async function getTranslationRecallRound({ userId, count }, { translation
  * gom nhom moi lan thu cua cung mot cau — ke ca lan thu o cho on lai.
  */
 export async function saveRecallAttempt({ userId, vietnamese, translation, corrected, correctionCount }, { translationRepository }) {
-  if (!vietnamese?.trim() || !translation?.trim() || !corrected?.trim()) throw new ValidationError("Missing attempt");
+  // Kiem typeof: client gui sai kieu (vd corrected=false) thi phai 400, khong phai 500.
+  const filled = (v) => typeof v === "string" && v.trim() !== "";
+  if (!filled(vietnamese) || !filled(translation) || !filled(corrected)) throw new ValidationError("Missing attempt");
   if (vietnamese.length > 500 || translation.length > 500 || corrected.length > 500) throw new ValidationError("Too long");
   await translationRepository.saveAttempt({
     userId,
