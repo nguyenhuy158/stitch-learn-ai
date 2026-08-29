@@ -6,6 +6,28 @@ Dùng pnpm cho repo này (không npm/yarn).
 
 Không chạy `wrangler deploy` local. Push lên `origin/main` là Cloudflare tự build & deploy (Workers Builds CI/CD).
 
+## Build artifacts (public/assets/) — workflow
+
+Mỗi lần `pnpm build`, Vite rewrite `public/index.html` để tham chiếu
+hash file mới (`index-XXX.css` + `index-YYY.js`). **Bắt buộc stage cả 3 file
+trong 1 commit**, nếu không Cloudflare sẽ deploy `index.html` trỏ tới
+asset không tồn tại → 500.
+
+```
+pnpm build
+git add public/index.html public/assets/
+git commit -m "..."
+```
+
+**Migration D1**: `pnpm dev` chỉ chạy local. Mỗi migration SQL mới
+(`data/migrations/00XX_*.sql`) **phải apply remote bằng tay**:
+
+```
+npx wrangler d1 execute stitch-db --remote --file=data/migrations/00XX_xxx.sql
+```
+
+Không có bước này → code mới reference table chưa tồn tại → runtime error / 500.
+Repo không có CI tự apply migration.
 ## Tài liệu tham khảo (root, untracked)
 
 3 file PDF ở root repo (Mai Lan Hương ngữ pháp, Oxford Picture Dictionary, Grammar in Use - Murphy): dùng làm tham khảo nội dung cho app (ngữ pháp/từ vựng), không phải asset app đọc trực tiếp. Không push lên remote — giữ untracked, không thêm gitignore.
