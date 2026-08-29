@@ -22,6 +22,8 @@ import { createDicebearAvatarGenerator } from "./adapters/dicebear/avatarGenerat
 import { createR2VocabImageStore } from "./adapters/r2/vocabImageStore.js";
 import { createMailerPort } from "./adapters/mailer/mailerPort.js";
 import { createNewsInLevelsFeed } from "./adapters/newsinlevels/feed.js";
+import { createTatoebaExamples } from "./adapters/tatoeba/examples.js";
+import { createD1ExampleSentencesRepository } from "./adapters/d1/exampleSentencesRepository.js";
 import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
 import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
 import { createMochiReadingQuiz } from "./adapters/mochi/readingQuiz.js";
@@ -63,7 +65,9 @@ function buildDeps(env) {
     newsFeedPort: createNewsInLevelsFeed(),
     readingRepository: createD1ReadingRepository(env.DB),
     readingQuizRepository: createD1ReadingQuizRepository(env.DB),
-    readingQuizPort: createMochiReadingQuiz(mochi)
+    readingQuizPort: createMochiReadingQuiz(mochi),
+    exampleSentencesPort: createTatoebaExamples(),
+    exampleSentencesRepository: createD1ExampleSentencesRepository(env.DB)
   };
 }
 

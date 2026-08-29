@@ -70,6 +70,13 @@
  * @property {(term: string) => Promise<{term: string, type: string, meaning: string, example: string, synonyms: string[], antonyms: string[]}|null>} get
  * @property {(key: string, word: object, createdAt: string) => Promise<void>} put
  *
+ * @typedef {Object} ExampleSentencesPort
+ * @property {(term: string) => Promise<Array<{en: string, vi: string}>>} search
+ *
+ * @typedef {Object} ExampleSentencesRepository
+ * @property {(term: string) => Promise<Array<{en: string, vi: string}>|null>} get
+ * @property {(term: string, examples: Array<{en: string, vi: string}>, createdAt: string) => Promise<void>} put
+ *
  * @typedef {Object} FeedbackRepository
  * @property {(userId: string, message: string) => Promise<void>} create
  *

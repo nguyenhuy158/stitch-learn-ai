@@ -8,7 +8,7 @@ import { getChatHistory, listConversations } from "../../domain/usecases/getChat
 import { clearChatHistory } from "../../domain/usecases/clearChatHistory.js";
 import { getLessonDetail } from "../../domain/usecases/getLessonDetail.js";
 import { reviewWriting } from "../../domain/usecases/reviewWriting.js";
-import { getTranslationRecallRound } from "../../domain/usecases/getTranslationRecallRound.js";
+import { getTranslationRecallRound, saveRecallAttempt } from "../../domain/usecases/getTranslationRecallRound.js";
 import { getTranslationHistory } from "../../domain/usecases/getTranslationHistory.js";
 import { getTranslationExercise } from "../../domain/usecases/getTranslationExercise.js";
 import { reviewTranslation } from "../../domain/usecases/reviewTranslation.js";
@@ -19,7 +19,7 @@ import { reviewVocab } from "../../domain/usecases/reviewVocab.js";
 import { getDailyChallenge } from "../../domain/usecases/getDailyChallenge.js";
 import { completeDailyChallenge } from "../../domain/usecases/completeDailyChallenge.js";
 import { toggleSavedVocab } from "../../domain/usecases/toggleSavedVocab.js";
-import { isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
+import { getWordExamples, isWordSaved, lookupWord, saveLookedUpWord } from "../../domain/usecases/lookupWord.js";
 import { listReadingStories, getReadingArticle, getReadingQuiz } from "../../domain/usecases/getReading.js";
 import { getSavedVocab } from "../../domain/usecases/getSavedVocab.js";
 import { getRankings, getWeeklyRankings } from "../../domain/usecases/getRankings.js";
@@ -172,6 +172,15 @@ export async function handleRequest(request, url, deps) {
     }, { label: "Word lookup error:", fallbackMessage: "Failed to look up word" })(request, url, deps);
   }
 
+  // Cau vi du that tu Tatoeba cho tu vua tra cuu.
+  if (url.pathname === "/api/word/examples" && request.method === "GET") {
+    return requireAuth(async () => {
+      const term = (url.searchParams.get("term") || "").trim();
+      if (!term) throw new ValidationError("Missing term");
+      return json(await getWordExamples({ term }, deps));
+    }, { label: "Word examples error:", fallbackMessage: "Failed to load examples" })(request, url, deps);
+  }
+
   // Tu nay da co trong bo suu tap chua (de nut luu hien dung trang thai).
   if (url.pathname === "/api/word/saved" && request.method === "GET") {
     return requireAuth(async (userId) => {
@@ -308,6 +317,15 @@ export async function handleRequest(request, url, deps) {
       const result = await getTranslationRecallRound({ userId, count: url.searchParams.get("count") }, deps);
       return json(result);
     }, { label: "Translation recall error:", fallbackMessage: "Failed to load recall round" })(request, url, deps);
+  }
+
+  // Lan thu o "Dich lai cau cu" cung vao chung lich su dich (khong goi AI).
+  if (url.pathname === "/api/translation/recall/attempt" && request.method === "POST") {
+    return requireAuth(async (userId) => {
+      const body = await request.json().catch(() => ({}));
+      await saveRecallAttempt({ userId, ...body }, deps);
+      return json({ success: true });
+    }, { label: "Save recall attempt error:", fallbackMessage: "Failed to save recall attempt" })(request, url, deps);
   }
 
   if (url.pathname === "/api/translation/review" && request.method === "POST") {

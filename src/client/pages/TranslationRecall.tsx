@@ -77,6 +77,15 @@ export default function TranslationRecall() {
       playWrongSound();
     }
     speak(current.corrected);
+    // Ghi vao chung lich su dich de trang Dich cau gom nhom cac lan thu cua cau nay.
+    api
+      .saveRecallAttempt({
+        vietnamese: current.vietnamese,
+        translation: answer.trim(),
+        corrected: current.corrected,
+        correctionCount: result.words.filter((w) => !w.ok).length
+      })
+      .catch(() => {});
   }
 
   function next() {

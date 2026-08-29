@@ -29,6 +29,7 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [examples, setExamples] = useState<{ en: string; vi: string }[]>([]);
 
   useEffect(() => {
     if (!picked) return;
@@ -37,7 +38,13 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
     setIpa(null);
     setError("");
     setSaved(false);
+    setExamples([]);
     lookupIpa(picked).then((res) => !stale && setIpa(res)).catch(() => {});
+    // Cau vi du that (Tatoeba); khong co cung khong sao.
+    api
+      .wordExamples(picked)
+      .then((res: { examples: { en: string; vi: string }[] }) => !stale && setExamples(res.examples))
+      .catch(() => {});
     api
       .lookupWord(picked, text)
       .then((res: WordInfo) => {
@@ -125,6 +132,22 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
               {info.synonyms.length > 0 && (
                 <div className="mt-2 text-xs text-fg-muted">
                   <span className="font-semibold uppercase">{t("word.synonyms")}</span> {info.synonyms.join(", ")}
+                </div>
+              )}
+              {examples.length > 0 && (
+                <div className="mt-2 text-xs">
+                  <span className="font-semibold uppercase text-fg-muted">{t("word.examples")}</span>
+                  <ul className="mt-1 flex flex-col gap-1.5">
+                    {examples.map((ex, i) => (
+                      <li key={i}>
+                        <span className="flex items-center gap-1">
+                          <SpeakButton text={ex.en} size="sm" />
+                          <span>{ex.en}</span>
+                        </span>
+                        <span className="block pl-6 italic text-fg-muted">{ex.vi}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
               {info.antonyms.length > 0 && (

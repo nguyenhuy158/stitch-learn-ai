@@ -27,6 +27,28 @@ export async function lookupWord({ term, context }, { wordLookupPort, wordLookup
   return word;
 }
 
+/**
+ * Cau vi du that (Tatoeba) kem ban dich Viet cho tu vua tra. Cache ca ket qua
+ * rong vi kho cau Tatoeba doi rat cham; nguon loi thi tra rong, khong hong popup.
+ */
+export async function getWordExamples({ term }, { exampleSentencesPort, exampleSentencesRepository }) {
+  const key = term.trim().toLowerCase();
+  const cached = await exampleSentencesRepository.get(key).catch((err) => {
+    console.error("Read examples cache error:", err);
+    return null;
+  });
+  if (cached) return { examples: cached };
+
+  let examples = [];
+  try {
+    examples = await exampleSentencesPort.search(key);
+    await exampleSentencesRepository.put(key, examples, new Date().toISOString());
+  } catch (err) {
+    console.error("Word examples error:", err);
+  }
+  return { examples };
+}
+
 /** Tu nay da nam trong bo suu tap cua nguoi hoc chua. */
 export async function isWordSaved({ userId, term }, deps) {
   return deps.savedVocabRepository.isTermSaved(userId, term.trim());

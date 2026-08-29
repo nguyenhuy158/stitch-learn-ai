@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRightIcon, CheckIcon, StarIcon } from "../components/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { api, isUnauthorized } from "../lib/api";
@@ -39,7 +39,19 @@ export default function Translation() {
   const [result, setResult] = useState<Result | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const { t } = useLanguage();
-  const pageCount = Math.ceil(history.length / PAGE_SIZE);
+  // Gom cac lan thu cua cung mot cau (ke ca lan thu o "Dich lai cau cu") vao
+  // mot nhom, de thay ngay cau nay da thu may lan. Nhom sap theo lan thu moi nhat.
+  const groups = useMemo(() => {
+    const map = new Map<string, Attempt[]>();
+    for (const a of history) {
+      const key = a.vietnamese.trim();
+      const arr = map.get(key);
+      if (arr) arr.push(a);
+      else map.set(key, [a]);
+    }
+    return [...map.entries()].map(([vietnamese, attempts]) => ({ vietnamese, attempts }));
+  }, [history]);
+  const pageCount = Math.ceil(groups.length / PAGE_SIZE);
 
   function loadExercise() {
     setExercise(null);
@@ -212,21 +224,35 @@ export default function Translation() {
           ) : (
             <>
               <div className="flex flex-col gap-2">
-                {history.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE).map((a) => (
-                  <button key={a.id} type="button" onClick={() => setOpened(a)} className="rounded-ui text-left outline-none transition focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]">
-                    <Card className="p-3.5">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <span className="font-semibold">{a.vietnamese}</span>
-                        <span className={"text-xs " + (a.correctionCount === 0 ? "text-primary" : "text-fg-muted")}>
-                          {a.correctionCount === 0
-                            ? t("translation.historyPerfect")
-                            : t("translation.historyErrors", { n: a.correctionCount })}
-                        </span>
-                      </div>
-                      <div className="mt-1 text-sm text-fg-muted">{a.translation}</div>
-                      <div className="mt-0.5 text-sm text-primary-hover">{a.corrected}</div>
-                    </Card>
-                  </button>
+                {groups.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE).map((g) => (
+                  <Card key={g.vietnamese} className="p-3.5">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <span className="font-semibold">{g.vietnamese}</span>
+                      <span className="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary">
+                        {t("translation.attemptCount", { n: g.attempts.length })}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-col divide-y divide-border">
+                      {g.attempts.map((a) => (
+                        <button
+                          key={a.id}
+                          type="button"
+                          onClick={() => setOpened(a)}
+                          className="rounded py-1.5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
+                        >
+                          <div className="flex flex-wrap items-baseline justify-between gap-2">
+                            <span className="text-sm text-fg-muted">{a.translation}</span>
+                            <span className={"text-xs " + (a.correctionCount === 0 ? "text-primary" : "text-fg-muted")}>
+                              {a.correctionCount === 0
+                                ? t("translation.historyPerfect")
+                                : t("translation.historyErrors", { n: a.correctionCount })}
+                            </span>
+                          </div>
+                          <div className="mt-0.5 text-sm text-primary-hover">{a.corrected}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </Card>
                 ))}
               </div>
               {pageCount > 1 && (
