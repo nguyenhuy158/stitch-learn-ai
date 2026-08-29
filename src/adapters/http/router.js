@@ -60,7 +60,8 @@ function requireAuth(handler, { label, fallbackMessage = "Request failed", valid
       return await handler(userId, request, url, deps);
     } catch (error) {
       if (error instanceof ValidationError) return json({ error: error.message }, { status: validationStatus });
-      if (label) console.error(label, error);
+      // Log tach field: workerd in Error khong ro ten/message khi loi den tu I/O.
+      if (label) console.error(label, error?.name, error?.message, String(error), error?.stack);
       return json({ error: passthroughMessage ? error.message : fallbackMessage }, { status: 500 });
     }
   };
