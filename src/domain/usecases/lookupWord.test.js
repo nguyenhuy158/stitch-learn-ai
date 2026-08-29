@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { lookupWord, getWordExamples, isWordSaved, saveLookedUpWord, LOOKUP_WORD_TAG } from "./lookupWord.js";
+import { lookupWord, getWordExamples, getWordFrequency, isWordSaved, saveLookedUpWord, LOOKUP_WORD_TAG } from "./lookupWord.js";
 
 const WORD = { term: "ticket", type: "noun", meaning: "vé", example: "A ticket.", synonyms: [], antonyms: [] };
 
@@ -105,4 +105,15 @@ test("saveLookedUpWord luu tu kem tag va ghi nhan hoat dong hoc", async () => {
   };
   await saveLookedUpWord({ userId: "u1", word: WORD }, d);
   assert.deepEqual(saved, [["u1", "ticket", LOOKUP_WORD_TAG]]);
+});
+
+test("getWordFrequency: tra frequency tu SUBTLEX repo", async () => {
+  const FREQ = { term: "hello", freqCount: 29857, cdCount: 7000, log10wf: 4.475, rank: 200 };
+  const d = { wordFrequencyRepository: { getByTerm: async (term) => (term === "hello" ? FREQ : null) } };
+  assert.deepEqual(await getWordFrequency({ term: "hello" }, d), FREQ);
+  assert.equal(await getWordFrequency({ term: "unknown" }, d), null);
+});
+
+test("getWordFrequency: thieu repo thi tra null (graceful)", async () => {
+  assert.equal(await getWordFrequency({ term: "hello" }, {}), null);
 });

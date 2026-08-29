@@ -72,3 +72,8 @@ export async function saveLookedUpWord({ userId, word }, deps) {
   await deps.savedVocabRepository.saveGeneratedWord(userId, word, LOOKUP_WORD_TAG);
   await recordLearningActivity({ userId }, deps);
 }
+
+/** Frequency rank theo SUBTLEX-US. Tra null neu tu khong co trong 74k tu pho bien nhat. */
+export async function getWordFrequency({ term }, { wordFrequencyRepository }) {
+  return wordFrequencyRepository?.getByTerm(term) ?? null;
+}

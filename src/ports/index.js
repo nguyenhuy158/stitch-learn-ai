@@ -131,5 +131,10 @@
  * @property {(guid: string, questions: QuizQuestion[], createdAt: string) => Promise<void>} put
  * @property {(userId: number, guid: string, correct: number, total: number, createdAt: string) => Promise<void>} saveAttempt
  * @property {(userId: number, guid: string, limit: number) => Promise<Array<{correct: number, total: number, created_at: string}>>} listAttempts
- */
+ *
+ * @typedef {Object} WordFrequencyRepository
+ * @property {(term: string) => Promise<{term: string, freqCount: number, cdCount: number, log10wf: number, rank: number}|null>} getByTerm
+ * @property {(terms: string[]) => Promise<Map<string, {freqCount: number, cdCount: number, log10wf: number, rank: number}>>} getByTerms
+ * @property {(row: {term: string, freqCount: number, cdCount: number, log10wf: number, rank: number}) => Promise<void>} upsert
+  */
 export {};

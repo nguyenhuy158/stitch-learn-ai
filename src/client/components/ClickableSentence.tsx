@@ -18,6 +18,7 @@ type WordInfo = {
   antonyms: string[];
   audioUrl?: string;
   level?: string | null;
+  frequency?: { rank: number; freqCount: number } | null;
 };
 
 /**
@@ -119,6 +120,14 @@ export function ClickableSentence({ text, bare = false }: { text: string; bare?:
               {info?.level && (
                 <span className="ml-2 rounded bg-primary-soft px-1.5 py-0.5 text-xs font-semibold text-primary-hover">
                   {info.level}
+                </span>
+              )}
+              {info?.frequency && (
+                <span
+                  title={`Xuất hiện ${info.frequency.freqCount.toLocaleString()} lần trong 51M phụ đề phim Mỹ (SUBTLEX-US)`}
+                  className="ml-2 rounded bg-primary-soft px-1.5 py-0.5 text-xs font-semibold text-primary-hover"
+                >
+                  #{info.frequency.rank}
                 </span>
               )}
               {info?.type && <span className="ml-2 text-xs italic text-fg-muted">{info.type}</span>}

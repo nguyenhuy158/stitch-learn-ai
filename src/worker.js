@@ -4,10 +4,8 @@ import { createD1LessonRepository } from "./adapters/d1/lessonRepository.js";
 import { createD1TranslationRepository } from "./adapters/d1/translationRepository.js";
 import { createD1FeedbackRepository } from "./adapters/d1/feedbackRepository.js";
 import { createD1SavedVocabRepository } from "./adapters/d1/savedVocabRepository.js";
-import { createD1VocabReviewRepository } from "./adapters/d1/vocabReviewRepository.js";
-import { createD1WordLookupCacheRepository } from "./adapters/d1/wordLookupCacheRepository.js";
+import { createD1WordFrequencyRepository } from "./adapters/d1/wordFrequencyRepository.js";
 import { createD1DailyChallengeRepository } from "./adapters/d1/dailyChallengeRepository.js";
-import { createD1WordGameRepository } from "./adapters/d1/wordGameRepository.js";
 import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
 import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
@@ -49,10 +47,8 @@ function buildDeps(env) {
     savedVocabRepository: createD1SavedVocabRepository(env.DB),
     vocabReviewRepository: createD1VocabReviewRepository(env.DB),
     wordLookupCacheRepository: createD1WordLookupCacheRepository(env.DB),
+    wordFrequencyRepository: createD1WordFrequencyRepository(env.DB),
     dailyChallengeRepository: createD1DailyChallengeRepository(env.DB),
-    wordGameRepository: createD1WordGameRepository(env.DB),
-    gameScoreRepository: createD1GameScoreRepository(env.DB),
-    sessionPort: createJoseSessionProvider(env.JWT_SECRET),
     ssoPort: env.SSO_ISSUER
       ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
       : null,
