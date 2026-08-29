@@ -28,7 +28,6 @@ import housingHouseholdPests from "./vocab-housing-household-pests.json";
 import housingWeightsAndMeasures from "./vocab-housing-weights-and-measures.json";
 import plantsAnimalsDomesticAnimalsAndRodents from "./vocab-plants-and-animals-domestic-animals-and-rodents.json";
 import workToolsAndBuildingSupplies from "./vocab-work-tools-and-building-supplies.json";
-import everydayLanguage100PhrasesA1 from "./phrases/vocab-everyday-language-100-phrases-a1.json";
 
 // Ordered by the dictionary's own chapter order.
 export const PICTURE_VOCAB_TOPICS = [
@@ -36,7 +35,6 @@ export const PICTURE_VOCAB_TOPICS = [
   everydayLanguageMoney,
   everydayLanguageWeather,
   everydayLanguageDescribingThings,
-  everydayLanguage100PhrasesA1,
   peopleAgePhysical,
   housingAHouse,
   housingCleaningSupplies,
