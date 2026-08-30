@@ -5,6 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@11.18.0",
   "scripts": {
+    "migrate": "wrangler d1 migrations apply stitch-db --remote",
+    "migrate:local": "wrangler d1 migrations apply stitch-db --local",
     "dev": "node scripts/build-info.mjs && wrangler dev",
     "dev:client": "node scripts/build-info.mjs && vite",
     "build": "node scripts/build-info.mjs && vite build",

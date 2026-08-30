@@ -15,7 +15,9 @@
     {
       "binding": "DB",
       "database_name": "stitch-db",
-      "database_id": "90b7f345-12cd-45de-b975-6836a0177e12"
+      "database_id": "90b7f345-12cd-45de-b975-6836a0177e12",
+      // Migration chay tu dong luc deploy (xem deploy command o Dashboard).
+      "migrations_dir": "data/migrations"
     }
   ],
   "ai": { "binding": "AI" },

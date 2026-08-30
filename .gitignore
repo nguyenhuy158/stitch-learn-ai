@@ -4,3 +4,6 @@ node_modules/
 # Dau vet build sinh tu git moi lan build (scripts/build-info.mjs)
 # Vite build output (Cloudflare Workers Builds se build lai, khong can commit)
 public/assets/
+
+# Tai lieu tham khao (PDF lon, khong day len git)
+*.pdf

@@ -49,17 +49,32 @@ git commit -m "chore: untrack Vite output (Cloudflare builds now)"
 
 Từ đó KHÔNG commit `public/assets/` nữa, chỉ commit `src/` + `public/index.html`.
 
-### Migration D1
+### Migration D1 (tự động khi deploy)
 
-`pnpm dev` chỉ chạy local. Mỗi migration SQL mới
-(`data/migrations/00XX_*.sql`) **phải apply remote bằng tay**:
+Migration dùng `wrangler d1 migrations` (`migrations_dir: data/migrations`,
+bảng `d1_migrations`). 31 file cũ đã được baseline (đánh dấu applied) nên
+không chạy lại.
+
+Thêm migration mới: tạo file `data/migrations/00XX_ten.sql` rồi commit. Không
+cần chạy tay nữa — Cloudflare apply lúc deploy.
+
+**Điều kiện (làm 1 lần trong Dashboard):** Workers & Pages → `ai-english` →
+Settings → Builds → **Deploy command**:
 
 ```
-npx wrangler d1 execute stitch-db --remote --file=data/migrations/00XX_xxx.sql
+npx wrangler d1 migrations apply stitch-db --remote && npx wrangler deploy
 ```
 
-Không có bước này → code mới reference table chưa tồn tại → runtime error / 500.
-Cloudflare Workers Builds KHÔNG chạy D1 migration tự động.
+Migration lỗi → deploy dừng, prod giữ code cũ (không còn cảnh code mới trỏ
+tới bảng chưa tồn tại).
+
+Chạy tay khi cần:
+
+```
+pnpm migrate         # remote
+pnpm migrate:local   # local
+```
+
 ## Tài liệu tham khảo (root, untracked)
 
 Máy này NixOS, không có `apt`. Không cài global — dùng `nix-shell -p <pkg> --run "..."` cho từng lệnh cần.
