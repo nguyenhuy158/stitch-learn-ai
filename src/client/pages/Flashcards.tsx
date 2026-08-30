@@ -35,10 +35,13 @@ export default function Flashcards() {
   const [level, setLevel] = useState<string | null>(() => localStorage.getItem("flashcards.level") || null);
   const [lessonId, setLessonId] = useState<number | null>(() => Number(localStorage.getItem("flashcards.lessonId")) || null);
   const [lessons, setLessons] = useState<{ id: number; title: string }[]>([]);
+  // Man chon chu de truoc khi vao hoc; da chon lan truoc thi vao thang.
+  const [picking, setPicking] = useState(() => localStorage.getItem("flashcards.picked") !== "1");
   const { t } = useLanguage();
   const toast = useToast();
 
   useEffect(() => {
+    if (picking) return;
     setCards(null);
     (async () => {
       try {
@@ -52,7 +55,7 @@ export default function Flashcards() {
         setError(t("flashcards.loadError") + err.message);
       }
     })();
-  }, [navigate, t, level, lessonId]);
+  }, [navigate, t, level, lessonId, picking]);
 
   useEffect(() => {
     if (level) localStorage.setItem("flashcards.level", level);
@@ -175,6 +178,9 @@ export default function Flashcards() {
     <div className="mx-auto max-w-xl">
       <PageHeader backTo="/" title={t("flashcards.title")} />
       <main className="p-5 sm:p-9">
+        {picking ? (
+          <>
+            <div className="mb-3 text-center text-sm font-semibold text-fg">{t("flashcards.pickTitle")}</div>
         <div className="mb-4 flex flex-wrap justify-center gap-1.5">
           {[null, ...CEFR_LEVELS].map((lv) => (
             <button
@@ -190,17 +196,36 @@ export default function Flashcards() {
             </button>
           ))}
         </div>
+            <div className="grid gap-2">
+              {[{ id: 0, title: t("flashcards.pickAll") }, ...lessons].map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  onClick={() => {
+                    setLessonId(l.id || null);
+                    localStorage.setItem("flashcards.picked", "1");
+                    setPicking(false);
+                  }}
+                  className={cn(
+                    "rounded-ui px-4 py-3 text-left text-sm font-semibold shadow-sm transition",
+                    (lessonId ?? 0) === l.id ? "bg-primary-hover text-white" : "bg-surface text-fg hover:bg-primary-soft"
+                  )}
+                >
+                  {l.title}
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+        <>
         <div className="mb-4 flex justify-center">
-          <select
-            value={lessonId ?? ""}
-            onChange={(e) => setLessonId(e.target.value ? Number(e.target.value) : null)}
-            className="max-w-full rounded-ui bg-surface px-3 py-1.5 text-xs font-semibold text-fg-muted shadow-sm"
+          <button
+            type="button"
+            onClick={() => setPicking(true)}
+            className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-fg-muted shadow-sm hover:bg-primary-soft"
           >
-            <option value="">{t("flashcards.levelAll")}</option>
-            {lessons.map((l) => (
-              <option key={l.id} value={l.id}>{l.title}</option>
-            ))}
-          </select>
+            {lessons.find((l) => l.id === lessonId)?.title ?? t("flashcards.pickAll")} · {t("flashcards.changeTopic")}
+          </button>
         </div>
         {error && <PageState tone="error">{error}</PageState>}
         {!error && cards === null && <LoadingState />}
@@ -320,6 +345,8 @@ export default function Flashcards() {
               </div>
             )}
           </>
+        )}
+        </>
         )}
       </main>
     </div>
