@@ -29,6 +29,8 @@ import housingWeightsAndMeasures from "./vocab-housing-weights-and-measures.json
 import plantsAnimalsDomesticAnimalsAndRodents from "./vocab-plants-and-animals-domestic-animals-and-rodents.json";
 import workToolsAndBuildingSupplies from "./vocab-work-tools-and-building-supplies.json";
 import everydayLanguage100PhrasesA1 from "./phrases/vocab-everyday-language-100-phrases-a1.json";
+// Bo tu Airport chi hoc qua flashcard (lesson trong D1), khong hien o trang Picture Vocab.
+import airport30 from "./phrases/vocab-airport-30.json";
 
 // Ordered by the dictionary's own chapter order.
 export const PICTURE_VOCAB_TOPICS = [
@@ -62,5 +64,5 @@ export const PICTURE_VOCAB_TOPICS = [
 
 /** All image keys we're willing to serve, so the image route can't be used to read arbitrary R2 objects. */
 export const KNOWN_IMAGE_KEYS = new Set(
-  PICTURE_VOCAB_TOPICS.flatMap((topic) => topic.items.map((item) => item.r2_key))
+  [...PICTURE_VOCAB_TOPICS, airport30].flatMap((topic) => topic.items.map((item) => item.r2_key))
 );
