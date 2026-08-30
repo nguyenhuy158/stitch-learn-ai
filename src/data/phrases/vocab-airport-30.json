@@ -1,0 +1,277 @@
+{
+  "topic": "Airport & Travel",
+  "r2_bucket": "ai-english-vocab",
+  "r2_key_prefix": "airport-30/",
+  "items": [
+    {
+      "term": "luggage",
+      "meaning_vi": "hành lý",
+      "example_en": "My luggage is very heavy.",
+      "example_vi": "Hành lý của tôi rất nặng.",
+      "image": "01-luggage.jpg",
+      "r2_key": "airport-30/01-luggage.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:A-trolley-used-for-transporting-baggage.jpg"
+    },
+    {
+      "term": "suitcase",
+      "meaning_vi": "va li",
+      "example_en": "I packed my suitcase last night.",
+      "example_vi": "Tôi đã xếp va li tối qua.",
+      "image": "02-suitcase.jpg",
+      "r2_key": "airport-30/02-suitcase.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Belber_Striped_Suitcase.jpg"
+    },
+    {
+      "term": "departure",
+      "meaning_vi": "sự khởi hành",
+      "example_en": "Our departure is at 9 a.m.",
+      "example_vi": "Chuyến bay của chúng tôi khởi hành lúc 9 giờ sáng.",
+      "image": "03-departure.jpg",
+      "r2_key": "airport-30/03-departure.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:47_Airport_departures_board_free_photo_-_Melbourne_Airport_timetable_-_Creative_Commons_Attribution.jpg"
+    },
+    {
+      "term": "arrival",
+      "meaning_vi": "sự đến nơi",
+      "example_en": "The arrival time is 6 p.m.",
+      "example_vi": "Giờ đến là 6 giờ chiều.",
+      "image": "04-arrival.jpg",
+      "r2_key": "airport-30/04-arrival.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Arrivals_Hall,_Newcastle_International_Airport,_Christmas_2011_-_geograph.org.uk_-_2740554.jpg"
+    },
+    {
+      "term": "check-in",
+      "meaning_vi": "làm thủ tục",
+      "example_en": "Please go to the check-in desk.",
+      "example_vi": "Vui lòng tới quầy làm thủ tục.",
+      "image": "05-check-in.jpg",
+      "r2_key": "airport-30/05-check-in.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Check-in_counters_at_Suvarnabhumi_International_Airport.JPG"
+    },
+    {
+      "term": "conveyor belt",
+      "meaning_vi": "băng chuyền",
+      "example_en": "My bag is on the conveyor belt.",
+      "example_vi": "Túi của tôi ở trên băng chuyền.",
+      "image": "06-conveyor-belt.jpg",
+      "r2_key": "airport-30/06-conveyor-belt.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Aeropuerto_Internacional_de_Tallinn,_Estonia,_2012-08-05,_DD_05.JPG"
+    },
+    {
+      "term": "boarding pass",
+      "meaning_vi": "thẻ lên máy bay",
+      "example_en": "Show your boarding pass at the gate.",
+      "example_vi": "Đưa thẻ lên máy bay ở cửa ra.",
+      "image": "07-boarding-pass.jpg",
+      "r2_key": "airport-30/07-boarding-pass.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:British_Airways_Flight_217_Boarding_Pass_Back.png"
+    },
+    {
+      "term": "carry-on",
+      "meaning_vi": "hành lý xách tay",
+      "example_en": "This carry-on fits under the seat.",
+      "example_vi": "Hành lý xách tay này vừa dưới ghế.",
+      "image": "08-carry-on.jpg",
+      "r2_key": "airport-30/08-carry-on.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Closing_of_the_Jerome_Relocation_Center,_Denson,_Arkansas._Jerome_residents_with_their_hand_luggage_._._._-_NARA_-_539816.jpg"
+    },
+    {
+      "term": "security",
+      "meaning_vi": "an ninh",
+      "example_en": "We waited ten minutes at security.",
+      "example_vi": "Chúng tôi đợi mười phút ở khu an ninh.",
+      "image": "09-security.jpg",
+      "r2_key": "airport-30/09-security.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Brisbane_Airport_Domestic_Terminal_new_central_security_screening_area,_Jan_2026_01.jpg"
+    },
+    {
+      "term": "metal detector",
+      "meaning_vi": "máy dò kim loại",
+      "example_en": "Walk through the metal detector slowly.",
+      "example_vi": "Đi qua máy dò kim loại từ từ.",
+      "image": "10-metal-detector.jpg",
+      "r2_key": "airport-30/10-metal-detector.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C3%BAsqueda_con_detectores_de_metales.jpg"
+    },
+    {
+      "term": "gate",
+      "meaning_vi": "cửa ra máy bay",
+      "example_en": "Our flight leaves from gate 12.",
+      "example_vi": "Chuyến bay của chúng tôi ở cửa số 12.",
+      "image": "11-gate.jpg",
+      "r2_key": "airport-30/11-gate.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:201812_Boarding_Directions_on_Gate_2,3A.jpg"
+    },
+    {
+      "term": "lounge",
+      "meaning_vi": "phòng chờ",
+      "example_en": "We rested in the airport lounge.",
+      "example_vi": "Chúng tôi nghỉ ở phòng chờ sân bay.",
+      "image": "12-lounge.jpg",
+      "r2_key": "airport-30/12-lounge.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Aspire_Executive_Lounge_Perth_Airport,_2026_(12).jpg"
+    },
+    {
+      "term": "straw",
+      "meaning_vi": "ống hút",
+      "example_en": "Can I have a straw, please?",
+      "example_vi": "Cho tôi xin một ống hút.",
+      "image": "13-straw.jpg",
+      "r2_key": "airport-30/13-straw.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:A_paper_straw_for_bubble_tea_and_the_popular_straw.jpg"
+    },
+    {
+      "term": "fridge",
+      "meaning_vi": "tủ lạnh",
+      "example_en": "The drinks are in the fridge.",
+      "example_vi": "Đồ uống ở trong tủ lạnh.",
+      "image": "14-fridge.jpg",
+      "r2_key": "airport-30/14-fridge.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:LG_refrigerator_interior.jpg"
+    },
+    {
+      "term": "can",
+      "meaning_vi": "lon",
+      "example_en": "I bought a can of soda.",
+      "example_vi": "Tôi mua một lon nước ngọt.",
+      "image": "15-can.jpg",
+      "r2_key": "airport-30/15-can.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:202601_A_Coffee_beverage_can_with_French_marigolds_garden_of_orange.jpg"
+    },
+    {
+      "term": "tea bag",
+      "meaning_vi": "túi trà",
+      "example_en": "Put the tea bag in hot water.",
+      "example_vi": "Cho túi trà vào nước nóng.",
+      "image": "16-tea-bag.jpg",
+      "r2_key": "airport-30/16-tea-bag.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Chai_tea_bag.jpg"
+    },
+    {
+      "term": "mug",
+      "meaning_vi": "cốc có quai",
+      "example_en": "She drinks coffee from a big mug.",
+      "example_vi": "Cô ấy uống cà phê bằng cốc lớn.",
+      "image": "17-mug.jpg",
+      "r2_key": "airport-30/17-mug.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Topology_joke.jpg"
+    },
+    {
+      "term": "toaster",
+      "meaning_vi": "máy nướng bánh mì",
+      "example_en": "The toaster is next to the sink.",
+      "example_vi": "Máy nướng bánh mì ở cạnh bồn rửa.",
+      "image": "18-toaster.jpg",
+      "r2_key": "airport-30/18-toaster.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Hoteltoaster_01_(sk).jpg"
+    },
+    {
+      "term": "boarding",
+      "meaning_vi": "việc lên máy bay",
+      "example_en": "Boarding starts in ten minutes.",
+      "example_vi": "Việc lên máy bay bắt đầu sau mười phút.",
+      "image": "19-boarding.jpg",
+      "r2_key": "airport-30/19-boarding.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Boarding_stairs_aviapartner.jpg"
+    },
+    {
+      "term": "on time",
+      "meaning_vi": "đúng giờ",
+      "example_en": "The flight is on time.",
+      "example_vi": "Chuyến bay đúng giờ.",
+      "image": "20-on-time.jpg",
+      "r2_key": "airport-30/20-on-time.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:20250808_152450_Taichung_Airport_Flight_information_displays.jpg"
+    },
+    {
+      "term": "delayed",
+      "meaning_vi": "bị hoãn",
+      "example_en": "Our flight was delayed by two hours.",
+      "example_vi": "Chuyến bay của chúng tôi bị hoãn hai tiếng.",
+      "image": "21-delayed.jpg",
+      "r2_key": "airport-30/21-delayed.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Dalian_Airport,_Much_delay..._(3387723778).jpg"
+    },
+    {
+      "term": "escalator",
+      "meaning_vi": "thang cuốn",
+      "example_en": "Take the escalator to the second floor.",
+      "example_vi": "Đi thang cuốn lên tầng hai.",
+      "image": "22-escalator.jpg",
+      "r2_key": "airport-30/22-escalator.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Copenhagen_Metro_escalators.jpg"
+    },
+    {
+      "term": "bench",
+      "meaning_vi": "ghế dài",
+      "example_en": "She sat on a bench near the gate.",
+      "example_vi": "Cô ấy ngồi trên ghế dài gần cửa ra.",
+      "image": "23-bench.jpg",
+      "r2_key": "airport-30/23-bench.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:A_public_bench_seat_-_geograph.org.uk_-_3567060.jpg"
+    },
+    {
+      "term": "window seat",
+      "meaning_vi": "ghế cạnh cửa sổ",
+      "example_en": "I always choose a window seat.",
+      "example_vi": "Tôi luôn chọn ghế cạnh cửa sổ.",
+      "image": "24-window-seat.jpg",
+      "r2_key": "airport-30/24-window-seat.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Cabin_window_of_787_prototype_(5998100871).jpg"
+    },
+    {
+      "term": "aisle seat",
+      "meaning_vi": "ghế cạnh lối đi",
+      "example_en": "He prefers an aisle seat.",
+      "example_vi": "Anh ấy thích ghế cạnh lối đi.",
+      "image": "25-aisle-seat.jpg",
+      "r2_key": "airport-30/25-aisle-seat.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Airplane_aisle_during_flight_(Unsplash).jpg"
+    },
+    {
+      "term": "wing",
+      "meaning_vi": "cánh máy bay",
+      "example_en": "The wing of the plane is huge.",
+      "example_vi": "Cánh máy bay rất lớn.",
+      "image": "26-wing.jpg",
+      "r2_key": "airport-30/26-wing.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Aircraft_wing_(49355845907).jpg"
+    },
+    {
+      "term": "take off",
+      "meaning_vi": "cất cánh",
+      "example_en": "The plane will take off soon.",
+      "example_vi": "Máy bay sắp cất cánh.",
+      "image": "27-take-off.jpg",
+      "r2_key": "airport-30/27-take-off.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:C-17_tests_Phoenix_snow_runway_for_wheeled_aircraft_at_McMurdo_Station_--_Antarctica_--_November_2016.jpg"
+    },
+    {
+      "term": "tray table",
+      "meaning_vi": "bàn ăn trên máy bay",
+      "example_en": "Please close your tray table.",
+      "example_vi": "Vui lòng gập bàn ăn lại.",
+      "image": "28-tray-table.jpg",
+      "r2_key": "airport-30/28-tray-table.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:HK_International_Airport_%E5%9C%8B%E6%B3%B0%E8%88%AA%E7%A9%BA_Cathay_Pacific_494_CX494_seat_folding_table_tray_and_%E9%A3%9B%E6%A9%9F%E9%A4%90%E9%A3%9F%E5%93%81_set_meal_March_2024_R12S_01.jpg"
+    },
+    {
+      "term": "subway",
+      "meaning_vi": "tàu điện ngầm",
+      "example_en": "We took the subway to the hotel.",
+      "example_vi": "Chúng tôi đi tàu điện ngầm tới khách sạn.",
+      "image": "29-subway.jpg",
+      "r2_key": "airport-30/29-subway.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Man_at_Dundas_subway_station,_Toronto,_2008-05-06.jpg"
+    },
+    {
+      "term": "hotel",
+      "meaning_vi": "khách sạn",
+      "example_en": "Our hotel is near the airport.",
+      "example_vi": "Khách sạn của chúng tôi gần sân bay.",
+      "image": "30-hotel.jpg",
+      "r2_key": "airport-30/30-hotel.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Afra_Hotel,_Oguz_(P1090470).jpg"
+    }
+  ]
+}
