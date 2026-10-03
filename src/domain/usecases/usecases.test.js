@@ -89,7 +89,7 @@ test("getCurrentUser: token hop le thi tra user kem streak + week + config chuan
       findById: async () => ({ id: "u1", gemini_config: "not json" })
     })
   };
-  const { user, mintedToken } = await getCurrentUser({ authToken: "t" }, d);
+  const { user, mintedToken } = await getCurrentUser({ authToken: "t" }, d, NOW);
   assert.equal(mintedToken, null);
   assert.equal(user.streak, 1);
   assert.equal(user.week.length, 7);

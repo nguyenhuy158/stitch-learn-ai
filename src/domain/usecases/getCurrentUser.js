@@ -4,7 +4,11 @@ import { normalizeAiConfig } from "../aiConfig.js";
 /** Enough history to cover both the current streak and this week's seven dots. */
 const HISTORY_DAYS = 400;
 
-export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, ssoPort, userRepository, avatarGeneratorPort }) {
+export async function getCurrentUser(
+  { authToken, ssoToken },
+  { sessionPort, ssoPort, userRepository, avatarGeneratorPort },
+  now = new Date()
+) {
   let token = authToken;
   let mintedToken = null;
 
@@ -33,7 +37,7 @@ export async function getCurrentUser({ authToken, ssoToken }, { sessionPort, sso
       // Read-only on purpose. This used to bump the streak on every call, so
       // merely opening the app counted as a day of learning; only the actions
       // in recordLearningActivity() do that now.
-      const today = localDate();
+      const today = localDate(now);
       const days = await userRepository.listActivityDays(payload.id, HISTORY_DAYS);
       user.streak = computeStreak(days, today);
       user.week = weekProgress(days, today);
