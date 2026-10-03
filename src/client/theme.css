@@ -6,8 +6,10 @@
  *
  * Accent chon qua `data-theme="teal|ocean|sunset"`, mode chon qua class `.dark`/`.light` — ca hai
  * deu dat tren <html> boi ThemeProvider, persist vao localStorage "app_theme" + "app_mode".
- * Day la nguon duy nhat cho --ui-bg/surface/fg/border/primary/ring — tokens.css chi con giu
- * --ui-success/warning/danger (khong phu thuoc accent) va cac gia tri cau truc (radius...).
+ * tokens.css la ban COPY NGUYEN VAN cua ui-kit/src/styles/tokens.css (giu ten token + mau mac
+ * dinh cua ui-kit, dong bo bang cach copy de lai). File nay la nguon mau thuong hieu: moi preset
+ * ghi de --ui-bg/surface/fg/border/primary/ring (selector :root[data-theme] / :root:not([data-theme])
+ * manh hon :root / .dark cua tokens.css). --ui-success/warning/danger + radius lay tu ui-kit.
  */
 
 /* ---------- Lavender (AI-Native) ---------- */

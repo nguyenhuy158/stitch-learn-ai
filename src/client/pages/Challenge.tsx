@@ -91,18 +91,18 @@ export default function Challenge() {
             {result.details.map((d, i) => (
               <Card
                 key={d.vocabId}
-                className={cn("p-4 border", d.isCorrect ? "border-green-500/50" : "border-red-500/50")}
+                className={cn("p-4 border", d.isCorrect ? "border-success/50" : "border-danger/50")}
               >
                 <div className="mb-2.5 text-sm text-fg-muted">{t("challenge.questionN", { n: i + 1 })}</div>
                 <div className="mb-3 text-lg font-bold text-primary-hover">{d.term}</div>
                 <div className="text-sm">
                   <span className="text-fg-muted">{t("challenge.yourAnswer")}: </span>
-                  <span className={d.isCorrect ? "text-green-600" : "text-red-600"}>{d.chosen ?? "—"}</span>
+                  <span className={d.isCorrect ? "text-success" : "text-danger"}>{d.chosen ?? "—"}</span>
                 </div>
                 {!d.isCorrect && (
                   <div className="mt-1 text-sm">
                     <span className="text-fg-muted">{t("challenge.correctAnswer")}: </span>
-                    <span className="text-green-600">{d.correctMeaning}</span>
+                    <span className="text-success">{d.correctMeaning}</span>
                   </div>
                 )}
               </Card>

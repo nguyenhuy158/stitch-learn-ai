@@ -1,3 +1,17 @@
+/* ===========================================================================
+   ui-kit design tokens: nguon chuan cho moi project ca nhan dung React +
+   Tailwind v4. Project khac COPY file nay va import no thay cho
+   `@import "tailwindcss"` trong file CSS goc.
+
+   Hop dong:
+   - Ten bien `--ui-*` va ten utility trong `@theme inline` la co dinh. Them /
+     doi ten / xoa token thi sua o day truoc roi dong bo sang cac app.
+   - Project chi duoc doi GIA TRI trong `:root` (sang) va `.dark` (toi), vi du
+     hue thuong hieu. Dark mode theo class `.dark` tren <html>.
+   - Component chi dung class ngu nghia (bg-surface, text-fg-muted,
+     bg-primary...), khong hardcode mau palette (violet-600, stone-200...).
+=========================================================================== */
+
 @import "tailwindcss";
 
 /* Dark theo class .dark tren <html> de toggle thu cong duoc (khong phu thuoc OS). */
@@ -12,15 +26,24 @@
    1. Bien mau. Doi 3 dong --ui-primary* la doi toan bo tone cua app.
    Dung oklch de chinh do sang/bao hoa khong bi lech mau.
 --------------------------------------------------------------------------- */
-/*
- * --ui-bg/surface/fg/border/primary/ring khong dinh nghia o day nua — chung do theme.css
- * quyet dinh (6 to hop accent x mode, chon qua data-theme + .dark tren <html>). Chi con
- * --ui-success/warning/danger (khong phu thuoc accent, chi doi theo sang/toi) va cac gia
- * tri cau truc nhu radius o day, tranh 2 nguon dinh nghia mau chong nhau.
- */
 :root {
   color-scheme: light;
 
+  /* Nen va chu */
+  --ui-bg: oklch(99% 0.005 300);
+  --ui-surface: oklch(100% 0 0);
+  --ui-surface-muted: oklch(97% 0.004 280);
+  --ui-border: oklch(90% 0.006 280);
+  --ui-fg: oklch(22% 0.01 280);
+  --ui-fg-muted: oklch(55% 0.015 280);
+
+  /* Mau thuong hieu */
+  --ui-primary: oklch(53% 0.23 300);
+  --ui-primary-hover: oklch(47% 0.23 300);
+  --ui-primary-fg: oklch(100% 0 0);
+  --ui-primary-soft: oklch(96% 0.03 300);
+
+  /* Mau trang thai */
   --ui-success: oklch(58% 0.15 155);
   --ui-success-soft: oklch(96% 0.04 155);
   --ui-warning: oklch(70% 0.16 75);
@@ -28,11 +51,24 @@
   --ui-danger: oklch(58% 0.2 20);
   --ui-danger-soft: oklch(96% 0.03 20);
 
+  --ui-ring: oklch(53% 0.23 300 / 35%);
   --ui-radius: 0.625rem;
 }
 
 .dark {
   color-scheme: dark;
+
+  --ui-bg: oklch(16% 0.008 280);
+  --ui-surface: oklch(21% 0.01 280);
+  --ui-surface-muted: oklch(25% 0.01 280);
+  --ui-border: oklch(32% 0.012 280);
+  --ui-fg: oklch(94% 0.005 280);
+  --ui-fg-muted: oklch(68% 0.015 280);
+
+  --ui-primary: oklch(65% 0.2 300);
+  --ui-primary-hover: oklch(71% 0.2 300);
+  --ui-primary-fg: oklch(18% 0.02 300);
+  --ui-primary-soft: oklch(30% 0.06 300);
 
   --ui-success: oklch(70% 0.14 155);
   --ui-success-soft: oklch(30% 0.05 155);
@@ -40,6 +76,8 @@
   --ui-warning-soft: oklch(32% 0.05 75);
   --ui-danger: oklch(68% 0.17 20);
   --ui-danger-soft: oklch(30% 0.06 20);
+
+  --ui-ring: oklch(65% 0.2 300 / 45%);
 }
 
 /* ---------------------------------------------------------------------------
