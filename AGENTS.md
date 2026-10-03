@@ -30,7 +30,7 @@ src/
     d1/                        #   D1 repositories (users, lessons, reading, games, ...)
     mochi/                     #   Workers AI prompts (tutor, lookup, quizzes, reviews)
     http/                      #   router.js (route -> use case) + cookies.js
-    jose/                      #   Session JWT + SSO JWKS verification
+    jose/                      #   Session JWT (SSO JWT is verified by @huyab/sso in worker.js)
     r2/  mailer/  dicebear/    #   Vocab images, streak e-mails, default avatars
     dictionaryapi/ tatoeba/ newsinlevels/ wikipedia/  # External content sources
   client/                      # React SPA (Vite entry: root index.html -> main.tsx)
@@ -146,6 +146,21 @@ diacritics, for example `feat(vocab): seed 100 cum tu A1` or
 `fix(reading): import usecase getReading vao router`. Pull requests should
 include a short summary, test/build results, linked issue if available, and
 screenshots for visible UI changes.
+
+## Ecosystem
+
+How this repo fits with the other `*.huyab.click` repos:
+https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md
+
+- Kit packages (`nguyenhuy158/kit@v0.1.0`): `@huyab/sso` (verifies the
+  `huyab_sso` JWT with the `SSO_AUDIENCE` check, wired in `src/worker.js`),
+  `@huyab/e2e` (`e2e/`: dev-server lifecycle, Chromium lookup, harness,
+  local-only guard), `@huyab/config` (`biome.json`, `tsconfig.json`), and CI
+  through the reusable `check.yml` workflow.
+- Talks to: `sso` (auth.huyab.click login/logout redirects + JWKS) and
+  `mailer` (`MAILER` service binding, `POST /send` for streak reminders).
+- Called by: `ai-english-expo` (mobile client, `auth_token` cookie); `mytools`
+  pings it for uptime.
 
 ## Agent-Specific Instructions
 
