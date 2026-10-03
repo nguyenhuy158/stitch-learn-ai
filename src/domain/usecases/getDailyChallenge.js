@@ -1,16 +1,8 @@
+import { shuffle } from "../shuffle.js";
 import { localDate } from "../streak.js";
 
 export const QUESTION_COUNT = 5;
 export const CHALLENGE_XP = 15;
-
-function shuffle(items) {
-  const arr = [...items];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
 /**
  * 5 multiple-choice questions (term -> pick the right Vietnamese meaning),

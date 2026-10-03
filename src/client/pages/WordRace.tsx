@@ -7,6 +7,7 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { normalizeAnswer } from "../lib/games";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { SpeakButton } from "../components/SpeakButton";
 import { DifficultyPicker } from "../components/DifficultyPicker";
@@ -17,10 +18,6 @@ type Difficulty = { key: string; label: string; desc: string; startMs: number; m
 const STEP_MS = 250;
 const START_LIVES = 1;
 const GAME_KEY = "word-race";
-
-function normalize(s: string) {
-  return s.trim().toLowerCase();
-}
 
 export default function WordRace() {
   const navigate = useNavigate();
@@ -135,7 +132,7 @@ export default function WordRace() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!current || feedback) return;
-    if (normalize(input) === normalize(current.meaning)) {
+    if (normalizeAnswer(input) === normalizeAnswer(current.meaning)) {
       playCorrectSound();
       setFeedback("correct");
       setScore((s) => s + 1);

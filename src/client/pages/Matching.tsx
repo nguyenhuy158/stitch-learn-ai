@@ -8,21 +8,13 @@ import { Button } from "../ui/Button";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 import { speak } from "../lib/speak";
+import { shuffle } from "../lib/shuffle";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { DifficultyPicker } from "../components/DifficultyPicker";
 
 type Word = { id: number; term: string; meaning: string };
 type Tile = { key: string; wordId: number; text: string; kind: "term" | "meaning" };
 type Difficulty = { key: string; label: string; desc: string; pairs: number; totalSeconds: number };
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
 
 const GAME_KEY = "matching-game";
 

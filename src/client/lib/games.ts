@@ -9,3 +9,8 @@ export const GAMES = [
 ] as const;
 
 export type GameKey = (typeof GAMES)[number]["key"];
+
+/** Typed answers match case-insensitively, ignoring surrounding spaces. */
+export function normalizeAnswer(s: string) {
+  return s.trim().toLowerCase();
+}

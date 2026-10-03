@@ -8,6 +8,7 @@ import { Button } from "../ui/Button";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
 import { speak } from "../lib/speak";
+import { shuffle } from "../lib/shuffle";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { DifficultyPicker } from "../components/DifficultyPicker";
 
@@ -22,11 +23,7 @@ function scramble(term: string): Letter[] {
   const chars = [...term];
   let out = chars;
   for (let attempt = 0; attempt < 10 && out.join("") === term; attempt++) {
-    out = [...chars];
-    for (let i = out.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [out[i], out[j]] = [out[j], out[i]];
-    }
+    out = shuffle(chars);
   }
   return out.map((char, i) => ({ key: `${i}-${char}`, char }));
 }

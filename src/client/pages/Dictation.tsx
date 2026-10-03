@@ -8,6 +8,7 @@ import { Textarea } from "../ui/Input";
 import { cn } from "../ui/cn";
 import { speak } from "../lib/speak";
 import { diffWords, type DiffWord } from "../lib/wordDiff";
+import { shuffle } from "../lib/shuffle";
 import { KeyboardIcon, ReplayIcon, SpeakerIcon } from "../components/icons";
 import { useLanguage } from "../i18n/LanguageProvider";
 
@@ -26,15 +27,6 @@ function toSentences(paragraphs: string[]): string[] {
       const n = s.split(/\s+/).length;
       return n >= 4 && n <= 24;
     });
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
 }
 
 /**

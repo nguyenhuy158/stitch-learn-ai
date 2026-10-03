@@ -7,6 +7,7 @@ import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { cn } from "../ui/cn";
 import { playWrongSound, playCorrectSound } from "../lib/gameSounds";
+import { normalizeAnswer } from "../lib/games";
 import { speak } from "../lib/speak";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { SpeakButton } from "../components/SpeakButton";
@@ -16,10 +17,6 @@ type Word = { id: number; term: string; meaning: string };
 type Difficulty = { key: string; label: string; desc: string; roundSize: number; secondsPerWord: number };
 
 const GAME_KEY = "spelling-game";
-
-function normalize(s: string) {
-  return s.trim().toLowerCase();
-}
 
 export default function Spelling() {
   const navigate = useNavigate();
@@ -128,7 +125,7 @@ export default function Spelling() {
     e.preventDefault();
     if (!current || status !== "idle") return;
     stopTimer();
-    const ok = normalize(input) === normalize(current.term);
+    const ok = normalizeAnswer(input) === normalizeAnswer(current.term);
     if (ok) {
       setStatus("correct");
       playCorrectSound();
