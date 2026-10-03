@@ -3,16 +3,22 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "packageManager": "pnpm@11.18.0",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "migrate": "wrangler d1 migrations apply stitch-db --remote",
-    "migrate:local": "wrangler d1 migrations apply stitch-db --local",
     "dev": "node scripts/build-info.mjs && wrangler dev",
     "dev:client": "node scripts/build-info.mjs && vite",
     "build": "node scripts/build-info.mjs && vite build",
     "preview": "vite preview",
-    "deploy": "wrangler deploy",
-    "test": "node --test 'src/**/*.test.js'"
+    "check": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "node --test 'src/**/*.test.js'",
+    "migrate": "wrangler d1 migrations apply stitch-db --remote",
+    "migrate:local": "wrangler d1 migrations apply stitch-db --local",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",
@@ -25,6 +31,7 @@
     "sonner": "^2.0.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
