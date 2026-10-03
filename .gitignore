@@ -1,9 +1,31 @@
+# Dependencies
 node_modules/
-.wrangler/
+.pnpm-store/
 
-# Dau vet build sinh tu git moi lan build (scripts/build-info.mjs)
+# Build output
+dist/
+coverage/
 # Vite build output (Cloudflare Workers Builds se build lai, khong can commit)
 public/assets/
+# Dau vet build sinh tu git moi lan build (scripts/build-info.mjs)
+src/shared/build-info.generated.js
+
+# Cloudflare local dev
+.wrangler/
+.dev.vars*
+
+# Environment files
+.env*
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# Stray template dirs created by misconfigured tools
+{{pkgetc}}/
+{{HOMEBREW_PREFIX}}/
 
 # Tai lieu tham khao (PDF lon, khong day len git)
 *.pdf
