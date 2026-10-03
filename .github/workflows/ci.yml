@@ -10,69 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Typecheck (pnpm check), unit test, build; E2E rieng: build FE, D1 local moi,
+  # `wrangler dev --local` (khong can token Cloudflare).
   check:
-    name: Typecheck, test, build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Typecheck
-        run: pnpm check
-
-      # Biome them sau khi da co code: con loi cu chua sua nen chua chan merge.
-      - name: Lint (Biome)
-        run: pnpm lint
-        continue-on-error: true
-
-      - name: Unit tests
-        run: pnpm test
-
-      # Build sau cung: chan luon ca loi chi lo ra luc bundle (import vong,
-      # asset thieu) chu khong chi loi kieu.
-      - name: Build
-        run: pnpm build
-
-  e2e:
-    name: E2E smoke
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # playwright-core khong tai browser; cai Chromium dung phien ban
-      # (e2e/chromium.mjs tu tim trong ~/.cache/ms-playwright).
-      - name: Install Chromium
-        run: pnpm exec playwright-core install --with-deps chromium
-
-      # Tu build FE, dung D1 local moi, bat `wrangler dev --local` roi tat;
-      # khong can token Cloudflare.
-      - name: E2E
-        run: pnpm e2e
-
-      - name: Upload failure screenshot
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-failure
-          path: e2e-failure.png
-          if-no-files-found: ignore
+    uses: nguyenhuy158/kit/.github/workflows/check.yml@v0.1.0
+    with:
+      run-test: true
+      run-build: true
+      run-e2e: true
