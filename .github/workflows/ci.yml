@@ -41,3 +41,38 @@ jobs:
       # asset thieu) chu khong chi loi kieu.
       - name: Build
         run: pnpm build
+
+  e2e:
+    name: E2E smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # playwright-core khong tai browser; cai Chromium dung phien ban
+      # (e2e/chromium.mjs tu tim trong ~/.cache/ms-playwright).
+      - name: Install Chromium
+        run: pnpm exec playwright-core install --with-deps chromium
+
+      # Tu build FE, dung D1 local moi, bat `wrangler dev --local` roi tat;
+      # khong can token Cloudflare.
+      - name: E2E
+        run: pnpm e2e
+
+      - name: Upload failure screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-failure
+          path: e2e-failure.png
+          if-no-files-found: ignore

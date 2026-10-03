@@ -46,6 +46,8 @@ src/
   data/                        # Bundled vocab data (picture dictionary, IPA chart)
   shared/build-info.generated.js  # Written by scripts/build-info.mjs on every build
 data/migrations/               # D1 migrations (wrangler migrations_dir)
+data/schema-base.sql           # Tables that predate 0001 (fresh local D1 only)
+e2e/                           # run.mjs (dev e2e), readonly-smoke.mjs (dev + prod), ui-smoke.mjs
 public/                        # Static assets + Vite output (index.html, assets/)
 scripts/                       # build-info.mjs, seed-subtlex.mjs, R2 upload scripts
 docs/                          # Feature notes, integration plan, UI/UX spec
@@ -65,6 +67,16 @@ docs/                          # Feature notes, integration plan, UI/UX spec
   `biome format --write .`.
 - `pnpm test`: run `node --test` over `src/**/*.test.js`.
 - `pnpm migrate` / `pnpm migrate:local`: apply D1 migrations remote / local.
+- `pnpm e2e`: build, create a fresh local D1 in `.wrangler/e2e` (schema base +
+  migrations + an `e2e-user`), start `wrangler dev --local` on port 8788 (no
+  Workers AI, no Cloudflare login), run `e2e/readonly-smoke.mjs` then the
+  logged-in `e2e/ui-smoke.mjs`, and stop the server. Like `pnpm build`, it
+  rewrites `public/index.html` and `src/shared/build-info.generated.js`.
+- `pnpm e2e:prod`: read-only smoke against https://en.huyab.click (GET
+  `/api/version`, `/api/auth/me`, `/api/stats` expecting 401, `/api/lessons`,
+  `/api/picture-vocab`, and the `/` -> `/login` page; no login, no writes).
+  Both need Chromium: `pnpm exec playwright-core install chromium`, or set
+  `PLAYWRIGHT_CHROMIUM_PATH` (local Google Chrome is picked up on macOS).
 
 Use `pnpm` for all package commands (never npm/yarn).
 
@@ -77,7 +89,9 @@ stops the deploy and production keeps the previous code.
 
 D1 migrations: add `data/migrations/00XX_name.sql` and commit; Cloudflare
 applies it on deploy (tracked in table `d1_migrations`; the first 31 files
-were baselined as applied).
+were baselined as applied). Migration 0001 assumes tables created before
+migrations existed, so a fresh local D1 needs `pnpm exec wrangler d1 execute
+stitch-db --local --file data/schema-base.sql` before `pnpm migrate:local`.
 
 Secrets (set with `wrangler secret put`, never committed): `JWT_SECRET`.
 Vars in `wrangler.jsonc`: `MOCHI_MODEL`, `AI_GATEWAY`, `SSO_ISSUER`,
@@ -119,8 +133,11 @@ reports existing findings. Do not mass-reformat; keep touched code clean.
 Tests use the built-in `node:test` runner with `node:assert`, colocated as
 `*.test.js` beside the module (`src/domain/streak.test.js`,
 `src/adapters/tatoeba/examples.test.js`). Use cases are tested with plain fake
-dependency objects (see `src/domain/usecases/usecases.test.js`). The client has
-no automated tests; verify UI changes in the browser.
+dependency objects (see `src/domain/usecases/usecases.test.js`); pass `now`
+instead of reading the clock so tests do not depend on today's date. Browser
+coverage is the e2e smoke (`pnpm e2e` locally and in CI, `pnpm e2e:prod` for
+read-only checks on production); `ui-smoke.mjs` signs its own session cookie
+and writes to the local D1, so it refuses any non-local base URL.
 
 ## Commit & Pull Request Guidelines
 

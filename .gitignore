@@ -29,3 +29,6 @@ src/shared/build-info.generated.js
 
 # Tai lieu tham khao (PDF lon, khong day len git)
 *.pdf
+
+# E2E failure screenshot (e2e/*.mjs)
+e2e-failure.png
