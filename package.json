@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
+    "@huyab/config": "github:nguyenhuy158/kit#v0.1.0&path:packages/config",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
