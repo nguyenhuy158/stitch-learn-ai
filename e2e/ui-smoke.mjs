@@ -6,14 +6,10 @@
 // - E2E_BASE_URL: mac dinh http://127.0.0.1:8787
 // - E2E_JWT_SECRET: JWT_SECRET cua wrangler dev, de ky cookie auth_token
 // - E2E_USER_ID / E2E_USER_NAME: user da them vao D1 local
+import { assertLocalOnly, BASE, findChromium } from "@huyab/e2e";
 import { SignJWT } from "jose";
 import { chromium } from "playwright-core";
-import { findChromium } from "./chromium.mjs";
 
-const BASE = (process.env.E2E_BASE_URL || "http://127.0.0.1:8787").replace(
-  /\/$/,
-  "",
-);
 const SECRET = process.env.E2E_JWT_SECRET;
 const USER_ID = process.env.E2E_USER_ID;
 const USER_NAME = process.env.E2E_USER_NAME;
@@ -25,12 +21,8 @@ if (!SECRET || !USER_ID || !USER_NAME) {
   );
   process.exit(1);
 }
-if (!/^http:\/\/(127\.0\.0\.1|localhost)[:/]/.test(`${BASE}/`)) {
-  console.error(
-    `ui-smoke ghi du lieu, chi chay vao server local (E2E_BASE_URL=${BASE}).`,
-  );
-  process.exit(1);
-}
+// ui-smoke ghi du lieu: chi chay vao server local.
+assertLocalOnly();
 
 let passed = 0;
 let failed = 0;

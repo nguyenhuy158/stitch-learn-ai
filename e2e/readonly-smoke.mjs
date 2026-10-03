@@ -5,14 +5,10 @@
 //
 // Bien moi truong:
 // - E2E_BASE_URL: mac dinh http://127.0.0.1:8787
-// - PLAYWRIGHT_CHROMIUM_PATH: xem e2e/chromium.mjs
+// - PLAYWRIGHT_CHROMIUM_PATH: chi dinh Chromium cu the (xem findChromium cua @huyab/e2e)
+import { BASE, expectStatus, findChromium, request } from "@huyab/e2e";
 import { chromium } from "playwright-core";
-import { findChromium } from "./chromium.mjs";
 
-const BASE = (process.env.E2E_BASE_URL || "http://127.0.0.1:8787").replace(
-  /\/$/,
-  "",
-);
 const WAIT = { timeout: 15000 };
 
 let passed = 0;
@@ -25,12 +21,8 @@ function ok(name) {
 
 /** GET mot endpoint, nem neu status khac mong doi; tra ve Response. */
 async function get(path, expectedStatus) {
-  const response = await fetch(BASE + path, { redirect: "manual" });
-  if (response.status !== expectedStatus) {
-    throw new Error(
-      `GET ${path}: mong ${expectedStatus}, nhan ${response.status}`,
-    );
-  }
+  const response = await request(path);
+  expectStatus(response, expectedStatus);
   return response;
 }
 
