@@ -14,7 +14,7 @@ src/
   ports/index.js     JSDoc typedef mô tả interface (UserRepository, SessionPort, AiTutorPort...)
   adapters/          implement ports, chứa mọi I/O thật
     d1/              D1 queries (user/chat/lesson repository)
-    jose/            ký/verify JWT nội bộ + verify JWKS remote của SSO
+    jose/            ký/verify JWT phiên nội bộ (JWT SSO verify bằng @huyab/sso trong worker.js)
     mochi/           gọi Workers AI qua binding `env.AI` (persona "Mochi"), build prompt
     http/            router.js (map route -> usecase) + cookies.js
   worker.js          composition root: wire adapters vào usecases, export fetch handler

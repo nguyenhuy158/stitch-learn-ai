@@ -15,6 +15,7 @@ export async function getCurrentUser(
   if (!token && ssoToken && ssoPort) {
     try {
       const ssoPayload = await ssoPort.verify(ssoToken);
+      if (!ssoPayload) throw new Error("invalid SSO token");
       const picture = ssoPayload.picture || avatarGeneratorPort?.generate(ssoPayload.email);
       const userId = await userRepository.resolveIdFromSso({
         email: ssoPayload.email,

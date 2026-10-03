@@ -45,7 +45,7 @@
  * @property {(token: string) => Promise<object>} verify
  *
  * @typedef {Object} SsoPort
- * @property {(token: string) => Promise<object>} verify
+ * @property {(token: string) => Promise<{email: string, name?: string, picture?: string}|null>} verify - claims, or null when the token is not valid
  *
  * @typedef {Object} AiTutorPort
  * @property {(input: {level: string, history: object[], message: string, config?: object}) => Promise<{message: string, feedback: string|null, corrections: string[]|undefined}>} reply

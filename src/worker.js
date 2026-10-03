@@ -1,3 +1,4 @@
+import { verifySsoToken } from "@huyab/sso";
 import { createD1UserRepository } from "./adapters/d1/userRepository.js";
 import { createD1ChatRepository } from "./adapters/d1/chatRepository.js";
 import { createD1LessonRepository } from "./adapters/d1/lessonRepository.js";
@@ -13,7 +14,6 @@ import { createD1GameScoreRepository } from "./adapters/d1/gameScoreRepository.j
 import { createD1ReadingRepository } from "./adapters/d1/readingRepository.js";
 import { createD1ReadingQuizRepository } from "./adapters/d1/readingQuizRepository.js";
 import { createJoseSessionProvider } from "./adapters/jose/sessionProvider.js";
-import { createJoseSsoVerifier } from "./adapters/jose/ssoVerifier.js";
 import { createMochiClient } from "./adapters/mochi/client.js";
 import { createMochiTutor } from "./adapters/mochi/tutor.js";
 import { createMochiVocabGenerator } from "./adapters/mochi/vocabGenerator.js";
@@ -59,7 +59,7 @@ function buildDeps(env) {
     gameScoreRepository: createD1GameScoreRepository(env.DB),
     sessionPort: createJoseSessionProvider(env.JWT_SECRET),
     ssoPort: env.SSO_ISSUER
-      ? createJoseSsoVerifier({ issuer: env.SSO_ISSUER, audience: env.SSO_AUDIENCE })
+      ? { verify: (token) => verifySsoToken(token, env.SSO_ISSUER, { audience: env.SSO_AUDIENCE }) }
       : null,
     aiTutorPort: createMochiTutor(mochi),
     vocabGeneratorPort: createMochiVocabGenerator(mochi),
