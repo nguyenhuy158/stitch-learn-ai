@@ -15,8 +15,8 @@ importers:
         specifier: ^9.4.3
         version: 9.4.3
       '@huyab/sso':
-        specifier: github:nguyenhuy158/kit#v0.1.0&path:packages/sso
-        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/sso
+        specifier: github:nguyenhuy158/kit#v0.2.0&path:packages/sso
+        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/sso
       jose:
         specifier: ^6.1.3
         version: 6.2.8
@@ -40,11 +40,11 @@ importers:
         specifier: ^2.5.15
         version: 2.5.15
       '@huyab/config':
-        specifier: github:nguyenhuy158/kit#v0.1.0&path:packages/config
-        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/config
+        specifier: github:nguyenhuy158/kit#v0.2.0&path:packages/config
+        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/config
       '@huyab/e2e':
-        specifier: github:nguyenhuy158/kit#v0.1.0&path:packages/e2e
-        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/e2e
+        specifier: github:nguyenhuy158/kit#v0.2.0&path:packages/e2e
+        version: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/e2e
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.3.3(vite@6.4.3(jiti@2.7.0)(lightningcss@1.32.0))
@@ -773,17 +773,17 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@huyab/config@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/config':
-    resolution: {gitHosted: true, path: packages/config, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51}
+  '@huyab/config@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/config':
+    resolution: {gitHosted: true, integrity: sha512-WqOvi2mfcB25roBma1epn7KAdWNLkA1O9pC2XDesQeqkjdzZxltmlkB82xqdAXh8ExQYL8tsMNwSaAunVNMgnw==, path: packages/config, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a}
     version: 0.1.0
 
-  '@huyab/e2e@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/e2e':
-    resolution: {gitHosted: true, path: packages/e2e, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51}
+  '@huyab/e2e@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/e2e':
+    resolution: {gitHosted: true, integrity: sha512-WqOvi2mfcB25roBma1epn7KAdWNLkA1O9pC2XDesQeqkjdzZxltmlkB82xqdAXh8ExQYL8tsMNwSaAunVNMgnw==, path: packages/e2e, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a}
     version: 0.1.0
     engines: {node: '>=22'}
 
-  '@huyab/sso@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/sso':
-    resolution: {gitHosted: true, path: packages/sso, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51}
+  '@huyab/sso@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/sso':
+    resolution: {gitHosted: true, path: packages/sso, tarball: https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a}
     version: 0.1.0
     peerDependencies:
       hono: ^4
@@ -2173,11 +2173,11 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@huyab/config@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/config': {}
+  '@huyab/config@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/config': {}
 
-  '@huyab/e2e@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/e2e': {}
+  '@huyab/e2e@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/e2e': {}
 
-  '@huyab/sso@https://codeload.github.com/nguyenhuy158/kit/tar.gz/dc6d7122964975a8283a12876dafa9ad8cff2c51#path:packages/sso': {}
+  '@huyab/sso@https://codeload.github.com/nguyenhuy158/kit/tar.gz/1470af6bdda0ca1db5525dcf3b212edef7dc7c4a#path:packages/sso': {}
 
   '@img/colour@1.1.0': {}
 

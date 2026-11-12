@@ -2,13 +2,13 @@
 
 ## Project Structure & Module Organization
 
-AI English (https://en.huyab.click) is one full-stack Cloudflare Worker: a
+AI English (https://en.huyab.cfd) is one full-stack Cloudflare Worker: a
 React + Vite + Tailwind v4 SPA in `src/client/` built into `public/`, plus a
 plain-JavaScript backend (`src/worker.js`) that serves `/api/*` and falls back
 to the static assets through the `ASSETS` binding (`wrangler.jsonc`). Storage
 is D1 (`stitch-db`), vocab images live in R2 (`ai-english-vocab`), the AI
 tutor "Mochi" runs on Workers AI (`env.AI`), login goes through the shared SSO
-worker at `auth.huyab.click`, and a daily cron sends streak reminders through
+worker at `auth.huyab.cfd`, and a daily cron sends streak reminders through
 the `mailer` service binding.
 
 The backend is hexagonal: pure business logic in `src/domain/` (one use case
@@ -72,7 +72,7 @@ docs/                          # Feature notes, integration plan, UI/UX spec
   Workers AI, no Cloudflare login), run `e2e/readonly-smoke.mjs` then the
   logged-in `e2e/ui-smoke.mjs`, and stop the server. Like `pnpm build`, it
   rewrites `public/index.html` and `src/shared/build-info.generated.js`.
-- `pnpm e2e:prod`: read-only smoke against https://en.huyab.click (GET
+- `pnpm e2e:prod`: read-only smoke against https://en.huyab.cfd (GET
   `/api/version`, `/api/auth/me`, `/api/stats` expecting 401, `/api/lessons`,
   `/api/picture-vocab`, and the `/` -> `/login` page; no login, no writes).
   Both need Chromium: `pnpm exec playwright-core install chromium`, or set
@@ -149,7 +149,7 @@ screenshots for visible UI changes.
 
 ## Ecosystem
 
-How this repo fits with the other `*.huyab.click` repos:
+How this repo fits with the other `*.huyab.cfd` repos:
 https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md
 
 - Kit packages (`nguyenhuy158/kit@v0.1.0`): `@huyab/sso` (verifies the
@@ -157,7 +157,7 @@ https://github.com/nguyenhuy158/kit/blob/main/docs/ECOSYSTEM.md
   `@huyab/e2e` (`e2e/`: dev-server lifecycle, Chromium lookup, harness,
   local-only guard), `@huyab/config` (`biome.json`, `tsconfig.json`), and CI
   through the reusable `check.yml` workflow.
-- Talks to: `sso` (auth.huyab.click login/logout redirects + JWKS) and
+- Talks to: `sso` (auth.huyab.cfd login/logout redirects + JWKS) and
   `mailer` (`MAILER` service binding, `POST /send` for streak reminders).
 - Called by: `ai-english-expo` (mobile client, `auth_token` cookie); `mytools`
   pings it for uptime.

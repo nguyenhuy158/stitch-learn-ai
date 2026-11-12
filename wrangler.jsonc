@@ -38,7 +38,7 @@
     // Ten AI Gateway (phai tao truoc trong dashboard, cung account). Bo trong
     // = goi Workers AI thang, khong co log/cache cua gateway.
     "AI_GATEWAY": "",
-    "SSO_ISSUER": "https://auth.huyab.click",
-    "SSO_AUDIENCE": "huyab.click"
+    "SSO_ISSUER": "https://auth.huyab.cfd",
+    "SSO_AUDIENCE": "huyab.cfd"
   }
 }

@@ -7,12 +7,12 @@ function reminderHtml(user, dueCount, latestStory) {
       : `Hôm nay chưa học gì cả, ghé qua 5 phút cũng được.`;
   const dueLine =
     dueCount > 0
-      ? `<p>Bạn có <b>${dueCount} từ vựng</b> đến hạn ôn — <a href="https://en.huyab.click/flashcards">ôn ngay với thẻ ghi nhớ →</a></p>`
+      ? `<p>Bạn có <b>${dueCount} từ vựng</b> đến hạn ôn — <a href="https://en.huyab.cfd/flashcards">ôn ngay với thẻ ghi nhớ →</a></p>`
       : "";
   const storyLine = latestStory
-    ? `<p>Bài đọc mới nhất: <a href="https://en.huyab.click/reading?g=${encodeURIComponent(latestStory.guid)}"><b>${latestStory.story}</b></a></p>`
+    ? `<p>Bài đọc mới nhất: <a href="https://en.huyab.cfd/reading?g=${encodeURIComponent(latestStory.guid)}"><b>${latestStory.story}</b></a></p>`
     : "";
-  return `<p>Chào ${user.name || "bạn"},</p><p>${streakLine}</p>${dueLine}${storyLine}<p><a href="https://en.huyab.click/challenge">Làm thử thách hôm nay →</a></p>`;
+  return `<p>Chào ${user.name || "bạn"},</p><p>${streakLine}</p>${dueLine}${storyLine}<p><a href="https://en.huyab.cfd/challenge">Làm thử thách hôm nay →</a></p>`;
 }
 
 /**
