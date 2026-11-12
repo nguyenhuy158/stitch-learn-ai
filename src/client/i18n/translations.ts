@@ -42,7 +42,7 @@ export const translations: Record<string, TranslationEntry> = {
 
   "notFound.message": { vi: "Không tìm thấy trang.", en: "Page not found." },
 
-  "login.subtitle": { vi: "Đăng nhập bằng Google (SSO huyab.click) để tiếp tục.", en: "Sign in with Google (huyab.click SSO) to continue." },
+  "login.subtitle": { vi: "Đăng nhập bằng Google (SSO huyab.cfd) để tiếp tục.", en: "Sign in with Google (huyab.cfd SSO) to continue." },
   "login.button": { vi: "Đăng nhập với Google", en: "Sign in with Google" },
 
   "appearance.title": { vi: "Giao diện", en: "Appearance" },
@@ -90,7 +90,7 @@ export const translations: Record<string, TranslationEntry> = {
   "help.faq.chat.q": { vi: "Chat với Mochi hoạt động ra sao?", en: "How does chatting with Mochi work?" },
   "help.faq.chat.a": { vi: "Bạn nhắn bằng tiếng Anh, Mochi trả lời tự nhiên và kèm nhận xét/sửa lỗi ngữ pháp nếu có. Lịch sử hội thoại được lưu lại, xem ở trang Lịch sử.", en: "You message in English, and Mochi replies naturally along with grammar feedback/corrections when needed. Your conversation history is saved and viewable on the History page." },
   "help.faq.login.q": { vi: "Đăng nhập bằng gì?", en: "How do I sign in?" },
-  "help.faq.login.a": { vi: "App dùng chung hệ thống đăng nhập Google (SSO) của huyab.click — không cần đặt mật khẩu riêng.", en: "The app uses huyab.click's shared Google sign-in (SSO) — no separate password needed." },
+  "help.faq.login.a": { vi: "App dùng chung hệ thống đăng nhập Google (SSO) của huyab.cfd — không cần đặt mật khẩu riêng.", en: "The app uses huyab.cfd's shared Google sign-in (SSO) — no separate password needed." },
   "help.faq.writing.q": { vi: "\"Sửa lỗi viết\" khác gì chat với Mochi?", en: "How is \"Writing Correction\" different from chatting with Mochi?" },
   "help.faq.writing.a": { vi: "Chat với Mochi là hội thoại qua lại. \"Sửa lỗi viết\" nhận 1 đoạn văn dài, trả về bản đã sửa + giải thích từng lỗi cụ thể.", en: "Chatting with Mochi is a back-and-forth conversation. \"Writing Correction\" takes one longer passage and returns a corrected version plus an explanation of each specific mistake." },
   "help.sendFeedback": { vi: "Gửi phản hồi", en: "Send feedback" },

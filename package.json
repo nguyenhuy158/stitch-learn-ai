@@ -17,7 +17,7 @@
     "format": "biome format --write .",
     "test": "node --test 'src/**/*.test.js'",
     "e2e": "node e2e/run.mjs",
-    "e2e:prod": "E2E_BASE_URL=https://en.huyab.click node e2e/readonly-smoke.mjs",
+    "e2e:prod": "E2E_BASE_URL=https://en.huyab.cfd node e2e/readonly-smoke.mjs",
     "migrate": "wrangler d1 migrations apply stitch-db --remote",
     "migrate:local": "wrangler d1 migrations apply stitch-db --local",
     "deploy": "wrangler deploy"
@@ -25,7 +25,7 @@
   "dependencies": {
     "@dicebear/collection": "^9.4.2",
     "@dicebear/core": "^9.4.3",
-    "@huyab/sso": "github:nguyenhuy158/kit#v0.1.0&path:packages/sso",
+    "@huyab/sso": "github:nguyenhuy158/kit#v0.2.0&path:packages/sso",
     "jose": "^6.1.3",
     "lucide-react": "^1.34.0",
     "react": "^19.0.0",
@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
-    "@huyab/config": "github:nguyenhuy158/kit#v0.1.0&path:packages/config",
-    "@huyab/e2e": "github:nguyenhuy158/kit#v0.1.0&path:packages/e2e",
+    "@huyab/config": "github:nguyenhuy158/kit#v0.2.0&path:packages/config",
+    "@huyab/e2e": "github:nguyenhuy158/kit#v0.2.0&path:packages/e2e",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

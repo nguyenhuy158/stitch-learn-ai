@@ -22,7 +22,7 @@ src/
 Đổi adapter (D1 -> KV, Mochi -> OpenAI, jose -> lib khác) không cần sửa `domain/`.
 
 ## Chức năng
-- Auth: SSO (huyab.click, worker `sso` tại `auth.huyab.click`) + email/password, JWT (jose), lưu D1
+- Auth: SSO (huyab.cfd, worker `sso` tại `auth.huyab.cfd`) + email/password, JWT (jose), lưu D1
 - Streak học tập
 - `/api/lessons` — danh sách bài học (D1)
 - `/api/lessons/:id` — chi tiết 1 bài học (vocab list), generate qua Mochi lần đầu rồi cache vào D1 (`lesson_vocab`)
@@ -78,11 +78,11 @@ Chỉ áp dụng khi Google không trả `picture` (hoặc user tương lai khô
 `changePassword` usecase + `updatePassword` repo method đã xoá. `/api/user/password` trả `410` cho mọi request — SSO là cách đăng nhập duy nhất được hỗ trợ giờ. Đăng nhập bằng password cũ (`/api/auth/login`) vẫn giữ (user hiện có vẫn login được), chỉ bỏ khả năng đổi/đặt mật khẩu mới. Menu "Thiết lập mật khẩu" trong bundle cũ vẫn hiện (không xoá được UI), nhưng bấm vào sẽ nhận lỗi rõ ràng thay vì lỗi ngầm.
 
 ## Auth qua SSO (2026-08-10)
-Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.click`:
+Không tự làm Google OAuth nữa, dùng chung SSO worker `auth.huyab.cfd`:
 - `/api/auth/google` chỉ redirect sang `${SSO_ISSUER}/login?redirect_uri=<origin>/`
-- SSO tự xử lý Google OAuth, set cookie `huyab_sso` (JWT RS256) scope `.huyab.click`, redirect về app
+- SSO tự xử lý Google OAuth, set cookie `huyab_sso` (JWT RS256) scope `.huyab.cfd`, redirect về app
 - `/api/auth/me` đọc cookie `huyab_sso`, verify bằng JWKS remote (`${SSO_ISSUER}/.well-known/jwks.json`, không cần secret chung), upsert user vào D1, rồi mint session `auth_token` cục bộ (giữ nguyên luồng cũ cho các route khác)
-- Yêu cầu: worker này phải chạy dưới subdomain `*.huyab.click` (đang là `en.huyab.click`) để cookie share được
+- Yêu cầu: worker này phải chạy dưới subdomain `*.huyab.cfd` (đang là `en.huyab.cfd`) để cookie share được
 - Không cần quản lý `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` ở repo này nữa — SSO giữ luôn
 
 ## Secrets cần set (không lưu trong repo)

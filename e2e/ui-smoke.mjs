@@ -1,5 +1,5 @@
 // E2E smoke CHI CHO DEV (wrangler dev + D1 local): dang nhap bang cookie
-// session tu ky (khong qua SSO auth.huyab.click), roi di qua cac flow chinh co
+// session tu ky (khong qua SSO auth.huyab.cfd), roi di qua cac flow chinh co
 // ghi D1 local. `pnpm e2e` tu bat server va tao user; KHONG chay vao production.
 //
 // Bien moi truong (e2e/run.mjs truyen san):

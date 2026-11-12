@@ -48,7 +48,7 @@ export function createWikipediaEtymology() {
       // Buoc 1: tim section "Etymology" (hoac "Origin", "History")
       const sectionsUrl = `${SECTIONS_URL}${encodeURIComponent(title)}&prop=sections${COMMON_PARAMS}`;
       const sectionsRes = await fetch(sectionsUrl, {
-        headers: { "User-Agent": "ai-english (https://en.huyab.click)" }
+        headers: { "User-Agent": "ai-english (https://en.huyab.cfd)" }
       });
       if (!sectionsRes.ok) return { etymology: "", sectionTitle: "" };
       const sectionsData = await sectionsRes.json();
@@ -61,7 +61,7 @@ export function createWikipediaEtymology() {
       // Buoc 2: lay content section do
       const contentUrl = `${CONTENT_URL}${encodeURIComponent(title)}&prop=wikitext&section=${target.index}${COMMON_PARAMS}`;
       const contentRes = await fetch(contentUrl, {
-        headers: { "User-Agent": "ai-english (https://en.huyab.click)" }
+        headers: { "User-Agent": "ai-english (https://en.huyab.cfd)" }
       });
       if (!contentRes.ok) return { etymology: "", sectionTitle: target.line };
       const contentData = await contentRes.json();
